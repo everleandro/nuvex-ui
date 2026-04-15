@@ -83,57 +83,349 @@ Si necesitas interactuar programaticamente con el control, usa `focus()` sobre e
 
 ## Ejemplos
 
-### Basico
-
-```vue
-<template>
-  <ESelect v-model="status" :items="['Draft', 'Review', 'Published']" label="Estado" />
-</template>
-```
-
-### Items objeto con `returnObject`
+### Selección simple
 
 ```vue
 <template>
   <ESelect
-    v-model="assignee"
-    :items="users"
-    item-text="name"
-    item-value="id"
-    return-object
-    label="Responsable"
+    v-model="status"
+    :items="['Draft', 'Review', 'Published', 'Archived']"
+    label="Estado del documento"
   />
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const status = ref('Draft')
+</script>
 ```
 
-### Multiple con chips
-
-```vue
-<template>
-  <ESelect
-    v-model="tags"
-    :items="['UI', 'Docs', 'Bug', 'Infra']"
-    multiple
-    chip
-    clearable
-    label="Etiquetas"
-  />
-</template>
-```
-
-### Autocomplete controlado
+### Objetos con propiedades custom
 
 ```vue
 <template>
   <ESelect
     v-model="selectedUser"
-    :items="filteredUsers"
-    :search="search"
-    autocomplete
-    label="Buscar usuario"
-    @update:search="search = $event"
+    :items="users"
+    item-text="name"
+    item-value="id"
+    return-object
+    label="Responsable"
+    clearable
   />
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+interface User {
+  id: string
+  name: string
+  email: string
+}
+
+const users: User[] = [
+  { id: '1', name: 'Ana García', email: 'ana@example.com' },
+  { id: '2', name: 'Carlos López', email: 'carlos@example.com' },
+  { id: '3', name: 'Diana Chen', email: 'diana@example.com' }
+]
+
+const selectedUser = ref<User | undefined>()
+</script>
+```
+
+### Selección múltiple con chips
+
+```vue
+<template>
+  <ESelect
+    v-model="selectedTags"
+    :items="availableTags"
+    multiple
+    chip
+    clearable
+    label="Etiquetas"
+    detail="Selecciona múltiples etiquetas"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const availableTags = ['UI Design', 'Documentation', 'Bug Report', 'Infrastructure', 'DevOps']
+const selectedTags = ref<string[]>(['UI Design'])
+</script>
+```
+
+### Búsqueda con autocomplete
+
+```vue
+<template>
+  <ESelect
+    v-model="selectedOption"
+    :items="filteredItems"
+    :search="searchQuery"
+    autocomplete
+    clearable
+    label="Buscar y seleccionar"
+    placeholder="Escribe aquí..."
+    @update:search="searchQuery = $event"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+const allItems = ['Apple', 'Apricot', 'Banana', 'Blueberry', 'Cherry', 'Date']
+const searchQuery = ref('')
+const selectedOption = ref('')
+
+const filteredItems = computed(() => {
+  if (!searchQuery.value) return allItems
+  return allItems.filter(item =>
+    item.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+})
+</script>
+```
+
+### Integrado con EForm
+
+```vue
+<template>
+  <EForm v-model="formValid" label-behavior="floating">
+    <ESelect
+      v-model="form.assignee"
+      :items="teamMembers"
+      item-text="name"
+      item-value="id"
+      label="Asignar a"
+      :rules="[(v) => !!v || 'Requerido']"
+    />
+
+    <ESelect
+      v-model="form.priority"
+      :items="['Low', 'Medium', 'High', 'Critical']"
+      label="Prioridad"
+      color="secondary"
+    />
+
+    <ESelect
+      v-model="form.labels"
+      :items="['Bug', 'Feature', 'Documentation', 'Support']"
+      multiple
+      chip
+      label="Etiquetas"
+    />
+  </EForm>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+interface TeamMember {
+  id: string
+  name: string
+}
+
+const teamMembers: TeamMember[] = [
+  { id: 'ana', name: 'Ana García' },
+  { id: 'carlos', name: 'Carlos López' },
+  { id: 'diana', name: 'Diana Chen' }
+]
+
+const formValid = ref<boolean | undefined>()
+const form = ref({
+  assignee: '',
+  priority: 'Medium',
+  labels: []
+})
+</script>
+```
+
+### Con carga remota
+
+```vue
+<template>
+  <ESelect
+    v-model="selectedCountry"
+    :items="countries"
+    :loading="isLoading"
+    label="País"
+    detail="Los datos se cargan desde una API"
+    @focus="fetchCountries"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+interface Country {
+  code: string
+  name: string
+}
+
+const countries = ref<Country[]>([])
+const selectedCountry = ref('')
+const isLoading = ref(false)
+
+const fetchCountries = async () => {
+  if (countries.value.length > 0) return
+
+  isLoading.value = true
+  try {
+    // Simular carga desde API
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    countries.value = [
+      { code: 'es', name: 'España' },
+      { code: 'mx', name: 'México' },
+      { code: 'ar', name: 'Argentina' },
+      { code: 'co', name: 'Colombia' }
+    ]
+  } finally {
+    isLoading.value = false
+  }
+}
+</script>
+```
+
+### Cascada de selecciones
+
+```vue
+<template>
+  <div class="flex-col gap-4">
+    <ESelect
+      v-model="selectedCategory"
+      :items="categories"
+      item-text="name"
+      item-value="id"
+      label="Categoría"
+    />
+
+    <ESelect
+      v-model="selectedSubcategory"
+      :items="subcategories"
+      item-text="name"
+      item-value="id"
+      label="Subcategoría"
+      :disabled="!selectedCategory"
+    />
+
+    <ESelect
+      v-model="selectedProduct"
+      :items="products"
+      item-text="name"
+      item-value="id"
+      label="Producto"
+      :disabled="!selectedSubcategory"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+interface Category {
+  id: string
+  name: string
+}
+
+interface Subcategory {
+  id: string
+  name: string
+  categoryId: string
+}
+
+interface Product {
+  id: string
+  name: string
+  subcategoryId: string
+}
+
+const categories: Category[] = [
+  { id: '1', name: 'Electrónica' },
+  { id: '2', name: 'Ropa' }
+]
+
+const subcategoriesData: Subcategory[] = [
+  { id: '1-1', name: 'Laptops', categoryId: '1' },
+  { id: '1-2', name: 'Teléfonos', categoryId: '1' },
+  { id: '2-1', name: 'Camisetas', categoryId: '2' }
+]
+
+const productsData: Product[] = [
+  { id: '1-1-1', name: 'MacBook Pro', subcategoryId: '1-1' },
+  { id: '1-1-2', name: 'Dell XPS', subcategoryId: '1-1' },
+  { id: '1-2-1', name: 'iPhone 15', subcategoryId: '1-2' }
+]
+
+const selectedCategory = ref('')
+const selectedSubcategory = ref('')
+const selectedProduct = ref('')
+
+const subcategories = computed(() =>
+  subcategoriesData.filter(s => s.categoryId === selectedCategory.value)
+)
+
+const products = computed(() =>
+  productsData.filter(p => p.subcategoryId === selectedSubcategory.value)
+)
+</script>
+```
+
+### Estados combinados
+
+```vue
+<template>
+  <div class="flex-col gap-4">
+    <!-- Normal -->
+    <ESelect v-model="field1" :items="['Opción 1', 'Opción 2']" label="Normal" />
+
+    <!-- Deshabilitado -->
+    <ESelect
+      v-model="field2"
+      :items="['Opción 1', 'Opción 2']"
+      label="Deshabilitado"
+      disabled
+    />
+
+    <!-- Readonly -->
+    <ESelect
+      v-model="field3"
+      :items="['Opción 1', 'Opción 2']"
+      label="Solo lectura"
+      readonly
+    />
+
+    <!-- Con error -->
+    <ESelect
+      v-model="field4"
+      :items="['Opción 1', 'Opción 2']"
+      label="Con error"
+      error
+      detail="Mensaje de error"
+    />
+
+    <!-- Outlined -->
+    <ESelect
+      v-model="field5"
+      :items="['Opción 1', 'Opción 2']"
+      label="Outlined"
+      outlined
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const field1 = ref('Opción 1')
+const field2 = ref('Opción 1')
+const field3 = ref('Opción 1')
+const field4 = ref('Opción 2')
+const field5 = ref('')
+</script>
 ```
 
 ## Accesibilidad

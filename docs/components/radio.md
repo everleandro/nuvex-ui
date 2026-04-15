@@ -81,21 +81,67 @@ Ademas hereda las props base de `SelectionFieldBaseProps`, como `label`, `detail
 
 ## Ejemplos
 
-### Grupo basico en fila
+### Grupo básico en fila
 
 ```vue
 <template>
-  <ERadioGroup v-model="contactChannel" row label="Canal de contacto">
+  <ERadioGroup v-model="contactMethod" row label="Método de contacto">
     <ERadio model-value="email" label="Email" />
-    <ERadio model-value="slack" label="Slack" />
-    <ERadio model-value="meet" label="Meet" />
+    <ERadio model-value="phone" label="Teléfono" />
+    <ERadio model-value="sms" label="SMS" />
   </ERadioGroup>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const contactChannel = ref<'email' | 'slack' | 'meet'>('slack')
+const contactMethod = ref<'email' | 'phone' | 'sms'>('email')
+</script>
+```
+
+### Grupo en columna con detail
+
+```vue
+<template>
+  <ERadioGroup
+    v-model="deploymentEnv"
+    label="Ambiente de despliegue"
+    detail="Elige dónde se publicarán los cambios"
+  >
+    <ERadio model-value="staging" label="Staging" />
+    <ERadio model-value="production" label="Production" />
+    <ERadio model-value="canary" label="Canary (10% traffic)" />
+  </ERadioGroup>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const deploymentEnv = ref<'staging' | 'production' | 'canary'>('staging')
+</script>
+```
+
+### Con selección obligatoria
+
+```vue
+<template>
+  <ERadioGroup
+    v-model="membershipTier"
+    mandatory
+    label="Plan de membresía"
+    detail-errors
+    :rules="[(v) => !!v || 'Debes seleccionar un plan']"
+  >
+    <ERadio model-value="free" label="Gratuito" />
+    <ERadio model-value="pro" label="Pro" />
+    <ERadio model-value="enterprise" label="Enterprise" />
+  </ERadioGroup>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const membershipTier = ref<string | null>(null)
 </script>
 ```
 
@@ -103,16 +149,26 @@ const contactChannel = ref<'email' | 'slack' | 'meet'>('slack')
 
 ```vue
 <template>
-  <EForm field-color="teal-900" label-behavior="floating">
+  <EForm v-model="formValid" label-behavior="floating">
     <ERadioGroup
-      v-model="releaseTrack"
-      label="Release track"
-      detail="Elige el canal de despliegue"
+      v-model="preferences.releaseTrack"
+      label="Canal de actualización"
+      detail="Cuándo recibir nuevas versiones"
       color="secondary"
     >
-      <ERadio model-value="stable" label="Stable" />
-      <ERadio model-value="beta" label="Beta" />
-      <ERadio model-value="canary" label="Canary" />
+      <ERadio model-value="stable" label="Estable (recomendado)" />
+      <ERadio model-value="beta" label="Beta (nuevas features primero)" />
+      <ERadio model-value="nightly" label="Nightly (experimental)" />
+    </ERadioGroup>
+
+    <ERadioGroup
+      v-model="preferences.language"
+      row
+      label="Idioma"
+    >
+      <ERadio model-value="es" label="Español" />
+      <ERadio model-value="en" label="English" />
+      <ERadio model-value="fr" label="Français" />
     </ERadioGroup>
   </EForm>
 </template>
@@ -120,20 +176,92 @@ const contactChannel = ref<'email' | 'slack' | 'meet'>('slack')
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const releaseTrack = ref<'stable' | 'beta' | 'canary'>('beta')
+const formValid = ref<boolean | undefined>()
+const preferences = ref({
+  releaseTrack: 'stable',
+  language: 'es'
+})
 </script>
 ```
 
-### Con seleccion obligatoria
+### Con cambios reactivos
 
 ```vue
 <template>
-  <ERadioGroup v-model="audience" mandatory label="Audience">
-    <ERadio model-value="internal" label="Internal" />
-    <ERadio model-value="beta-users" label="Beta users" />
-    <ERadio model-value="public" label="Public" />
-  </ERadioGroup>
+  <div class="flex-col gap-6">
+    <ERadioGroup
+      v-model="reportFormat"
+      label="Formato del reporte"
+      @update:model-value="generateReport"
+    >
+      <ERadio model-value="pdf" label="PDF" />
+      <ERadio model-value="excel" label="Excel" />
+      <ERadio model-value="json" label="JSON" />
+    </ERadioGroup>
+
+    <div v-if="reportData" class="flex-col gap-2 p-4 rounded blue-100">
+      <strong>Reporte en {{ reportFormat.toUpperCase() }}</strong>
+      <code class="truncate">{{ reportData }}</code>
+    </div>
+  </div>
 </template>
+
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+
+const reportFormat = ref<'pdf' | 'excel' | 'json'>('pdf')
+const reportData = ref<string | null>(null)
+
+const generateReport = async (format: string) => {
+  // Simular generación de reporte
+  reportData.value = `Generando reporte en ${format}...`
+  await new Promise(resolve => setTimeout(resolve, 500))
+  reportData.value = `{ "format": "${format}", "timestamp": "${new Date().toISOString()}" }`
+}
+</script>
+```
+
+### Estados combinados
+
+```vue
+<template>
+  <div class="flex-col gap-4">
+    <!-- Normal -->
+    <ERadioGroup v-model="mode" label="Modo de operación">
+      <ERadio model-value="auto" label="Automático" />
+      <ERadio model-value="manual" label="Manual" />
+    </ERadioGroup>
+
+    <!-- Deshabilitado -->
+    <ERadioGroup
+      v-model="legacyMode"
+      disabled
+      label="Modo heredado (no disponible)"
+    >
+      <ERadio model-value="v1" label="Version 1" />
+      <ERadio model-value="v2" label="Version 2" />
+    </ERadioGroup>
+
+    <!-- Readonly -->
+    <ERadioGroup
+      v-model="systemMode"
+      readonly
+      label="Modo del sistema (bloqueado)"
+      detail="Su administrador ha establecido este valor"
+    >
+      <ERadio model-value="production" label="Production" />
+      <ERadio model-value="sandbox" label="Sandbox" />
+    </ERadioGroup>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const mode = ref<'auto' | 'manual'>('auto')
+const legacyMode = ref<'v1' | 'v2'>('v1')
+const systemMode = ref<'production' | 'sandbox'>('production')
+</script>
 ```
 
 ## Accesibilidad

@@ -83,11 +83,11 @@ Tambien expone `input` via `ref` si necesitas acceso directo al elemento nativo.
 
 ## Ejemplos
 
-### Basico
+### Básico
 
 ```vue
 <template>
-  <ETextfield v-model="name" label="Nombre" />
+  <ETextfield v-model="name" label="Nombre completo" />
 </template>
 
 <script setup lang="ts">
@@ -102,14 +102,22 @@ const name = ref('')
 ```vue
 <template>
   <ETextfield
-    v-model="rate"
-    label="Tarifa"
+    v-model="price"
+    label="Precio"
+    type="number"
     prefix="$"
     suffix="USD"
-    :limit="6"
+    :limit="10"
     counter
+    detail="Máximo 10 dígitos"
   />
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const price = ref('')
+</script>
 ```
 
 ### Clearable con label flotante
@@ -119,24 +127,222 @@ const name = ref('')
   <ETextfield
     v-model="email"
     label="Email"
+    type="email"
     label-behavior="floating"
     clearable
+    icon-clear="mdi-close"
     autocomplete="email"
+    placeholder="usuario@ejemplo.com"
   />
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const email = ref('')
+</script>
 ```
 
-### Escuchar payload de entrada
+### Con validación integrada
+
+```vue
+<template>
+  <EForm v-model="formValid" label-behavior="floating">
+    <ETextfield
+      v-model="username"
+      label="Usuario"
+      clearable
+      :rules="[
+        (v) => !!v || 'Requerido',
+        (v) => v.length >= 3 || 'Mínimo 3 caracteres',
+        (v) => /^[a-zA-Z0-9_-]+$/.test(v) || 'Solo letras, números, guión y guión bajo'
+      ]"
+    />
+
+    <ETextfield
+      v-model="password"
+      label="Contraseña"
+      type="password"
+      :rules="[
+        (v) => !!v || 'Requerido',
+        (v) => v.length >= 8 || 'Mínimo 8 caracteres'
+      ]"
+    />
+
+    <ETextfield
+      v-model="confirmPassword"
+      label="Confirmar contraseña"
+      type="password"
+      :rules="[
+        (v) => !!v || 'Requerido',
+        (v) => v === password || 'Las contraseñas no coinciden'
+      ]"
+    />
+  </EForm>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const formValid = ref<boolean | undefined>()
+const username = ref('')
+const password = ref('')
+const confirmPassword = ref('')
+</script>
+```
+
+### Búsqueda con debounce
+
+```vue
+<template>
+  <div class="flex-col gap-4">
+    <ETextfield
+      v-model="searchQuery"
+      label="Buscar"
+      clearable
+      prepend-icon="mdi-magnify"
+      placeholder="Escribe para buscar..."
+      @input="debouncedSearch"
+    />
+
+    <div v-if="isSearching" class="text-center">
+      Buscando...
+    </div>
+
+    <div v-else-if="searchResults.length > 0" class="flex-col gap-2">
+      <div v-for="result in searchResults" :key="result.id" class="p-2 rounded border">
+        {{ result.name }}
+      </div>
+    </div>
+
+    <div v-else-if="searchQuery && searchResults.length === 0" class="text-center text-gray-500">
+      No se encontraron resultados
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const searchQuery = ref('')
+const searchResults = ref<Array<{ id: string; name: string }>>([])
+const isSearching = ref(false)
+
+let searchTimeout: NodeJS.Timeout
+
+const debouncedSearch = async (event: any) => {
+  clearTimeout(searchTimeout)
+  
+  if (!searchQuery.value.trim()) {
+    searchResults.value = []
+    return
+  }
+
+  searchTimeout = setTimeout(async () => {
+    isSearching.value = true
+    try {
+      // Simular búsqueda en API
+      await new Promise(resolve => setTimeout(resolve, 500))
+      searchResults.value = [
+        { id: '1', name: `Resultado para "${searchQuery.value}"` },
+        { id: '2', name: `Otra opción "${searchQuery.value}"` }
+      ]
+    } finally {
+      isSearching.value = false
+    }
+  }, 300)
+}
+</script>
+```
+
+### Entrada numérica con pasos
 
 ```vue
 <template>
   <ETextfield
-    v-model="username"
-    label="Usuario"
-    @input="handleInput"
-    @keydown:enter="submitFromKeyboard"
+    v-model="quantity"
+    label="Cantidad"
+    type="number"
+    input-mode="numeric"
+    :rules="[
+      (v) => !!v || 'Requerido',
+      (v) => v >= 1 || 'Mínimo 1',
+      (v) => v <= 100 || 'Máximo 100'
+    ]"
+    @keydown:enter="submitOrder"
   />
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const quantity = ref(1)
+
+const submitOrder = () => {
+  if (quantity.value >= 1 && quantity.value <= 100) {
+    console.log(`Orden confirmada: ${quantity.value} items`)
+  }
+}
+</script>
+```
+
+### Estados combinados
+
+```vue
+<template>
+  <div class="flex-col gap-4">
+    <!-- Normal -->
+    <ETextfield v-model="field1" label="Campo normal" />
+
+    <!-- Deshabilitado -->
+    <ETextfield
+      v-model="field2"
+      label="Campo deshabilitado"
+      disabled
+      detail="No se puede editar"
+    />
+
+    <!-- Readonly -->
+    <ETextfield
+      v-model="field3"
+      label="Campo de solo lectura"
+      readonly
+    />
+
+    <!-- Con error -->
+    <ETextfield
+      v-model="field4"
+      label="Campo con error"
+      error
+      detail="Mensaje de error"
+    />
+
+    <!-- Outlined -->
+    <ETextfield
+      v-model="field5"
+      label="Campo outlined"
+      outlined
+    />
+
+    <!-- Dense -->
+    <ETextfield
+      v-model="field6"
+      label="Campo denso"
+      dense
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const field1 = ref('Editable')
+const field2 = ref('Deshabilitado')
+const field3 = ref('Solo lectura')
+const field4 = ref('Valor con error')
+const field5 = ref('Outlined')
+const field6 = ref('Denso')
+</script>
 ```
 
 ## Accesibilidad
