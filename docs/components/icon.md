@@ -109,8 +109,9 @@ const logoPaths = [
 ## Accesibilidad
 
 - El componente marca el icono como decorativo con `aria-hidden="true"`.
-- Si el icono comunica significado por si solo, acompanal o envuelvelo con texto accesible.
+- Si el icono comunica significado por si solo, acompanalo con texto visible o usa una etiqueta accesible en el control contenedor.
 - Si usas el slot `default`, mantén el mismo criterio: decorativo o con etiqueta accesible externa.
+- En botones icon-only, coloca `aria-label` en el boton, no en `EIcon`.
 
 ## Errores comunes
 
@@ -118,3 +119,4 @@ const logoPaths = [
 - Esperar que `icon="arrowLeft"` resuelva automaticamente un SVG: los strings solo generan clases CSS.
 - Olvidar configurar `--e-icon-prefix` o `prefix` cuando la libreria de iconos usa otro prefijo distinto de `icon-`.
 - Pasar `viewBox` esperando que afecte iconos por clase CSS: solo aplica a SVG paths.
+- Pasar paths SVG con `fill` fijo y luego esperar que `color` del componente los sobrescriba automaticamente.

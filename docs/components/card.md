@@ -83,10 +83,12 @@ import { ECard, ECardContainer } from 'drocket'
 
 - `ECard` es un contenedor visual y no aporta semantica interactiva por si solo.
 - Si el card representa una region importante, agrega semantica desde fuera con `section`, `article`, `aria-labelledby` o encabezados visibles.
-- No conviertas el card completo en area clickeable sin exponer foco y semantica adecuados.
+- Si el card contiene acciones, mantenlas en botones o links reales dentro del contenido.
+- No conviertas el card completo en area clickeable sin exponer foco, etiqueta y rol adecuados.
 
 ## Errores comunes
 
 - Esperar que `color` cambie el fondo: hoy solo agrega una clase de color de texto.
 - Pasar `height` esperando unidades CSS libres: el componente agrega `px`, por lo que espera un valor numerico o string numerico.
 - Usar contenido suelto sin `ECardContainer` y luego sorprenderse por falta de padding interno.
+- Mezclar multiples patrones de espaciado (padding manual + `ECardContainer`) y terminar con layouts inconsistentes.

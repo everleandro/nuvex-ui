@@ -117,9 +117,12 @@ const open = ref(true)
 - El contenedor usa `role="dialog"` y `aria-modal="true"`.
 - Debes proveer un titulo visible y contenido claro dentro del slot.
 - Por defecto intenta enfocar el dialog al abrir y restaurar el foco al cerrar. Puedes desactivar ese comportamiento con `autoFocus` o `restoreFocus`.
+- Si el dialog contiene formularios largos, asegura un orden de tabulacion coherente y una accion primaria visible.
+- En `persistent`, incluye siempre una salida explicita (`Cerrar`, `Cancelar`, `Aceptar`) para no bloquear al usuario.
 
 ## Errores comunes
 
 - Esperar cierre automatico sin escuchar `update:modelValue`: el componente depende de `v-model` para reflejar el estado externo.
 - Usar `maxWidth` con unidades CSS: el componente agrega `px`, por lo que espera numero o string numerico.
 - Marcar `persistent` y no ofrecer una accion de salida visible: el usuario puede quedar bloqueado.
+- Renderizar multiples dialogs abiertos al mismo tiempo sin coordinacion de foco: puede romper la navegacion por teclado.
