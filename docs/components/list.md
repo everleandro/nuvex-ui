@@ -14,7 +14,9 @@
 import { EList, EListItem, EListGroup } from 'drocket'
 ```
 
-## EList Props
+## Props
+
+### EList
 
 | Prop | Tipo | Default | Descripcion |
 | --- | --- | --- | --- |
@@ -27,14 +29,7 @@ import { EList, EListItem, EListGroup } from 'drocket'
 | `modelValue` | `string \| number \| Array<string \| number> \| undefined \| null` | `undefined` | Estado de seleccion de items. Si es array, la lista trabaja en multiple seleccion. |
 | `group` | `string \| number \| Array<string \| number> \| undefined \| null` | estado interno | Estado de grupos abiertos. Es opcional; si no se pasa, `EList` administra su propio estado. |
 
-## EList Eventos
-
-| Evento | Payload | Descripcion |
-| --- | --- | --- |
-| `update:modelValue` | `ListModelProp` | Emitido al cambiar la seleccion de items. |
-| `update:group` | `ListModelProp` | Emitido al abrir o cerrar grupos cuando el estado es controlado desde fuera. |
-
-## EListItem Props
+### EListItem
 
 | Prop | Tipo | Default | Descripcion |
 | --- | --- | --- | --- |
@@ -53,19 +48,28 @@ import { EList, EListItem, EListGroup } from 'drocket'
 | `value` | `string \| number` | `undefined` | Valor explicito del item para seleccion. |
 | `size` | `'x-small' \| 'small' \| 'default' \| 'large' \| 'x-large'` | `'default'` | Define el tamano del item usando el mismo contrato que `EButton`. |
 
-## EListItem Eventos
-
-| Evento | Payload | Descripcion |
-| --- | --- | --- |
-| `click:item` | `MouseEvent` | Emitido al hacer click en el item. |
-
-## EListGroup Props
+### EListGroup
 
 | Prop | Tipo | Default | Descripcion |
 | --- | --- | --- | --- |
 | `disabled` | `boolean` | `false` | Deshabilita el grupo y su activador. |
 | `elevation` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `undefined` | Aplica elevacion al contenedor del grupo. |
 | `value` | `string \| number` | `useId()` | Identidad del grupo. Si no se pasa, el componente genera una interna. Para control externo o persistencia, conviene pasar un valor estable. |
+
+## Eventos
+
+### EList
+
+| Evento | Payload | Descripcion |
+| --- | --- | --- |
+| `update:modelValue` | `ListModelProp` | Emitido al cambiar la seleccion de items. |
+| `update:group` | `ListModelProp` | Emitido al abrir o cerrar grupos cuando el estado es controlado desde fuera. |
+
+### EListItem
+
+| Evento | Payload | Descripcion |
+| --- | --- | --- |
+| `click:item` | `MouseEvent` | Emitido al hacer click en el item. |
 
 ## Slots
 
