@@ -1,203 +1,364 @@
 # Theming
 
-Drocket expone variables Sass y CSS custom properties para personalizar tema en build-time y runtime.
+Drocket expone variables Sass y CSS custom properties para personalizar tema en build-time y runtime, con soporte para Light/Dark mode dinámico via CSS variables.
 
-## Import recomendado
+## Configuración inicial
+
+### Step 1: Prepara tu archivo de variables
+
+Crea un archivo centralizado para todas las customizaciones de tema:
 
 ```scss
 // assets/styles/variables.scss
+
+// Tamaños y espaciado
 $border-radius-root: 6px;
 $root-font-size: 16px;
 
+// Colores temáticos para modo Light
 $semantic-color-tokens-light: (
   'primary': #42b883,
   'secondary': #35495e,
+  'tertiary': #6c5ce7,
+  'error': #e74c3c,
   'warning': #f39c12,
-  'error': #e74c3c
+  'success': #27ae60,
+  'info': #3498db
 );
 
+// Colores temáticos para modo Dark
 $semantic-color-tokens-dark: (
   'primary': #58d78d,
   'secondary': #8ca0b8,
+  'tertiary': #a29bfe,
+  'error': #f58a8a,
   'warning': #f8b739,
-  'error': #f58a8a
+  'success': #55efc4,
+  'info': #74b9ff
 );
 
+// Importar después de tus customizaciones
 @import 'drocket/setting.scss';
 ```
 
-## Mixins
+### Step 2: Importa las variables en tu main.scss
 
 ```scss
-@import 'drocket/mixin.scss';
+// styles/main.scss
+@import 'variables.scss';
 ```
 
-## Buenas practicas
+## Uso en Vue
 
-- Mantener variables de tema en un archivo central.
-- Evitar sobrescribir clases internas de componentes cuando exista variable Sass equivalente.
-- Documentar cualquier variable nueva agregada por componente.
+```vue
+<script setup>
+// Cambiar tema en runtime
+const toggleTheme = () => {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const newTheme = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', newTheme);
+}
+</script>
 
-## Temas dinamicos con CSS variables
+<template>
+  <button @click="toggleTheme">Cambiar tema</button>
+</template>
+```
 
-El framework publica variables CSS `--e-*` para permitir cambios de tema sin recompilar.
+## Buenas prácticas
 
-### Paleta primitiva publica
+- **Centraliza variables:** Mantén todas las variaciones de tema en un único archivo de configuración
+- **Respeta la jerarquía:** No sobrescribas valores internos de componentes; usa las variables Sass documentadas
+- **Documenta customizaciones:** Si añades nuevas variables, actualiza este archivo con comentarios
+- **Separa concerns:** Usa variables para temas, no para sobrescrituras CSS puntuales
 
-Ademas de los tokens semanticos del tema, la libreria expone una paleta primitiva pensada para usuarios consumidores.
+## Sistema de Colores Avanzado
 
-La idea es separar:
+### Paleta Primitiva vs. Colores Semánticos
 
-1. Paleta primitiva publica: `--e-palette-red-500`, `--e-palette-blue-700`, etc.
-2. Tokens semanticos del tema: `--e-color-primary`, `--e-color-surface-1`, etc.
+Drocket diferencia entre dos sistemas de color:
 
-La paleta primitiva no reemplaza el sistema actual `light` y `dark`; es una capa adicional para que la app consumidora tenga colores reutilizables consistentes.
+**Tokens Semánticos** (`--e-color-*`): Significado intencional
+- `primary`, `secondary`, `error`, `success`, etc.
+- Cambian con el tema Light/Dark
+- Usados internamente por componentes
 
-Los props `color` de los componentes deben referenciar colores definidos en el sistema (`--e-color-*` o `--e-palette-*`).
-No se considera parte del contrato pasar valores literales como `#000`, `rgb(...)` o `hsl(...)` directamente al prop.
+**Paleta Primitiva** (`--e-palette-*`): Colores reutilizables sin carga semántica
+- `--e-palette-red-500`, `--e-palette-blue-700`, etc.
+- Escala fija de 10 tonos (50-900) por color
+- Ideal para ilustraciones, gráficos y aplicaciones del usuario
 
-#### API Sass
+### Personalizar Seeds (Colores Base)
 
-En `public/styles/override/tokens/index.scss` existen tres piezas:
-
-1. `$primitive-color-seeds`
-2. `$primitive-color-overrides`
-3. `$primitive-color-palettes`
-
-`$primitive-color-seeds` define el color base por familia:
+Define el color raíz de cada familia antes de importar `setting.scss`:
 
 ```scss
+// assets/styles/variables.scss
 $primitive-color-seeds: (
-  red: #ef4444,
-  blue: #3b82f6,
-  green: #22c55e,
-  amber: #f59e0b,
-  neutral: #6b7280,
-) !default;
-```
-
-A partir de esas seeds, Drocket genera automaticamente una escala por color:
-
-```css
---e-palette-red: #ef4444;
---e-palette-red-50: ...;
---e-palette-red-100: ...;
---e-palette-red-200: ...;
---e-palette-red-300: ...;
---e-palette-red-400: ...;
---e-palette-red-500: #ef4444;
---e-palette-red-600: ...;
---e-palette-red-700: ...;
---e-palette-red-800: ...;
---e-palette-red-900: ...;
-```
-
-#### Personalizar la paleta
-
-Puedes redefinir las seeds antes de importar `drocket/setting.scss`:
-
-```scss
-$primitive-color-seeds: (
-  red: #dc2626,
-  blue: #2563eb,
-  green: #16a34a,
+  red: #dc2626,      // Rojo más oscuro
+  blue: #2563eb,     // Azul más vibrante
+  green: #16a34a,    // Verde más saturado
   amber: #d97706,
   neutral: #4b5563,
+  purple: #7c3aed,   // Agregar nuevo color
 ) !default;
 
 @import 'drocket/setting.scss';
 ```
 
-Si quieres corregir tonos especificos sin perder la generacion automatica, usa `$primitive-color-overrides`:
+Drocket generará automáticamente la escala completa para cada color.
+
+### Corregir Tonos Específicos
+
+Si necesitas controlar tonos puntuales sin regenerar toda la escala:
 
 ```scss
 $primitive-color-overrides: (
   red: (
-    500: #dc2626,
-    700: #b91c1c,
+    50: #fee2e2,
+    500: #dc2626,  // Seed override
     900: #7f1d1d,
   ),
   blue: (
-    500: #2563eb,
+    700: #1d4ed8,
   ),
 ) !default;
 
 @import 'drocket/setting.scss';
 ```
 
-Eso te permite usar la paleta directamente en tu app:
+Luego úsalos en tu CSS:
 
 ```scss
-:root {
-  border-color: var(--e-palette-neutral-300);
-}
-
 .danger-banner {
-  background: var(--e-palette-red-100);
-  color: var(--e-palette-red-800);
+  background: var(--e-palette-red-50);
+  border-left: 4px solid var(--e-palette-red-600);
+  color: var(--e-palette-red-900);
+}
+
+.info-box {
+  background: var(--e-palette-blue-100);
+  color: var(--e-palette-blue-900);
 }
 ```
 
-### Como se generan
+## Utility Classes
 
-La fuente de verdad para tokens base vive en `public/styles/override/tokens/index.scss`.
+Drocket genera automáticamente clases de utilidad para espaciado, flexbox, posicionamiento y más. Están optimizadas para reducir la cantidad de CSS custom que escribes.
 
-Reglas actuales:
+### Sistema de Espaciado
 
-1. Variables Sass simples se exportan automaticamente desde `public/styles/override/theme/base.scss`
-2. Si la variable Sass empieza con `$e-`, la CSS var resultante conserva el nombre
-3. Si no empieza con `$e-`, se le agrega el prefijo `e-`
-4. Los mapas Sass no se exportan automaticamente; solo se convierten en CSS vars si se agregan a `$theme-base-css-var-groups`
-5. La paleta primitiva publica se exporta ademas como `--e-palette-{color}` y `--e-palette-{color}-{tono}`
-
-Ejemplos:
+Genera clases usando `$space-base` (default: 4px) y `$space-scale` (0-16).
 
 ```scss
-$border-radius-root: 4px;   // -> --e-border-radius-root
-$e-bar-height: 64px;        // -> --e-bar-height
-$root-font-family: "Roboto", sans-serif; // -> --e-root-font-family
+// En assets/styles/variables.scss si quieres custom:
+$space-base: 4px;
+$space-scale: 16;
 ```
 
-Para grupos:
+Esto genera clases como `.m-0` a `.m-16`, `.p-0` a `.p-16`:
+
+```vue
+<template>
+  <!-- Margin/Padding -->
+  <div class="p-4">Padding: 16px</div>
+  <div class="m-8">Margin: 32px</div>
+  <div class="mt-2">Margin-top: 8px</div>
+  <div class="px-6">Padding left/right: 24px</div>
+  
+  <!-- Margin negativo (solo margin) -->
+  <div class="m-n4">Margin: -16px</div>
+  <div class="ml-n2">Margin-left: -8px</div>
+</template>
+```
+
+**Direcciones disponibles:**
+- `-X` (left+right), `-Y` (top+bottom), `-T`, `-R`, `-B`, `-L` (individual)
+- Ejemplo: `.px-4` = `padding-left: 16px; padding-right: 16px;`
+
+### Flexbox & Gap
+
+```vue
+<template>
+  <!-- Dirección y distribución -->
+  <div class="flex-row gap-4">Fila con espaciado</div>
+  <div class="flex-col gap-2">Columna con espaciado</div>
+  <div class="flex-wrap gap-x-6 gap-y-4">Wrappeable con gap custom por eje</div>
+  
+  <!-- Control de flex grow/shrink -->
+  <div class="flex-1">Ocupa espacio disponible</div>
+  <div class="flex-auto">Flexible con contenido natural</div>
+  <div class="flex-none">Tamaño fijo</div>
+  
+  <!-- Alineación -->
+  <div class="flex-row justify-center items-center">Centrado completo</div>
+  <div class="flex-row justify-between items-start">Distribuido + alineado arriba</div>
+</template>
+```
+
+### Posicionamiento Absoluto
+
+```vue
+<template>
+  <!-- Posición -->
+  <div class="absolute top-0 left-0">Arriba-izquierda</div>
+  <div class="absolute inset-0">Llena todo el contenedor</div>
+  <div class="fixed top-4 right-4">Fixed en arriba-derecha</div>
+  <div class="relative">Baseline para absolutas internas</div>
+</template>
+```
+
+### Overflow
+
+```vue
+<template>
+  <!-- Comportamiento de desborde -->
+  <div class="overflow-auto">Scroll si es necesario</div>
+  <div class="overflow-hidden">Recorta contenido</div>
+  <div class="overflow-x-auto overflow-y-hidden">Scroll horizontal apenas</div>
+</template>
+```
+
+### Texto
+
+```vue
+<template>
+  <!-- Truncamiento -->
+  <p class="truncate">El texto se corta en una línea con ellipsis...</p>
+  <p class="line-clamp-2">El texto no excede 2 líneas</p>
+  <p class="line-clamp-3">El texto no excede 3 líneas</p>
+  
+  <!-- Whitespace -->
+  <pre class="whitespace-pre">Respeta    espacios y
+saltos de línea</pre>
+  <p class="break-words">Unhyphenatedlongwordcanwrap</p>
+</template>
+```
+
+### Border Radius
+
+```vue
+<template>
+  <!-- Esquinas -->
+  <div class="rounded">Redondeado estándar (6px)</div>
+  <div class="rounded-lg">Redondeado grande</div>
+  <div class="rounded-full">Completamente redondo</div>
+  <div class="rounded-none">Sin redondeo</div>
+  
+  <!-- Lados específicos -->
+  <div class="rounded-t">Solo arriba</div>
+  <div class="rounded-b">Solo abajo</div>
+  <div class="rounded-l">Solo izquierda</div>
+  <div class="rounded-r">Solo derecha</div>
+</template>
+```
+
+### Display & Responsive
+
+```vue
+<template>
+  <!-- Display base -->
+  <div class="d-block">Block por default</div>
+  <div class="d-flex">Flex por default</div>
+  <div class="d-none">Oculto</div>
+  
+  <!-- Responsive (cambia con breakpoints) -->
+  <div class="d-none d-sm-block">Oculto < 600px, block >= 600px</div>
+  <div class="d-flex d-lg-none">Flex por default, oculto >= 1264px</div>
+</template>
+```
+
+**Breakpoints:** `xs` (0px), `sm` (600px), `md` (960px), `lg` (1264px), `xl` (1904px)
+
+### Colores con Utilidades
+
+Ahora puedes aplicar colores directamente con clases generadas:
+
+```vue
+<template>
+  <!-- Colores semánticos -->
+  <div class="primary">Fondo + contraste automático</div>
+  <div class="primary--text">Solo color de texto</div>
+  
+  <!-- Colores primitivos -->
+  <div class="red">Fondo red + contraste</div>
+  <div class="blue-500">Fondo blue-500 + contraste</div>
+  <div class="green-700--text">Texto green-700</div>
+  
+  <!-- Combinadas -->
+  <button class="blue-600 p-4 rounded gap-2 flex-row items-center">
+    Click me
+  </button>
+</template>
+```
+
+## Theming Runtime con CSS Variables
+
+### Modo Light/Dark
+
+Usa el atributo `data-theme` en el `<html>`:
+
+```html
+<!-- Default: light -->
+<html data-theme="light">
+
+<!-- Cambiar a dark -->
+<html data-theme="dark">
+```
+
+Los componentes y utilities responden automáticamente sin recompilar.
+
+### Crear Temas Personalizados
 
 ```scss
-$icon-font-sizes: (
-  small: 20px,
-  default: 24px,
-) !default;
+// assets/styles/themes.scss
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"],
+  :root:not([data-theme]) {
+    // Tus overrides para dark
+    --e-color-primary: var(--e-palette-blue-300);
+    --e-color-surface-1: #1e1e1e;
+  }
+}
 
-$theme-base-css-var-groups: (
-  "e-icon-size": $icon-font-sizes,
-) !default;
+:root[data-theme="custom"] {
+  --e-color-primary: #9c27b0;
+  --e-color-secondary: #673ab7;
+  --e-color-surface-1: #f5f5f5;
+}
 ```
 
-Eso genera:
+## API Sass
 
-```css
---e-icon-size-small: 20px;
---e-icon-size-default: 24px;
-```
+### Variables Disponibles
 
-### Variables disponibles
+```scss
+// Globales
+$border-radius-root: 6px;
+$root-font-size: 16px;
+$root-font-family: 'Segoe UI', Roboto, sans-serif;
 
-```css
-/* Colores base (derivadas de $semantic-color-tokens-light) */
---e-color-primary: #42b883;
---e-color-secondary: #35495e;
---e-color-error: #e74c3c;
---e-contrast-white: #000;
-/* + todos los demás colores definidos */
+// Espaciado
+$space-base: 4px;
+$space-scale: 16;
 
-/* Breakpoints */
---e-grid-breakpoint-xs: 0;
---e-grid-breakpoint-sm: 600px;
---e-grid-breakpoint-md: 960px;
---e-grid-breakpoint-lg: 1264px;
---e-grid-breakpoint-xl: 1904px;
+// Grid
+$grid-breakpoints: (
+  0: 0,
+  sm: 600px,
+  md: 960px,
+  lg: 1264px,
+  xl: 1904px,
+);
 
-/* Tamaños de botón */
---e-btn-height-x-small: 2.187rem;
---e-btn-height-small: 2.5rem;
+// Elevación (sombras)
+$elevation: (
+  xs: 0px 2px 4px rgba(0, 0, 0, 0.1),
+  sm: 0px 4px 6px rgba(0, 0, 0, 0.1),
+  // ... más niveles
+);
+
 --e-btn-height-default: 3rem;
 /* + todas las variantes */
 

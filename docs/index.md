@@ -26,7 +26,8 @@ app.mount('#app')
 ## Secciones
 
 - [Guia de inicio](./getting-started.md)
-- [Theming](./theming.md)
+- [Theming y personalización](./theming.md)
+- [Utility Classes](./utilities.md)
 - [Componentes](./components/README.md)
 
 ## Novedades recientes
