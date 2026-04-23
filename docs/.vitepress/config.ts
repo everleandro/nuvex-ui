@@ -33,7 +33,8 @@ export default defineConfig({
         items: [
           { text: 'Inicio', link: '/' },
           { text: 'Getting Started', link: '/getting-started' },
-          { text: 'Theming', link: '/theming' }
+          { text: 'Theming', link: '/theming' },
+          { text: 'Utilities', link: '/utilities' }
         ]
       },
       {
@@ -50,7 +51,9 @@ export default defineConfig({
           { text: 'Form', link: '/components/form' },
           { text: 'Icon', link: '/components/icon' },
           { text: 'List', link: '/components/list' },
+          { text: 'Progress', link: '/components/progress' },
           { text: 'Radio', link: '/components/radio' },
+          { text: 'Schedule', link: '/components/schedule' },
           { text: 'Select', link: '/components/select' },
           { text: 'Switch', link: '/components/switch' },
           { text: 'Textfield', link: '/components/textfield' },
