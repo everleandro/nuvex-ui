@@ -28,9 +28,9 @@ $list-item-font-sizes: map.merge(
 
 $list-item-states: map.merge(
     (
-        focus: 0.10,
+        focus: 0.12,
         hover: 0.08,
-        active: 0.10,
+        active: 0.12,
     ),
     ()
 ) !default;
