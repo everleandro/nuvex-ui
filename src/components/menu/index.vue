@@ -158,6 +158,9 @@ const syncActivatorBehavior = async (): Promise<void> => {
 
 const resolveCurrentActivator = (): HTMLElement | null => {
     if (typeof props.activator === 'string') {
+        if (typeof document === 'undefined') {
+            return null
+        }
         return (document.querySelector(props.activator) || null) as HTMLElement | null
     }
 

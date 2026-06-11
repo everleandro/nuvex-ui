@@ -1,6 +1,14 @@
 <template>
-    <div v-show="active" :class="['e-window-item', { 'e-window-item--active': active }]" disabled="false" :key="value"
-        :data-value="value">
+    <div
+        v-show="active"
+        :class="['e-window__item', 'e-window-item', { 'e-window__item--active e-window-item--active': active }]"
+        :data-value="value"
+        role="tabpanel"
+        :id="panelId"
+        :aria-labelledby="tabId"
+        :aria-hidden="!active"
+        :tabindex="active ? 0 : -1"
+    >
         <slot></slot>
     </div>
 </template>
@@ -15,4 +23,6 @@ const props = defineProps<Props>()
 const Group = inject<Partial<EWindow> | undefined>("EWindow", undefined);
 
 const active = computed(() => Group?.modelValue?.value === props.value)
+const panelId = computed(() => Group?.name?.value ? `${Group.name.value}-panel-${String(props.value)}` : undefined)
+const tabId = computed(() => Group?.name?.value ? `${Group.name.value}-tab-${String(props.value)}` : undefined)
 </script>

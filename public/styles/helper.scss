@@ -138,7 +138,7 @@ $directions: (
   @each $d in $displays {
     $selector: ".d-#{$bp}-#{$d}";
 
-    @if $bp == 0 {
+    @if $value == 0 {
       $selector: ".d-#{$d}";
     }
 

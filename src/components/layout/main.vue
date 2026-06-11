@@ -9,10 +9,6 @@
 <script setup lang="ts" >
 import { useLayout } from '@/composables'
 
-interface Props {
-    theme?: string
-}
-const props = withDefaults(defineProps<Props>(), { theme: 'light' })
 const { mainLayoutStyle } = useLayout()
 
 </script>

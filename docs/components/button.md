@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { EButton } from 'drocket'
+import { EButton } from 'nuvex-ui'
 ```
 
 ## Props

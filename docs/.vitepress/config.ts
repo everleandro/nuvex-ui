@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
-  title: 'Drocket',
+  title: 'Nuvex UI',
   description: 'Vue 3 UI component library',
   lang: 'es-ES',
   vite: {
@@ -61,6 +61,6 @@ export default defineConfig({
         ]
       }
     ],
-    socialLinks: [{ icon: 'github', link: 'https://github.com/everleandro/drocket' }]
+    socialLinks: [{ icon: 'github', link: 'https://github.com/everleandro/nuvex-ui' }]
   }
 })

@@ -5,6 +5,7 @@
 @forward "./components/icon";
 @forward "./components/avatar";
 @forward "./components/bar";
+@forward "./components/drawer";
 @forward "./components/button";
 @forward "./components/chip";
 @forward "./components/date-picker";
@@ -18,6 +19,7 @@
 @use "./foundation/layout" as layout;
 @use "./components/button" as button;
 @use "./components/chip" as chip;
+@use "./components/drawer" as drawer;
 @use "./components/icon" as icon;
 @use "./components/list" as list;
 
@@ -43,8 +45,11 @@ $theme-base-css-var-groups: (
   "e-list-item-title-line-height": list.$list-item-title-line-heights,
   "e-list-item-subtitle-font-size": list.$list-item-subtitle-font-sizes,
   "e-list-item-subtitle-line-height": list.$list-item-subtitle-line-heights,
+  "e-list-item-padding-inline": list.$list-item-padding-inline,
   "e-list-item-content-padding-block": list.$list-item-content-padding-block,
   "e-list-item-affix-gap": list.$list-item-affix-gap,
+  "e-list-item-affix-width": list.$list-item-affix-width,
+  "e-list-item-affix-slot-min-width": list.$list-item-affix-slot-min-width,
   "e-list-item-height": list.$list-item-height,
   "e-list-item-icon-size": list.$list-item-icon-size,
   "e-list-item-dense": list.$list-item-dense,

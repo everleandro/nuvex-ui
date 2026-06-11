@@ -11,7 +11,7 @@
 ## Importacion
 
 ```ts
-import { EList, EListItem, EListGroup } from 'drocket'
+import { EList, EListItem, EListGroup } from 'nuvex-ui'
 ```
 
 ## Props

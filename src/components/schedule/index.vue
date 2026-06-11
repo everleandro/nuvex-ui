@@ -127,7 +127,7 @@
 import { CalendarScale, ScheduleView } from "@/types";
 import type { ElevationLevel, ElevationProps, ScheduleEvent, ScheduleSpace, Point, ScheduleSlotEvent, ScheduleToolbarSlotProps } from "@/types";
 import { ripple } from "@/directives";
-import { Lng as Lnguage, suportedLng } from '@/locales/index';
+import { getDefaultLocaleCode, Lng as Lnguage, suportedLng } from '@/locales/index';
 import EProgressLinear from '@/components/progress/linear.vue';
 import { useResolvedColor } from '@/composables/color';
 import { getColorContrastCssValue, getColorCssValue, normalizeCssSize } from '@/utils/style';
@@ -150,7 +150,7 @@ export interface Props extends ElevationProps {
 }
 const props = withDefaults(defineProps<Props>(),
     {
-        lng: 'en', color: 'primary', rowHeight: '97',
+        lng: getDefaultLocaleCode(), color: 'primary', rowHeight: '97',
         eventElevation: 'md',
         step: 60 * 60, start: 0, events: () => [], stickyTopHeader: 0,
         end: 60 * 60 * 24, spaces: () => []

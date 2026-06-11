@@ -1,6 +1,6 @@
 # Utility Classes
 
-Drocket genera automáticamente clases CSS de utilidad para acelerar el desarrollo. Estas clases siguen convenciones simples y cubren casos comunes: espaciado, flexbox, posicionamiento, texto y colores.
+Nuvex UI genera automaticamente clases CSS de utilidad para acelerar el desarrollo. Estas clases siguen convenciones simples y cubren casos comunes: espaciado, flexbox, posicionamiento, texto y colores.
 
 ## Introducción Rápida
 
@@ -438,7 +438,7 @@ Cambia display según breakpoint. Breakpoints disponibles: `xs` (0), `sm` (600px
 ```vue
 <template>
   <div class="flex-row gap-4 items-center justify-between px-6 py-4 e-elevation--sm">
-    <span class="primary--text font-semibold">Drocket</span>
+    <span class="primary--text font-semibold">Nuvex UI</span>
     <nav class="flex-row gap-2">
       <button class="p-2 rounded hover:bg-blue-100">Home</button>
       <button class="p-2 rounded hover:bg-blue-100">Docs</button>

@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { ECheckbox } from 'drocket'
+import { ECheckbox } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida

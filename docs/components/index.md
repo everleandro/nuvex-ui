@@ -1,6 +1,6 @@
 # Componentes
 
-Esta seccion documenta cada componente publico exportado por Drocket.
+Esta seccion documenta cada componente publico exportado por Nuvex UI.
 
 ## Disponibles hoy
 

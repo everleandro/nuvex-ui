@@ -1,17 +1,28 @@
 .e-drawer {
+  --drawer-local-bg: var(--e-drawer-bg, var(--e-color-surface-1, #ffffff));
+  --drawer-local-color: var(--e-drawer-color, var(--e-contrast-surface-1, #000000));
+  --drawer-local-border-color: var(--e-drawer-border-color, var(--e-color-border, rgba(0, 0, 0, 0.12)));
+  --drawer-local-border-width: var(--e-drawer-border-width, 1px);
+  --drawer-local-transition-duration: var(--e-drawer-transition-duration, 0.2s);
+  --drawer-local-transition-timing-function: var(--e-drawer-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+  --drawer-local-floating-bg: var(--e-drawer-floating-bg, var(--drawer-local-bg));
+  --drawer-local-floating-margin: var(--e-drawer-floating-margin, 12px);
+  --drawer-local-floating-radius: var(--e-drawer-floating-radius, var(--e-border-radius-root, 0.95rem));
+
   height: 100%;
   left: 0;
   max-width: 100%;
-  background-color: #fff;
+  background-color: var(--drawer-local-bg);
+  color: var(--drawer-local-color);
   overflow: hidden;
   pointer-events: auto;
   top: 0;
-  transition-duration: 0.2s;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: var(--drawer-local-transition-duration);
+  transition-timing-function: var(--drawer-local-transition-timing-function);
   transition-property: transform, visibility, width;
   position: fixed;
   z-index: 11;
-
+  
   &__body {
     flex: 0 1 auto;
     height: 100%;
@@ -27,6 +38,9 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    background-color: var(--drawer-local-bg);
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   &__prepend,
@@ -37,21 +51,10 @@
 
   &--absolute {
     position: absolute;
-
-    &.e-drawer--open {
-      box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2),
-        0 16px 24px 2px rgb(0, 0, 0, 0.4), 0 6px 30px 5px rgb(0, 0, 0, 0.2);
-    }
   }
 
   &--fixed {
     position: fixed;
-  }
-
-  &__content {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 100%;
   }
 
   &--right {
@@ -71,16 +74,18 @@
     top: 0;
     height: 100%;
     width: 0;
-    border-left: 1px solid #0000001f;
+    border-left: var(--drawer-local-border-width) solid var(--drawer-local-border-color);
   }
+
   &--floating {
     .e-drawer {
       &__content {
-        box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024,
-          0 1px 5px #0000001f;
-        height: calc(100% - 24px);
-        margin: 12px;
+        background-color: var(--drawer-local-floating-bg);
+        border-radius: var(--drawer-local-floating-radius);
+        height: calc(100% - (var(--drawer-local-floating-margin) * 2));
+        margin: var(--drawer-local-floating-margin);
       }
+
       &__border {
         display: none;
       }

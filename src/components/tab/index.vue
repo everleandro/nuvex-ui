@@ -1,15 +1,15 @@
 <template>
     <slot name="activator" :attrs="activatorAttrs">
         <EButton v-bind="buttonProps" :class="['e-tab',
-            { 'e-slide-group-item--active e-tab--selected': active }]" tabindex="0" role="tab" :aria-selected="active"
-            :value="value" @click="changeGroupValue" :icon="icon">
+            { 'e-slide-group-item--active e-tab--selected': active }]" role="tab" :aria-selected="active"
+            :id="tabId" :aria-controls="panelId" :tabindex="active ? 0 : -1" :value="value" :data-value="value"
+            @click="changeGroupValue" @keydown="handleTabNavigation" :icon="icon">
             <slot></slot>
-            <div class="e-tab__slider" :style="sliderStyle"></div>
         </EButton>
     </slot>
 </template>
 <script lang="ts" setup>
-import { computed, inject, reactive } from "vue";
+import { computed, inject } from "vue";
 import { TabGroup } from "./group.vue"
 import EButton from "@/components/button/index.vue";
 import { ButtonProps } from "@/components/button/index.vue";
@@ -19,17 +19,63 @@ export interface Props extends ButtonProps {
 }
 const props = defineProps<Props>();
 const Group = inject<Partial<TabGroup> | undefined>("TabGroup", undefined);
-const sliderStyle = reactive<Record<string, string>>({})
 
 const emit = defineEmits<{
     (e: 'click', value: Event): void
 }>()
 
 const active = computed(() => Group?.modelValue?.value === props.value && props.value !== undefined)
+const tabId = computed(() => Group?.name?.value ? `${Group.name.value}-tab-${String(props.value)}` : undefined)
+const panelId = computed(() => Group?.name?.value ? `${Group.name.value}-panel-${String(props.value)}` : undefined)
 
 const changeGroupValue = (evt: Event): void => {
     Group?.changeValue?.(props.value)
     emit('click', evt)
+}
+
+const handleTabNavigation = (evt: KeyboardEvent): void => {
+    const key = evt.key
+    const isVertical = Boolean(Group?.vertical?.value)
+    const previousKey = isVertical ? 'ArrowUp' : 'ArrowLeft'
+    const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight'
+    const managedKeys = [previousKey, nextKey, 'Home', 'End']
+
+    if (!managedKeys.includes(key)) {
+        return
+    }
+
+    const currentTab = evt.currentTarget as HTMLElement | null
+    const tabContainer = currentTab?.closest('.e-tabs__content')
+    if (!currentTab || !tabContainer) {
+        return
+    }
+
+    const tabs = Array.from(tabContainer.querySelectorAll<HTMLElement>('.e-tab'))
+    if (!tabs.length) {
+        return
+    }
+
+    const currentIndex = tabs.indexOf(currentTab)
+    if (currentIndex < 0) {
+        return
+    }
+
+    evt.preventDefault()
+
+    let targetIndex = currentIndex
+    if (key === previousKey) {
+        targetIndex = (currentIndex - 1 + tabs.length) % tabs.length
+    } else if (key === nextKey) {
+        targetIndex = (currentIndex + 1) % tabs.length
+    } else if (key === 'Home') {
+        targetIndex = 0
+    } else if (key === 'End') {
+        targetIndex = tabs.length - 1
+    }
+
+    const targetTab = tabs[targetIndex]
+    targetTab.click()
+    targetTab.focus()
 }
 
 const color = computed((): string => {

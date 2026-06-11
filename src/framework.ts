@@ -2,13 +2,13 @@ import type { Plugin } from "vue";
 import { version } from "../package.json";
 import { install } from "./install";
 
-type DrocketPlugin = Plugin & {
+type LibraryPlugin = Plugin & {
   version: string;
 };
 
-const Drocket: DrocketPlugin = {
+const NuvexUI: LibraryPlugin = {
   install,
   version,
 };
 
-export default Drocket;
+export default NuvexUI;

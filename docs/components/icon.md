@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { EIcon } from 'drocket'
+import { EIcon } from 'nuvex-ui'
 ```
 
 ## Props

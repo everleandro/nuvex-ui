@@ -7,7 +7,7 @@ $header-col-height: 4.0625rem !default;
 $schedule-bg: var(--e-color-surface-1, #ffffff) !default;
 $schedule-color: var(--e-contrast-surface-1) !default;
 $schedule-border-color: var(--e-color-border, rgba(0, 0, 0, 0.12)) !default;
-$schedule-border-radius: globals.$border-radius-root !default;
+$schedule-border-radius: var(--e-border-radius-root, #{globals.$border-radius-root}) !default;
 $schedule-header-frame-height: calc($header-col-height + 1.25rem) !default;
 $schedule-toolbar-gap: globals.$space-base * 2 !default;
 $schedule-event-bg: var(--e-color-surface-2, #ffffff) !default;

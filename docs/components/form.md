@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { EForm } from 'drocket'
+import { EForm } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida

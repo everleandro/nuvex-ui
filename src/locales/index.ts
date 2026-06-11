@@ -34,8 +34,12 @@ export interface Locale {
   schedule: ScheduleLocale;
 }
 
-const defaultLocaleCode = "en";
+let defaultLocaleCode: LocaleCode = "en";
 const localeFactory: Record<string, Locale> = { es, en, fr };
+
+const normalizeLocaleCode = (code: string | undefined): string => {
+  return `${code ?? ""}`.trim().toLowerCase();
+};
 
 export const registerLocales = (locales: Record<string, Locale> = {}): void => {
   Object.assign(localeFactory, locales);
@@ -46,11 +50,31 @@ export const getLocales = (): Readonly<Record<string, Locale>> => {
 };
 
 export const hasLocale = (code: string): boolean => {
-  return Object.prototype.hasOwnProperty.call(localeFactory, code);
+  return Object.prototype.hasOwnProperty.call(localeFactory, normalizeLocaleCode(code));
 };
 
 const resolveLocaleCode = (code: string): string => {
-  return hasLocale(code) ? code : defaultLocaleCode;
+  const normalizedCode = normalizeLocaleCode(code);
+  if (hasLocale(normalizedCode)) {
+    return normalizedCode;
+  }
+
+  // Allow common regional codes like "es-MX" to fallback to "es".
+  const baseCode = normalizedCode.split("-")[0];
+  if (baseCode && hasLocale(baseCode)) {
+    return baseCode;
+  }
+
+  return defaultLocaleCode;
+};
+
+export const getDefaultLocaleCode = (): LocaleCode => {
+  return defaultLocaleCode;
+};
+
+export const setDefaultLocaleCode = (code: LocaleCode): LocaleCode => {
+  defaultLocaleCode = resolveLocaleCode(code);
+  return defaultLocaleCode;
 };
 
 export class Lng {

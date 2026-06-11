@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { ERadio, ERadioGroup } from 'drocket'
+import { ERadio, ERadioGroup } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida

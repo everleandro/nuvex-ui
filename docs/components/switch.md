@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { ESwitch } from 'drocket'
+import { ESwitch } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida

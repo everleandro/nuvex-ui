@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { ETimePicker } from 'drocket'
+import { ETimePicker } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida

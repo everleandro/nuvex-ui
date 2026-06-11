@@ -1,4 +1,4 @@
-# Documentacion Drocket
+# Documentacion Nuvex UI
 
 Esta carpeta contiene la documentacion local del proyecto.
 

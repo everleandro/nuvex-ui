@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { EDialog } from 'drocket'
+import { EDialog } from 'nuvex-ui'
 ```
 
 ## Props

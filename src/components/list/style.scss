@@ -4,6 +4,7 @@ $list-item-sizes: x-small, small, default, large, x-large;
 $list-item-affix-types: icon, avatar, slot;
 
 @mixin list-item-size-variables($size-name) {
+  --list-item-padding-inline: var(--e-list-item-padding-inline-#{$size-name});
   --list-item-font-size: var(--e-list-item-font-size-#{$size-name});
   --list-item-title-font-size: var(--e-list-item-title-font-size-#{$size-name});
   --list-item-title-line-height: var(--e-list-item-title-line-height-#{$size-name});
@@ -11,6 +12,8 @@ $list-item-affix-types: icon, avatar, slot;
   --list-item-subtitle-line-height: var(--e-list-item-subtitle-line-height-#{$size-name});
   --list-item-content-padding-block: var(--e-list-item-content-padding-block-#{$size-name});
   --list-item-affix-gap: var(--e-list-item-affix-gap-#{$size-name});
+  --list-item-affix-width: var(--e-list-item-affix-width-#{$size-name});
+  --list-item-affix-slot-min-width: var(--e-list-item-affix-slot-min-width-#{$size-name}, var(--e-list-item-affix-width-#{$size-name}));
   --list-item-height: var(--e-list-item-height-#{$size-name});
   --list-item-icon-size: var(--e-list-item-icon-size-#{$size-name});
 }
@@ -34,15 +37,14 @@ $list-item-affix-types: icon, avatar, slot;
 }
 
 .e-list {
-  --root-indent: var(--e-space-base, 4px);
-  --padding-inline: var(--e-list-padding-inline, calc(var(--e-space-base, 4px) * 4));
+  --list-item-border-radius: var(--e-list-item-border-radius, var(--e-border-radius-root));
   color: var(--e-list-color, inherit);
   display: block;
   padding: 8px 0;
   position: static;
   transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   --before-opacity: var(--e-list-item-state-active, 0.12);
-  border-radius: var(--e-border-radius-root, 4px);
+  border-radius: var(--e-list-border-radius, var(--e-border-radius-root, 4px));
   overflow: hidden;
 
   &-group {
@@ -53,7 +55,6 @@ $list-item-affix-types: icon, avatar, slot;
     transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
 
     &__content {
-      --group-inline-padding: var(--e-space-base, 4px);
       --list-item-nested-offset: calc((var(--list-group-level, 0) + 1) * var(--group-indent-step));
     }
 
@@ -71,10 +72,10 @@ $list-item-affix-types: icon, avatar, slot;
   }
 
   &-item {
-    --list-item-affix-size: var(--list-item-height, var(--e-list-item-height-default, 3rem));
-    --list-item-nested-offset: 0px;
-
-    --list-item-media-size: calc(var(--list-item-affix-size) - (var(--e-space-base, 4px) * 3));
+    --padding-inline: var(--list-item-padding-inline, var(--e-list-padding-inline, calc(var(--e-space-base, 4px) * 4)));
+    --list-item-affix-size: var(--list-item-affix-width, calc(var(--list-item-height, var(--e-list-item-height-default, 3rem)) - (var(--e-space-base, 4px) * 2)));
+    border-radius: var(--list-item-border-radius, 4px);
+    --list-item-media-size: var(--list-item-affix-size);
     align-items: center;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -82,11 +83,10 @@ $list-item-affix-types: icon, avatar, slot;
     letter-spacing: normal;
     min-height: var(--list-item-height, 48px);
     outline: none;
-    // padding: 0 16px;
     position: relative;
     text-decoration: none;
     color: var(--e-list-color, currentColor);
-    padding-inline-start: calc(var(--padding-inline) + var(--list-item-nested-offset));
+    padding-inline-start: calc(var(--padding-inline) + var(--list-item-nested-offset, 0px));
     padding-inline-end: var(--padding-inline);
 
     &__append,
@@ -110,6 +110,13 @@ $list-item-affix-types: icon, avatar, slot;
         --e-icon-size-default: var(--list-item-icon-size);
         --e-icon-size-large: var(--list-item-icon-size);
         --e-icon-size-x-large: var(--list-item-icon-size);
+      }
+
+      &--slot {
+        --list-item-affix-size: auto;
+        aspect-ratio: auto;
+        min-width: var(--list-item-affix-slot-min-width, var(--list-item-affix-width, 22px));
+        width: auto;
       }
     }
 
@@ -139,7 +146,6 @@ $list-item-affix-types: icon, avatar, slot;
     &-title {
       display: block;
       overflow: hidden;
-      text-overflow: ellipsis;
       text-overflow: ellipsis;
       text-transform: none;
     }

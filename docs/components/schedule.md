@@ -14,7 +14,7 @@ import {
   ESchedule,
   EScheduleToolbar,
   ScheduleView,
-} from 'drocket'
+} from 'nuvex-ui'
 ```
 
 Los props `view` y `scale` siguen aceptando los valores serializados (`"calendar"`, `"resource"`, `"day"`, `"week"`), pero la libreria ahora exporta `ScheduleView` y `CalendarScale` para reutilizarlos en estado, watchers, tests y componentes consumidores.
@@ -42,7 +42,7 @@ Los props `view` y `scale` siguen aceptando los valores serializados (`"calendar
 | `resourceColumns` | `string \| number` | `undefined` | Cantidad de columnas visibles por página en vista `ScheduleView.Resource`. |
 | `loading` | `boolean` | `false` | Desactiva interacción y muestra `EProgressLinear` en el header. |
 | `color` | `string` | `'primary'` | Color base del componente y acciones internas. |
-| `lng` | `suportedLng` | `'en'` | Idioma usado para labels del header y del toolbar. |
+| `lng` | `suportedLng` | `locale global` | Idioma usado para labels del header y del toolbar. Si no se pasa, usa el locale configurado en `app.use(NuvexUI, { locale })`. |
 | `rowHeight` | `string \| number` | `'97'` | Altura visual por bloque de tiempo. |
 | `stickyTopHeader` | `string \| number` | `0` | Offset superior cuando el header se vuelve sticky. Para verlo en accion debe existir un contenedor scrollable sobre el que el header pueda fijarse. |
 | `step` | `number` | `3600` | Duración de cada celda en segundos. |
@@ -133,7 +133,7 @@ Uso recomendado:
 
 ```vue
 <script setup lang="ts">
-import { CalendarScale, ScheduleView } from 'drocket'
+import { CalendarScale, ScheduleView } from 'nuvex-ui'
 </script>
 
 <template>
@@ -155,7 +155,7 @@ import { CalendarScale, ScheduleView } from 'drocket'
 
 ```vue
 <script setup lang="ts">
-import { ScheduleView } from 'drocket'
+import { ScheduleView } from 'nuvex-ui'
 </script>
 
 <template>

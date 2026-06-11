@@ -26,3 +26,4 @@ dist-ssr
 
 # VitePress local cache
 docs/.vitepress/cache/
+docs/.vitepress/dist/

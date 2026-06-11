@@ -7,11 +7,6 @@
 <script setup lang="ts" >
 import { provideLayout } from '@/composables'
 
-interface Props {
-    theme?: string
-}
-const props = withDefaults(defineProps<Props>(), { theme: 'light' })
-
 provideLayout()
 </script>
 

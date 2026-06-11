@@ -1,7 +1,7 @@
 @use "sass:map";
 @use "../foundation/globals" as globals;
 
-$btn-border-radius: globals.$border-radius-root !default;
+$btn-border-radius: var(--e-border-radius-root, #{globals.$border-radius-root}) !default;
 $btn-font-weight: 500 !default;
 $btn-letter-spacing: 0.089em !default;
 $btn-border-style: solid !default;

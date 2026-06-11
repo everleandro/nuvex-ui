@@ -17,6 +17,7 @@
             <router-link to="/radio">Radios</router-link>
             <router-link to="/checkbox">Checkboxes</router-link>
             <router-link to="/schedule">Schedule</router-link>
+            <router-link to="/tab">Tabs</router-link>
             <router-link to="/menu">Menu</router-link>
             <router-link to="/palette">Paleta</router-link>
         </nav>
@@ -25,28 +26,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
-const theme = ref("light");
+import { computed } from "vue";
+import { useTheme } from "../../src/theme";
 
-const toggleTheme = () => {
-    theme.value = theme.value === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", theme.value);
-    localStorage.setItem("playground-theme", theme.value);
-};
-
-onMounted(() => {
-    // Restore saved theme or use system preference
-    const saved = localStorage.getItem("playground-theme");
-    if (saved) {
-        theme.value = saved;
-    } else {
-        const systemDark = window.matchMedia(
-            "(prefers-color-scheme: dark)",
-        ).matches;
-        theme.value = systemDark ? "dark" : "light";
-    }
-    document.documentElement.setAttribute("data-theme", theme.value);
-});
+const { currentTheme, toggleTheme } = useTheme();
+const theme = computed(() => currentTheme.value);
 </script>
 
 <style scoped>

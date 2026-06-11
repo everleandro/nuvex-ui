@@ -7,7 +7,7 @@ Describe que problema resuelve y cuando usarlo.
 ## Importacion
 
 ```ts
-import { EComponente } from 'drocket'
+import { EComponente } from 'nuvex-ui'
 ```
 
 ## Props

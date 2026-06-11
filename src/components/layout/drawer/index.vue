@@ -61,6 +61,7 @@ const props = withDefaults(defineProps<DrawerProps>(), {
   restoreFocus: true,
   width: 16,
   widthUnit: "rem",
+  elevation: "sm",
 });
 let mediaQueryList: MediaQueryList | null = null;
 const overlayId = `drawer-overlay-${Math.random().toString(36).slice(2)}`;
@@ -116,6 +117,10 @@ const drawerClass = computed((): Array<string> => {
   const classes2 = availableRootClassKeys
     .filter((key) => !!props[key])
     .map((key) => availableRootClasses[key]);
+
+  if ((absoluteComputed.value || props.floating) && props.elevation) {
+    classes.push(`e-elevation--${props.elevation}`);
+  }
 
   return [...classes, ...classes2];
 });

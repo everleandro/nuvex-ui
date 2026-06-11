@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { ESelect } from 'drocket'
+import { ESelect } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida

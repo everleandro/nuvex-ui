@@ -1,74 +1,102 @@
-import { Lng, suportedLng } from "../locales/index";
+import { getDefaultLocaleCode, Lng, suportedLng } from "../locales/index";
 export default class UtilDate {
-  date;
+  date: Date;
   lng: Lng;
 
   constructor(
     date: string | number | Date = new Date(),
-    lng: suportedLng = "en"
+    lng: suportedLng = getDefaultLocaleCode()
   ) {
     this.date = new Date(date);
     this.lng = new Lng(lng);
   }
 
+  private toInteger(value: number | string, fallback = 0): number {
+    const parsed = Number.parseInt(`${value}`, 10);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  }
+
+  /**
+   * Keep historical mutable behavior (many call sites rely on side effects)
+   * while still returning a new UtilDate for chain-style usage.
+   */
+  private mutateDate(mutator: (date: Date) => void): UtilDate {
+    const nextDate = new Date(this.date);
+    mutator(nextDate);
+    this.date = nextDate;
+    return new UtilDate(nextDate, this.lng.selectedLng);
+  }
+
   private addHours(h: number | string): UtilDate {
-    return new UtilDate(
-      this.date.setHours(this.date.getHours() + parseInt(`${h}`))
-    );
+    return this.mutateDate((date) => {
+      date.setHours(date.getHours() + this.toInteger(h));
+    });
   }
 
   private setHours(h: number | string): UtilDate {
-    return new UtilDate(this.date.setHours(parseInt(`${h}`)));
+    return this.mutateDate((date) => {
+      date.setHours(this.toInteger(h));
+    });
   }
 
   private addMinutes(minutes: number | string): UtilDate {
-    return new UtilDate(
-      this.date.setMinutes(this.date.getMinutes() + parseInt(`${minutes}`))
-    );
+    return this.mutateDate((date) => {
+      date.setMinutes(date.getMinutes() + this.toInteger(minutes));
+    });
   }
 
   private setMinutes(minutes: number | string): UtilDate {
-    return new UtilDate(this.date.setMinutes(parseInt(`${minutes}`)));
+    return this.mutateDate((date) => {
+      date.setMinutes(this.toInteger(minutes));
+    });
   }
 
   private addSeconds(seconds: number | string): UtilDate {
-    return new UtilDate(
-      this.date.setSeconds(this.date.getSeconds() + parseInt(`${seconds}`))
-    );
+    return this.mutateDate((date) => {
+      date.setSeconds(date.getSeconds() + this.toInteger(seconds));
+    });
   }
 
   private setSeconds(seconds: number | string): UtilDate {
-    return new UtilDate(this.date.setSeconds(parseInt(`${seconds}`)));
+    return this.mutateDate((date) => {
+      date.setSeconds(this.toInteger(seconds));
+    });
   }
 
   private setMonth(month: number | string): UtilDate {
-    return new UtilDate(this.date.setMonth(parseInt(`${month}`)));
+    return this.mutateDate((date) => {
+      date.setMonth(this.toInteger(month));
+    });
   }
 
   private addMonths(month: number | string): UtilDate {
-    return new UtilDate(
-      this.date.setMonth(this.date.getMonth() + parseInt(`${month}`))
-    );
+    return this.mutateDate((date) => {
+      date.setMonth(date.getMonth() + this.toInteger(month));
+    });
   }
 
   private addDays(days: number | string): UtilDate {
-    return new UtilDate(
-      this.date.setDate(this.date.getDate() + parseInt(`${days}`))
-    );
+    return this.mutateDate((date) => {
+      date.setDate(date.getDate() + this.toInteger(days));
+    });
   }
 
   private setDays(days: number | string): UtilDate {
-    return new UtilDate(this.date.setDate(parseInt(`${days}`)));
+    return this.mutateDate((date) => {
+      date.setDate(this.toInteger(days));
+    });
   }
 
   private setYears(year: number | string): UtilDate {
-    return new UtilDate(this.date.setFullYear(parseInt(`${year}`)));
+    return this.mutateDate((date) => {
+      date.setFullYear(this.toInteger(year));
+    });
   }
 
   private addYears(years: number | string): UtilDate {
-    return new UtilDate(
-      this.date.setFullYear(this.date.getFullYear() + parseInt(`${years}`))
-    );
+    return this.mutateDate((date) => {
+      date.setFullYear(date.getFullYear() + this.toInteger(years));
+    });
   }
 
   setTime(hours = 0, minutes = 0, seconds = 0): UtilDate {
@@ -80,7 +108,7 @@ export default class UtilDate {
   }
 
   startOfMonth(): UtilDate {
-    return new UtilDate(this.date).set(1, "days");
+    return new UtilDate(this.date, this.lng.selectedLng).set(1, "days");
   }
 
   endOfMonth(): UtilDate {
@@ -89,11 +117,13 @@ export default class UtilDate {
       this.date.getMonth() + 1,
       0
     );
-    return new UtilDate(newDate);
+    return new UtilDate(newDate, this.lng.selectedLng);
   }
 
   startOfYear(): UtilDate {
-    return new UtilDate(this.date, this.lng.selectedLng).set(1, "months");
+    return this.mutateDate((date) => {
+      date.setMonth(0, 1);
+    });
   }
 
   add(
@@ -230,35 +260,47 @@ export default class UtilDate {
     const hours = this.date.getHours();
     const minutes = this.date.getMinutes();
 
-    return format
-      .replace(/week-dddd/, this.weekdayName)
-      .replace(/week-ddd/, this.weekdayShortName)
-      .replace(/week-dd/, this.weekdaysMinName)
-      .replace(/month-DD/, ("0" + day).slice(-2))
-      .replace(/month-D/, `${day}`)
-      .replace(/hour-hh/, ("0" + hours).slice(-2))
-      .replace(/hour-h/, `${hours}`)
-      .replace(/minutes-mm/, ("0" + minutes).slice(-2))
-      .replace(/minutes-m/, `${minutes}`)
-      .replace(/year-YYYY/, `${year}`)
-      .replace(/year-YY/, String(year).slice(2))
-      .replace(/month-mmmm/, this.monthName)
-      .replace(/month-mmm/, this.monthshortName)
-      .replace(/month-MM/, ("0" + month).slice(-2))
-      .replace(/month-M/, `${month}`)
-      .replace(/nth-su/, this.nthSuffix);
+    const tokenValues: Record<string, string> = {
+      "week-dddd": this.weekdayName,
+      "week-ddd": this.weekdayShortName,
+      "week-dd": this.weekdaysMinName,
+      "month-DD": ("0" + day).slice(-2),
+      "month-D": `${day}`,
+      "hour-hh": ("0" + hours).slice(-2),
+      "hour-h": `${hours}`,
+      "minutes-mm": ("0" + minutes).slice(-2),
+      "minutes-m": `${minutes}`,
+      "year-YYYY": `${year}`,
+      "year-YY": String(year).slice(2),
+      "month-mmmm": this.monthName,
+      "month-mmm": this.monthshortName,
+      "month-MM": ("0" + month).slice(-2),
+      "month-M": `${month}`,
+      "nth-su": this.nthSuffix,
+    };
+
+    const orderedTokens = Object.keys(tokenValues).sort(
+      (left, right) => right.length - left.length
+    );
+    const tokenPattern = new RegExp(orderedTokens.join("|"), "g");
+
+    return format.replace(tokenPattern, (token) => tokenValues[token] ?? token);
   }
 
   createDateArray(start: Date | string, end: Date | string): Array<Date> {
-    const dates = [];
+    const dates: Array<Date> = [];
     let localStart = new Date(start);
     const localEnd = new Date(end);
-    while (localStart <= localEnd) {
-      dates.push(new Date(start));
-      localStart = new Date(
-        new Date(start).setDate(new Date(start).getDate() + 1)
-      );
+
+    if (!this.isValidDate(localStart) || !this.isValidDate(localEnd) || localStart > localEnd) {
+      return dates;
     }
+
+    while (localStart <= localEnd) {
+      dates.push(new Date(localStart));
+      localStart = new Date(localStart.setDate(localStart.getDate() + 1));
+    }
+
     return dates;
   }
 }

@@ -9,6 +9,7 @@ import PaletteView from './PaletteView.vue';
 import ProgressView from './ProgressView.vue';
 import RadioView from './RadioView.vue';
 import ScheduleView from './ScheduleView.vue';
+import TabView from './TabView.vue';
 import TextareaView from './TextareaView.vue';
 import TimePickerView from './TimePickerView.vue';
 
@@ -23,6 +24,7 @@ const routes = [
   { path: '/radio', component: RadioView },
   { path: '/checkbox', component: CheckboxView },
   { path: '/schedule', component: ScheduleView },
+  { path: '/tab', component: TabView },
   { path: '/menu', component: MenuView },
   { path: '/palette', component: PaletteView },
 ];

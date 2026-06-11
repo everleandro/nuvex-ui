@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { EAvatar } from 'drocket'
+import { EAvatar } from 'nuvex-ui'
 ```
 
 ## Props

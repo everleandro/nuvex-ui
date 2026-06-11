@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { ECard } from 'drocket'
+import { ECard } from 'nuvex-ui'
 ```
 
 ## Props
@@ -31,7 +31,7 @@ import { ECard } from 'drocket'
 `ECardContainer` es un helper estructural que agrega el padding interno estandar del card.
 
 ```ts
-import { ECard, ECardContainer } from 'drocket'
+import { ECard, ECardContainer } from 'nuvex-ui'
 ```
 
 ## Ejemplos

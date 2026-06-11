@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { EProgressLinear } from 'drocket'
+import { EProgressLinear } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida

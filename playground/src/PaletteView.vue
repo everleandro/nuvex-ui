@@ -3,7 +3,7 @@
     <div class="hero-card">
       <div>
         <p class="eyebrow">Primitive Palette</p>
-        <h2>Paleta publica de Drocket</h2>
+        <h2>Paleta publica de Nuvex UI</h2>
         <p class="lead">
           Esta vista muestra las CSS vars generadas automaticamente como
           <code>--e-palette-red-500</code> para que puedas validar tonos,
@@ -116,7 +116,7 @@ $primitive-color-overrides: (
   ),
 );
 
-@import "drocket/setting.scss";</code></pre>
+@import "nuvex-ui/setting.scss";</code></pre>
     </section>
   </section>
 </template>

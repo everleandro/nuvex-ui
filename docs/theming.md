@@ -1,6 +1,13 @@
 # Theming
 
-Drocket expone variables Sass y CSS custom properties para personalizar tema en build-time y runtime, con soporte para Light/Dark mode dinámico via CSS variables.
+Nuvex UI expone variables Sass y CSS custom properties para personalizar tema en build-time y runtime, con soporte para Light/Dark mode dinamico via CSS variables.
+
+## Resumen rapido
+
+- `theme` en `app.use(NuvexUI, { theme })` es opcional.
+- La libreria siempre incluye `light` y `dark` por defecto.
+- `light` y `dark` se personalizan principalmente via Sass/CSS variables.
+- El runtime API (`useTheme`) sirve para cambiar tema y registrar temas adicionales.
 
 ## Configuración inicial
 
@@ -38,7 +45,7 @@ $semantic-color-tokens-dark: (
 );
 
 // Importar después de tus customizaciones
-@import 'drocket/setting.scss';
+@import 'nuvex-ui/setting.scss';
 ```
 
 ### Step 2: Importa las variables en tu main.scss
@@ -52,19 +59,62 @@ $semantic-color-tokens-dark: (
 
 ```vue
 <script setup>
-// Cambiar tema en runtime
-const toggleTheme = () => {
-  const html = document.documentElement;
-  const current = html.getAttribute('data-theme');
-  const newTheme = current === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', newTheme);
-}
+import { useTheme } from 'nuvex-ui'
+
+const { currentTheme, setTheme, toggleTheme, getThemes } = useTheme()
+
+const useDark = () => setTheme('dark')
 </script>
 
 <template>
-  <button @click="toggleTheme">Cambiar tema</button>
+  <button @click="toggleTheme">Toggle theme</button>
+  <button @click="useDark">Dark</button>
+  <p>Theme actual: {{ currentTheme }}</p>
+  <p>Disponibles: {{ getThemes().map(t => t.name).join(', ') }}</p>
 </template>
 ```
+
+## Configuracion del plugin de tema
+
+```ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import { NuvexUI } from 'nuvex-ui'
+
+const app = createApp(App)
+
+app.use(NuvexUI, {
+  theme: {
+    // Opcional: si no se define, fallback a light
+    defaultTheme: 'light',
+    storage: {
+      enabled: true,
+      key: 'my-app-theme',
+    },
+    system: {
+      enabled: true,
+    },
+    // Solo para agregar temas nuevos, no para sobrescribir light/dark
+    themes: {
+      ocean: {
+        name: 'ocean',
+        isDark: false,
+        tokens: {
+          brand: '#0ea5e9',
+          'surface-1': '#ecfeff',
+        },
+      },
+    },
+    applyTokensAsCssVars: true,
+  },
+})
+```
+
+## SSR
+
+- El sistema de tema es SSR-safe: no accede a `window`, `document` o `localStorage` durante la creacion del store en servidor.
+- La aplicacion de `data-theme` al DOM ocurre solo en cliente.
+- Si hay tema persistido en cliente, se reconcilia durante hidratacion sin romper render.
 
 ## Buenas prácticas
 
@@ -72,12 +122,13 @@ const toggleTheme = () => {
 - **Respeta la jerarquía:** No sobrescribas valores internos de componentes; usa las variables Sass documentadas
 - **Documenta customizaciones:** Si añades nuevas variables, actualiza este archivo con comentarios
 - **Separa concerns:** Usa variables para temas, no para sobrescrituras CSS puntuales
+- **No sobrescribas `light`/`dark` via plugin:** Para esos temas base, usa tokens Sass/CSS.
 
 ## Sistema de Colores Avanzado
 
 ### Paleta Primitiva vs. Colores Semánticos
 
-Drocket diferencia entre dos sistemas de color:
+Nuvex UI diferencia entre dos sistemas de color:
 
 **Tokens Semánticos** (`--e-color-*`): Significado intencional
 - `primary`, `secondary`, `error`, `success`, etc.
@@ -104,10 +155,10 @@ $primitive-color-seeds: (
   purple: #7c3aed,   // Agregar nuevo color
 ) !default;
 
-@import 'drocket/setting.scss';
+@import 'nuvex-ui/setting.scss';
 ```
 
-Drocket generará automáticamente la escala completa para cada color.
+Nuvex UI genera automaticamente la escala completa para cada color.
 
 ### Corregir Tonos Específicos
 
@@ -125,7 +176,7 @@ $primitive-color-overrides: (
   ),
 ) !default;
 
-@import 'drocket/setting.scss';
+@import 'nuvex-ui/setting.scss';
 ```
 
 Luego úsalos en tu CSS:
@@ -145,7 +196,7 @@ Luego úsalos en tu CSS:
 
 ## Utility Classes
 
-Drocket genera automáticamente clases de utilidad para espaciado, flexbox, posicionamiento y más. Están optimizadas para reducir la cantidad de CSS custom que escribes.
+Nuvex UI genera automaticamente clases de utilidad para espaciado, flexbox, posicionamiento y mas. Estan optimizadas para reducir la cantidad de CSS custom que escribes.
 
 ### Sistema de Espaciado
 
@@ -295,39 +346,19 @@ Ahora puedes aplicar colores directamente con clases generadas:
 
 ## Theming Runtime con CSS Variables
 
-### Modo Light/Dark
+El runtime manager aplica `data-theme` en `documentElement` y permite activar temas base (`light`/`dark`) o temas agregados.
 
-Usa el atributo `data-theme` en el `<html>`:
+```ts
+import { useTheme } from 'nuvex-ui'
 
-```html
-<!-- Default: light -->
-<html data-theme="light">
+const { setTheme } = useTheme()
 
-<!-- Cambiar a dark -->
-<html data-theme="dark">
+setTheme('light')
+setTheme('dark')
+setTheme('ocean')
 ```
 
-Los componentes y utilities responden automáticamente sin recompilar.
-
-### Crear Temas Personalizados
-
-```scss
-// assets/styles/themes.scss
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="auto"],
-  :root:not([data-theme]) {
-    // Tus overrides para dark
-    --e-color-primary: var(--e-palette-blue-300);
-    --e-color-surface-1: #1e1e1e;
-  }
-}
-
-:root[data-theme="custom"] {
-  --e-color-primary: #9c27b0;
-  --e-color-secondary: #673ab7;
-  --e-color-surface-1: #f5f5f5;
-}
-```
+Cuando `applyTokensAsCssVars` esta habilitado, los tokens del tema activo se escriben como CSS variables con prefijo configurable (`--e-theme-` por defecto).
 
 ## API Sass
 

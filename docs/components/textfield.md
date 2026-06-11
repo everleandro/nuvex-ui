@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { ETextfield } from 'drocket'
+import { ETextfield } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida

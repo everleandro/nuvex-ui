@@ -104,7 +104,7 @@
 <script lang="ts" setup>
 import EButton from "@/components/button/index.vue";
 import { useResolvedColor } from "@/composables/color";
-import { Lng as Lnguage } from "@/locales/index";
+import { getDefaultLocaleCode, Lng as Lnguage } from "@/locales/index";
 import type { ContainerMenuInterface, DialogInterface } from "@/types";
 import {
   datePickerViewType,
@@ -164,7 +164,7 @@ const menuContainer = inject<ContainerMenuInterface | undefined>(
 
 const props = withDefaults(defineProps<DatePickerProps>(), {
   gridButtonElevation: undefined,
-  lng: "en",
+  lng: getDefaultLocaleCode(),
   disabled: undefined,
   highlighted: undefined,
   view: undefined,
