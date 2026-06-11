@@ -9,6 +9,31 @@ Nuvex UI expone variables Sass y CSS custom properties para personalizar tema en
 - `light` y `dark` se personalizan principalmente via Sass/CSS variables.
 - El runtime API (`useTheme`) sirve para cambiar tema y registrar temas adicionales.
 
+## Contrato oficial de surfaces
+
+La libreria usa `surface-0..surface-3` como jerarquia visual comun. Esta jerarquia aplica tanto para `light` como para `dark`.
+
+- `surface-0`: fondo base de app y viewport.
+- `surface-1`: contenedores y paneles de contenido por defecto.
+- `surface-2`: chrome persistente o capas elevadas frecuentes.
+- `surface-3`: enfasis puntual (estados destacados), no como fondo general.
+
+### Mapeo por componente de layout
+
+- `App` (`.e-app`): `surface-0` (via `--e-app-background`).
+- `Main` (`.e-main`) y `Container` (`.e-container`): heredan fondo del contexto, no definen surface propio.
+- `Bar` (`.e-bar`): `surface-2`.
+- `Drawer` (`.e-drawer`): `surface-1` base, `surface-2` en modo floating.
+- `Card`, `Dialog`, `Menu`: `surface-1`.
+
+### Regla de composicion
+
+Si un layout mezcla varios bloques visibles al mismo tiempo, prioriza esta progresion:
+
+`surface-0` -> `surface-1` -> `surface-2` -> `surface-3`
+
+Evita saltar directamente de `surface-0` a `surface-3` para fondos estructurales.
+
 ## Configuración inicial
 
 ### Step 1: Prepara tu archivo de variables

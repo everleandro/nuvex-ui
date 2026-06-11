@@ -7,7 +7,7 @@
     border-radius: var(--e-border-radius-root, 4px);
     overflow: hidden;
     background-color: var(--e-color-surface-1, #ffffff);
-    color: var(--e-menu-color, currentColor);
+    color: var(--e-menu-color, var(--e-contrast-surface-1, #000000));
     transition-duration: 300ms;
     position: relative;
   }
