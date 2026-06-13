@@ -7,6 +7,8 @@ export type DrawerClassKeys =
   | "fixed"
   | "floating";
 
+export type DrawerAppearance = "default" | "transparent";
+
 export interface DrawerProps {
   autoFocus?: boolean;
   modelValue?: boolean;
@@ -28,4 +30,11 @@ export interface DrawerProps {
    * @default 'sm'
    */
   elevation?: ElevationLevel;
+  /**
+   * Visual appearance variant for the drawer surface.
+   * - `default`: uses the drawer surface/background/border tokens.
+   * - `transparent`: keeps layout behavior but removes surface emphasis.
+   * @default 'default'
+   */
+  appearance?: DrawerAppearance;
 }

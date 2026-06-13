@@ -94,4 +94,10 @@
       }
     }
   }
+
+  &--transparent {
+    --drawer-local-bg: transparent;
+    --drawer-local-floating-bg: transparent;
+    --drawer-local-border-width: 0;
+  }
 }
