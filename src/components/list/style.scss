@@ -39,6 +39,7 @@ $list-item-affix-types: icon, avatar, slot;
 .e-list {
   --list-item-border-radius: var(--e-list-item-border-radius, var(--e-border-radius-root));
   color: var(--e-list-color, inherit);
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
   display: block;
   padding: 8px 0;
   position: static;
@@ -86,6 +87,7 @@ $list-item-affix-types: icon, avatar, slot;
     position: relative;
     text-decoration: none;
     color: var(--e-list-color, currentColor);
+    font-family: inherit;
     padding-inline-start: calc(var(--padding-inline) + var(--list-item-nested-offset, 0px));
     padding-inline-end: var(--padding-inline);
 
@@ -155,15 +157,17 @@ $list-item-affix-types: icon, avatar, slot;
       white-space: nowrap;
       word-break: normal;
       word-wrap: break-word;
+      font-family: inherit;
       font-size: var(--list-item-title-font-size, var(--list-item-font-size));
-      font-weight: var(--list-item-title-font-weight, 400);
+      font-weight: var(--e-typography-title-font-weight-sm, var(--list-item-title-font-weight, 400));
       line-height: var(--list-item-title-line-height, 1.5rem);
     }
 
     &-subtitle {
       word-break: break-all;
+      font-family: inherit;
       font-size: var(--list-item-subtitle-font-size, 0.875rem);
-      font-weight: var(--list-item-subtitle-font-weight, 400);
+      font-weight: var(--e-typography-body-font-weight-sm, var(--list-item-subtitle-font-weight, 400));
       line-height: var(--list-item-subtitle-line-height, 1rem);
       opacity: 0.6;
     }

@@ -31,7 +31,7 @@
 }
 
 body {
-  font-family: var(--e-root-font-family, #{setting.$root-font-family});
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, #{setting.$root-font-family}));
   background-color: var(--e-app-background, #ffffff);
   color: var(--e-app-color, #000000);
   transition: background-color 0.2s ease, color 0.2s ease;

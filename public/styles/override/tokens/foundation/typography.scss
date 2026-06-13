@@ -1,0 +1,217 @@
+@use "sass:map";
+
+$typography-family: map.merge(
+    (
+        base: ("Roboto Flex", "Roboto", sans-serif),
+        mono: ("Roboto Mono", monospace),
+    ),
+    ()
+) !default;
+
+$typography-display-font-sizes: map.merge(
+    (
+        lg: 3.5625rem,
+        md: 2.8125rem,
+        sm: 2.25rem,
+    ),
+    ()
+) !default;
+
+$typography-display-line-heights: map.merge(
+    (
+        lg: 4rem,
+        md: 3.25rem,
+        sm: 2.75rem,
+    ),
+    ()
+) !default;
+
+$typography-display-font-weights: map.merge(
+    (
+        lg: 500,
+        md: 500,
+        sm: 500,
+    ),
+    ()
+) !default;
+
+$typography-display-letter-spacings: map.merge(
+    (
+        lg: -0.015em,
+        md: -0.01em,
+        sm: -0.005em,
+    ),
+    ()
+) !default;
+
+$typography-headline-font-sizes: map.merge(
+    (
+        lg: 2rem,
+        md: 1.75rem,
+        sm: 1.5rem,
+    ),
+    ()
+) !default;
+
+$typography-headline-line-heights: map.merge(
+    (
+        lg: 2.5rem,
+        md: 2.25rem,
+        sm: 2rem,
+    ),
+    ()
+) !default;
+
+$typography-headline-font-weights: map.merge(
+    (
+        lg: 500,
+        md: 500,
+        sm: 500,
+    ),
+    ()
+) !default;
+
+$typography-headline-letter-spacings: map.merge(
+    (
+        lg: -0.01em,
+        md: -0.005em,
+        sm: 0,
+    ),
+    ()
+) !default;
+
+$typography-title-font-sizes: map.merge(
+    (
+        lg: 1.375rem,
+        md: 1rem,
+        sm: 0.875rem,
+    ),
+    ()
+) !default;
+
+$typography-title-line-heights: map.merge(
+    (
+        lg: 1.75rem,
+        md: 1.5rem,
+        sm: 1.25rem,
+    ),
+    ()
+) !default;
+
+$typography-title-font-weights: map.merge(
+    (
+        lg: 500,
+        md: 500,
+        sm: 500,
+    ),
+    ()
+) !default;
+
+$typography-title-letter-spacings: map.merge(
+    (
+        lg: -0.005em,
+        md: 0,
+        sm: 0.005em,
+    ),
+    ()
+) !default;
+
+$typography-body-font-sizes: map.merge(
+    (
+        lg: 1rem,
+        md: 0.875rem,
+        sm: 0.75rem,
+    ),
+    ()
+) !default;
+
+$typography-body-line-heights: map.merge(
+    (
+        lg: 1.5rem,
+        md: 1.25rem,
+        sm: 1rem,
+    ),
+    ()
+) !default;
+
+$typography-body-font-weights: map.merge(
+    (
+        lg: 400,
+        md: 400,
+        sm: 400,
+    ),
+    ()
+) !default;
+
+$typography-body-letter-spacings: map.merge(
+    (
+        lg: 0,
+        md: 0,
+        sm: 0.01em,
+    ),
+    ()
+) !default;
+
+$typography-label-font-sizes: map.merge(
+    (
+        lg: 0.875rem,
+        md: 0.75rem,
+        sm: 0.6875rem,
+    ),
+    ()
+) !default;
+
+$typography-label-line-heights: map.merge(
+    (
+        lg: 1.25rem,
+        md: 1rem,
+        sm: 1rem,
+    ),
+    ()
+) !default;
+
+$typography-label-font-weights: map.merge(
+    (
+        lg: 500,
+        md: 500,
+        sm: 500,
+    ),
+    ()
+) !default;
+
+$typography-label-letter-spacings: map.merge(
+    (
+        lg: 0.01em,
+        md: 0.02em,
+        sm: 0.02em,
+    ),
+    ()
+) !default;
+
+$typography-code-font-sizes: map.merge(
+    (
+        sm: 0.75rem,
+    ),
+    ()
+) !default;
+
+$typography-code-line-heights: map.merge(
+    (
+        sm: 1.125rem,
+    ),
+    ()
+) !default;
+
+$typography-code-font-weights: map.merge(
+    (
+        sm: 400,
+    ),
+    ()
+) !default;
+
+$typography-code-letter-spacings: map.merge(
+    (
+        sm: 0,
+    ),
+    ()
+) !default;

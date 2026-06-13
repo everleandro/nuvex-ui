@@ -3,6 +3,9 @@
   height: var(--e-bar-height, 64px);
   background-color: var(--e-bar-bg, var(--e-color-surface-2, #ffffff));
   color: var(--e-bar-color, var(--e-contrast-surface-2, #000000));
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+  font-size: var(--e-typography-body-font-size-md, 0.875rem);
+  line-height: var(--e-typography-body-line-height-md, 1.25rem);
   flex-grow: 1;
   display: block;
   contain: layout;

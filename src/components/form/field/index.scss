@@ -4,6 +4,8 @@
 .e-field {
     --field-layout-active-height: var(--e-field-height);
     --field-layout-control-padding-inline: calc(var(--e-field-slot-padding-base) * 3);
+    --e-field-input-line-height: var(--e-typography-body-line-height-md, 1.25rem);
+    --e-field-label-line-height: var(--e-typography-label-line-height-md, 1rem);
     --field-layout-label-rest-y: calc((var(--field-layout-active-height) - var(--e-field-label-line-height)) / 2);
     --field-layout-content-padding-top: var(--e-field-slot-padding-base);
     --field-label-state-y: var(--field-layout-label-rest-y);
@@ -24,7 +26,8 @@
     flex-grow: 1;
     position: relative;
     color: var(--e-field-rest-color);
-    font-size: 1rem;
+    font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+    font-size: var(--e-typography-body-font-size-md, 0.875rem);
     letter-spacing: normal;
     text-align: left;
     width: 100%;
@@ -261,6 +264,10 @@
     }
 
     .e-label {
+        font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+        font-size: var(--e-typography-label-font-size-md, 0.75rem);
+        font-weight: var(--e-typography-label-font-weight-md, 500);
+        letter-spacing: var(--e-typography-label-letter-spacing-md, 0.02em);
         line-height: var(--e-field-label-line-height);
         margin-top: var(--field-layout-label-rest-y);
         padding-right: var(--field-layout-gap);
@@ -478,7 +485,8 @@
         z-index: 1;
         line-height: var(--e-field-input-line-height);
         min-width: 0;
-        font-size: 1rem;
+        font-size: var(--e-typography-body-font-size-md, 0.875rem);
+        font-family: inherit;
 
         &:active,
         &:focus {

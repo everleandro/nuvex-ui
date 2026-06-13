@@ -3,6 +3,9 @@
 .e-dialog {
   background-color: var(--e-color-surface-1, #ffffff);
   color: var(--e-contrast-surface-1, #000000);
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+  font-size: var(--e-typography-body-font-size-md, 0.875rem);
+  line-height: var(--e-typography-body-line-height-md, 1.25rem);
   border-radius: var(--e-border-radius-root, 4px);
   margin: 8px;
   overflow-y: auto;

@@ -86,7 +86,11 @@
         text-transform: uppercase;
         color: var(--e-expansion-panel-button-color, var(--e-contrast-surface-1, #000000));
         background-color: var(--e-expansion-panel-button-background-color, var(--e-color-surface-1, #ffffff));
-        font-size: var(--e-expansion-header-font-size, 0.875rem);
+        font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+        font-size: var(--e-expansion-header-font-size, var(--e-typography-label-font-size-lg, 0.875rem));
+        line-height: var(--e-typography-label-line-height-lg, 1.25rem);
+        font-weight: var(--e-typography-label-font-weight-lg, 500);
+        letter-spacing: var(--e-typography-label-letter-spacing-lg, 0.01em);
         padding: 0 var(--panel-inline-padding);
         @include prefix(user-select, none);
         @include button-reset();

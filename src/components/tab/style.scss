@@ -1,6 +1,9 @@
 .e-tabs {
   display: flex;
   height: var(--e-tabs-height);
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+  font-size: var(--e-typography-label-font-size-lg, 0.875rem);
+  line-height: var(--e-typography-label-line-height-lg, 1.25rem);
   --before-opacity: 0.13;
 
   &.e-slide-group--vertical {

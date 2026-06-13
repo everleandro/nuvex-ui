@@ -389,6 +389,8 @@ Cuando `applyTokensAsCssVars` esta habilitado, los tokens del tema activo se esc
 
 ### Variables Disponibles
 
+La libreria expone una escala tipografica semantica en CSS variables, por ejemplo `--e-typography-family-base`, `--e-typography-body-font-size-md` y `--e-typography-label-font-weight-md`. Los componentes base ya consumen estas variables para mantener la consistencia entre labels, inputs y texto de soporte.
+
 ```scss
 // Globales
 $border-radius-root: 6px;

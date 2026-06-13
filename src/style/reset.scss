@@ -29,28 +29,19 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-input,
-select,
-textarea {
-  background-color: transparent;
-  border-style: none;
-  border-top-style: none;
-  border-right-style: none;
-  border-bottom-style: none;
-  border-left-style: none;
-}
-
 body {
   color: var(--e-app-color, unset);
 }
 
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
 html {
-  font-size: var(--root-font-size, unset);
+  font-size: var(--e-root-font-size, unset);
 }
 
 button,

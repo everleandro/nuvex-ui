@@ -25,7 +25,7 @@
 }
 
 @mixin date-picker-grid-header-cell($text-align: inherit, $text-transform: none) {
-  font-weight: 500;
+  font-weight: var(--e-typography-label-font-weight-md, 500);
   padding: var(--e-date-picker-grid-header-cell-padding-block, 0.5rem) 0;
   text-align: $text-align;
   text-transform: $text-transform;
@@ -46,7 +46,9 @@
   contain: layout style;
   display: inline-flex;
   flex-direction: column;
-  font-size: 1rem;
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+  font-size: var(--e-typography-body-font-size-lg, 1rem);
+  line-height: var(--e-typography-body-line-height-lg, 1.5rem);
   overflow: hidden;
   position: relative;
   vertical-align: top;
@@ -182,15 +184,18 @@
     &__year {
       align-items: center;
       display: inline-flex;
-      font-size: var(--e-date-picker-title-year-font-size, 0.875rem);
-      font-weight: 500;
+      font-size: var(--e-date-picker-title-year-font-size, var(--e-typography-label-font-size-lg, 0.875rem));
+      font-weight: var(--e-typography-label-font-weight-lg, 500);
+      letter-spacing: var(--e-typography-label-letter-spacing-lg, 0.01em);
       margin-bottom: var(--e-date-picker-title-year-spacing, 0.5rem);
       user-select: none;
     }
 
     &__date {
-      font-size: var(--e-date-picker-title-date-font-size, 2.125rem);
-      font-weight: 500;
+      font-size: var(--e-date-picker-title-date-font-size, var(--e-typography-headline-font-size-lg, 2.125rem));
+      line-height: var(--e-typography-headline-line-height-lg, 2.5rem);
+      font-weight: var(--e-typography-headline-font-weight-lg, 500);
+      letter-spacing: var(--e-typography-headline-letter-spacing-lg, -0.01em);
       margin-bottom: calc(var(--date-picker-local-title-date-padding-bottom) * -1);
       overflow: hidden;
       padding-bottom: var(--date-picker-local-title-date-padding-bottom);
@@ -240,7 +245,8 @@
     position: relative;
 
     .e-btn {
-      font-size: var(--e-date-picker-grid-button-font-size, 0.75rem);
+      font-size: var(--e-date-picker-grid-button-font-size, var(--e-typography-label-font-size-md, 0.75rem));
+      font-weight: var(--e-typography-label-font-weight-md, 500);
       margin: 0;
       z-index: auto;
     }
