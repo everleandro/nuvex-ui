@@ -12,6 +12,7 @@
   }
 
   .e-btn {
+    --button-local-text-transform: var(--e-tab-text-transform, var(--e-btn-text-transform, none));
     border-radius: 0;
 
     &+.e-btn {
@@ -107,6 +108,7 @@
   left: 0;
   bottom: 0;
   background: var(--e-tabs-indicator-color, currentColor);
+  z-index: 1;
   pointer-events: none;
   opacity: 0;
   transition:
@@ -114,4 +116,22 @@
     width 0.22s cubic-bezier(0.4, 0, 0.2, 1),
     height 0.22s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 0.18s ease;
+}
+
+.e-tabs__track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--e-color-border, rgba(0, 0, 0, 0.12));
+  pointer-events: none;
+}
+
+.e-tabs__track--vertical {
+  top: 0;
+  right: auto;
+  bottom: auto;
+  width: 1px;
+  height: 100%;
 }

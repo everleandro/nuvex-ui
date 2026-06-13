@@ -135,6 +135,16 @@ const saving = ref(false)
 </style>
 ```
 
+### Text transform por tema
+
+`EButton` usa el token global `--e-btn-text-transform` (default: `none`).
+
+```css
+:root {
+  --e-btn-text-transform: uppercase;
+}
+```
+
 ## Accesibilidad
 
 - Usa texto visible y especifico en el slot `default`.

@@ -7,7 +7,7 @@ $btn-letter-spacing: 0.089em !default;
 $btn-border-style: solid !default;
 $btn-border-width: 1px !default;
 $btn-rounded-border-radius: 28px !default;
-$btn-text-transform: uppercase !default;
+$btn-text-transform: none !default;
 $btn-transition-duration: 0.3s !default;
 
 $btn-states: map.merge(

@@ -110,4 +110,19 @@ describe("ETab + ETabGroup", () => {
 
     expect((wrapper.vm as { model: string }).model).toBe("activity");
   });
+
+  it("renders an optional track line that follows group orientation", async () => {
+    const wrapper = mountTabHost();
+    await nextTick();
+    expect(wrapper.find('.e-tabs__track').exists()).toBe(false);
+
+    const horizontalWithTrack = mountTabHost({ track: true });
+    await nextTick();
+    const horizontalTrack = horizontalWithTrack.get('.e-tabs__track');
+    expect(horizontalTrack.classes()).not.toContain('e-tabs__track--vertical');
+
+    const verticalWithTrack = mountTabHost({ track: true, vertical: true });
+    await nextTick();
+    expect(verticalWithTrack.get('.e-tabs__track').classes()).toContain('e-tabs__track--vertical');
+  });
 });

@@ -4,6 +4,10 @@
             <div ref="contentRef" class="e-slide-group__content e-tabs__content">
                 <slot></slot>
                 <div
+                    v-if="props.track"
+                    :class="['e-tabs__track', { 'e-tabs__track--vertical': props.vertical }]"
+                ></div>
+                <div
                     :class="['e-tabs__indicator', { 'e-tabs__indicator--vertical': props.vertical }]"
                     :style="indicatorStyle"
                 ></div>
@@ -29,12 +33,13 @@ export interface Props {
     modelValue?: string | number,
     color?: string,
     inactiveColor?: string,
+    track?: boolean,
     vertical?: boolean,
     grow?: boolean,
     tabAlign?: string,
     name?: string
 }
-const props = withDefaults(defineProps<Props>(), { color: 'primary', inactiveColor: 'secondary', tabAlign: 'center', direction: 'horizontal' })
+const props = withDefaults(defineProps<Props>(), { color: 'primary', inactiveColor: 'secondary', track: false, tabAlign: 'center', direction: 'horizontal' })
 const emit = defineEmits<{ (e: 'update:modelValue', value: number | string): void }>()
 const contentRef = ref<HTMLElement | null>(null)
 
@@ -55,6 +60,7 @@ const tabGroupClass = computed(() => {
     const classes = ['e-slide-group e-tabs e-tabs--density-default']
     if (props.vertical) classes.push('e-slide-group--vertical e-tabs--vertical')
     if (props.grow) classes.push('e-slide-group--grow')
+    if (props.track) classes.push('e-tabs--with-track')
     classes.push(`e-tabs--align-tabs-${props.tabAlign}`)
     return classes;
 })

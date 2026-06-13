@@ -16,6 +16,7 @@ Esta seccion documenta cada componente publico exportado por Nuvex UI.
 - [List (`EList`, `EListItem`, `EListGroup`)](./list.md)
 - [Progress Linear (`EProgressLinear`)](./progress.md)
 - [Schedule (`ESchedule`, `EScheduleToolbar`)](./schedule.md)
+- [Tabs (`ETab`, `ETabGroup`)](./tab.md)
 
 ### Form Controls
 

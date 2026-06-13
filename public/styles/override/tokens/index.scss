@@ -25,6 +25,8 @@
 @use "./components/icon" as icon;
 @use "./components/list" as list;
 
+$tab-text-transform: var(--e-btn-text-transform, #{button.$btn-text-transform}) !default;
+
 // Tokens simples autoexportables a CSS vars.
 // Regla:
 // - Si el nombre empieza con `e-`, se genera `--<nombre>`.
