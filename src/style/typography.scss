@@ -1,13 +1,91 @@
 @use '~/public/styles/_mixins.scss' as mixins;
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+}
+
+@mixin text-role($size, $line-height, $weight, $letter-spacing, $family: var(--e-typography-family-base, var(--e-root-font-family, inherit))) {
+  font-family: $family;
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: $weight;
+  letter-spacing: $letter-spacing;
+}
+
+@mixin code-role {
+  @include text-role(
+    var(--e-typography-code-font-size-sm),
+    var(--e-typography-code-line-height-sm),
+    var(--e-typography-code-font-weight-sm),
+    var(--e-typography-code-letter-spacing-sm),
+    var(--e-typography-family-mono, var(--e-root-font-family-mono, monospace))
+  );
+}
+
+h1 {
+  @include text-role(
+    var(--e-typography-headline-font-size-lg),
+    var(--e-typography-headline-line-height-lg),
+    var(--e-typography-headline-font-weight-lg),
+    var(--e-typography-headline-letter-spacing-lg)
+  );
 
   +p {
     font-size: var(--e-typography-title-font-size-lg);
     line-height: var(--e-typography-title-line-height-lg);
     font-weight: var(--e-typography-body-font-weight-lg);
   }
+}
+
+h2 {
+  @include text-role(
+    var(--e-typography-headline-font-size-md),
+    var(--e-typography-headline-line-height-md),
+    var(--e-typography-headline-font-weight-md),
+    var(--e-typography-headline-letter-spacing-md)
+  );
+}
+
+h3 {
+  @include text-role(
+    var(--e-typography-headline-font-size-sm),
+    var(--e-typography-headline-line-height-sm),
+    var(--e-typography-headline-font-weight-sm),
+    var(--e-typography-headline-letter-spacing-sm)
+  );
+}
+
+h4 {
+  @include text-role(
+    var(--e-typography-title-font-size-lg),
+    var(--e-typography-title-line-height-lg),
+    var(--e-typography-title-font-weight-lg),
+    var(--e-typography-title-letter-spacing-lg)
+  );
+}
+
+h5 {
+  @include text-role(
+    var(--e-typography-title-font-size-md),
+    var(--e-typography-title-line-height-md),
+    var(--e-typography-title-font-weight-md),
+    var(--e-typography-title-letter-spacing-md)
+  );
+}
+
+h6 {
+  @include text-role(
+    var(--e-typography-title-font-size-sm),
+    var(--e-typography-title-line-height-sm),
+    var(--e-typography-title-font-weight-sm),
+    var(--e-typography-title-letter-spacing-sm)
+  );
 }
 
 .text-lead {
@@ -18,49 +96,48 @@ h1 {
 
 p {
   margin-bottom: 1rem;
-  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
   line-height: var(--e-typography-body-line-height-lg);
 }
 
 .heading {
-  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
-  font-size: var(--e-typography-display-font-size-md);
-  line-height: var(--e-typography-display-line-height-md);
-  font-weight: var(--e-typography-display-font-weight-md);
-  letter-spacing: var(--e-typography-display-letter-spacing-md);
+  @include text-role(
+    var(--e-typography-display-font-size-md),
+    var(--e-typography-display-line-height-md),
+    var(--e-typography-display-font-weight-md),
+    var(--e-typography-display-letter-spacing-md)
+  );
 }
 
 .code {
-  font-family: var(--e-typography-family-mono, var(--e-root-font-family-mono, monospace));
-  font-size: var(--e-typography-code-font-size-sm);
-  line-height: var(--e-typography-code-line-height-sm);
-  font-weight: var(--e-typography-code-font-weight-sm);
-  letter-spacing: var(--e-typography-code-letter-spacing-sm);
+  @include code-role;
 }
 
 .text-body {
-  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
-  font-size: var(--e-typography-body-font-size-lg);
-  line-height: var(--e-typography-body-line-height-lg);
-  font-weight: var(--e-typography-body-font-weight-lg);
-  letter-spacing: var(--e-typography-body-letter-spacing-lg);
+  @include text-role(
+    var(--e-typography-body-font-size-lg),
+    var(--e-typography-body-line-height-lg),
+    var(--e-typography-body-font-weight-lg),
+    var(--e-typography-body-letter-spacing-lg)
+  );
 }
 
 .title {
-  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
-  font-size: var(--e-typography-title-font-size-lg);
+  @include text-role(
+    var(--e-typography-title-font-size-lg),
+    var(--e-typography-title-line-height-lg),
+    var(--e-typography-title-font-weight-lg),
+    var(--e-typography-title-letter-spacing-lg)
+  );
   margin-top: 0;
-  font-weight: var(--e-typography-title-font-weight-lg);
-  line-height: var(--e-typography-title-line-height-lg);
-  letter-spacing: var(--e-typography-title-letter-spacing-lg);
 }
 
 .subtitle {
-  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
-  font-size: var(--e-typography-label-font-size-lg);
-  line-height: var(--e-typography-label-line-height-lg);
-  font-weight: var(--e-typography-label-font-weight-lg);
-  letter-spacing: var(--e-typography-label-letter-spacing-lg);
+  @include text-role(
+    var(--e-typography-label-font-size-lg),
+    var(--e-typography-label-line-height-lg),
+    var(--e-typography-label-font-weight-lg),
+    var(--e-typography-label-letter-spacing-lg)
+  );
   text-transform: uppercase;
   overflow: hidden;
   height: 1.5em;
@@ -69,11 +146,12 @@ p {
 }
 
 .dialog-title {
-  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
-  font-size: var(--e-typography-headline-font-size-sm);
-  line-height: var(--e-typography-headline-line-height-sm);
-  font-weight: var(--e-typography-headline-font-weight-sm);
-  letter-spacing: var(--e-typography-headline-letter-spacing-sm);
+  @include text-role(
+    var(--e-typography-headline-font-size-sm),
+    var(--e-typography-headline-line-height-sm),
+    var(--e-typography-headline-font-weight-sm),
+    var(--e-typography-headline-letter-spacing-sm)
+  );
   margin-top: 24px;
   margin-bottom: 0;
   text-transform: capitalize;
@@ -96,22 +174,64 @@ p {
 }
 
 .text {
+  &-h1 {
+    @include text-role(
+      var(--e-typography-display-font-size-lg),
+      var(--e-typography-display-line-height-lg),
+      var(--e-typography-display-font-weight-lg),
+      var(--e-typography-display-letter-spacing-lg)
+    );
+    text-transform: none;
+  }
+
+  &-h2 {
+    @include text-role(
+      var(--e-typography-display-font-size-md),
+      var(--e-typography-display-line-height-md),
+      var(--e-typography-display-font-weight-md),
+      var(--e-typography-display-letter-spacing-md)
+    );
+    text-transform: none;
+  }
+
   &-h3 {
-    font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
-    font-size: var(--e-typography-display-font-size-sm);
-    font-weight: var(--e-typography-display-font-weight-sm);
-    line-height: var(--e-typography-display-line-height-sm);
-    letter-spacing: var(--e-typography-display-letter-spacing-sm);
+    @include text-role(
+      var(--e-typography-display-font-size-sm),
+      var(--e-typography-display-line-height-sm),
+      var(--e-typography-display-font-weight-sm),
+      var(--e-typography-display-letter-spacing-sm)
+    );
 
     text-transform: none;
   }
 
   &-h4 {
-    font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
-    font-size: var(--e-typography-headline-font-size-lg);
-    font-weight: var(--e-typography-headline-font-weight-lg);
-    line-height: var(--e-typography-headline-line-height-lg);
-    letter-spacing: var(--e-typography-headline-letter-spacing-lg);
+    @include text-role(
+      var(--e-typography-headline-font-size-lg),
+      var(--e-typography-headline-line-height-lg),
+      var(--e-typography-headline-font-weight-lg),
+      var(--e-typography-headline-letter-spacing-lg)
+    );
+    text-transform: none;
+  }
+
+  &-h5 {
+    @include text-role(
+      var(--e-typography-headline-font-size-md),
+      var(--e-typography-headline-line-height-md),
+      var(--e-typography-headline-font-weight-md),
+      var(--e-typography-headline-letter-spacing-md)
+    );
+    text-transform: none;
+  }
+
+  &-h6 {
+    @include text-role(
+      var(--e-typography-headline-font-size-sm),
+      var(--e-typography-headline-line-height-sm),
+      var(--e-typography-headline-font-weight-sm),
+      var(--e-typography-headline-letter-spacing-sm)
+    );
     text-transform: none;
   }
 }

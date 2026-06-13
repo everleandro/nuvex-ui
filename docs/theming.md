@@ -391,6 +391,38 @@ Cuando `applyTokensAsCssVars` esta habilitado, los tokens del tema activo se esc
 
 La libreria expone una escala tipografica semantica en CSS variables, por ejemplo `--e-typography-family-base`, `--e-typography-body-font-size-md` y `--e-typography-label-font-weight-md`. Los componentes base ya consumen estas variables para mantener la consistencia entre labels, inputs y texto de soporte.
 
+### Guia de uso tipografico
+
+Para mantener una jerarquia profesional y consistente en apps completas, usa esta regla:
+
+- Usa `h1`...`h6` para estructura semantica del documento.
+- Usa `.text-h1`...`.text-h6` cuando necesites la escala visual de heading sin cambiar la semantica HTML.
+- Usa `.text-body` para contenido principal.
+- Usa `.title` para encabezados de bloque o tarjeta.
+- Usa `.subtitle` para metadatos o etiquetas secundarias en mayusculas.
+- Usa `.text-lead` para parrafos introductorios despues de un heading.
+- Usa `.code` para contenido monoespaciado.
+
+Ejemplo recomendado:
+
+```vue
+<template>
+  <section>
+    <h1>Documentacion de componentes</h1>
+    <p class="text-lead">Base visual y semantica para interfaces consistentes.</p>
+
+    <h2>Botones</h2>
+    <p class="text-body">Los botones heredan tipografia semantica por defecto.</p>
+
+    <div class="title">Tokens activos</div>
+    <div class="subtitle">sistema tipografico</div>
+    <pre class="code">--e-typography-headline-font-size-lg</pre>
+  </section>
+</template>
+```
+
+Nota: evita usar heading levels solo por apariencia visual; si solo quieres cambiar la apariencia, prefiere las clases `.text-h*`.
+
 ```scss
 // Globales
 $border-radius-root: 6px;
