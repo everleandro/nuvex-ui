@@ -20,8 +20,8 @@ export default { name: 'tabGroup' }
 export interface TabGroup {
     changeValue: (value: number | string) => void
     modelValue: ComputedRef<string | number | undefined>
-    color: ComputedRef<string>
-    inactiveColor: ComputedRef<string>
+    color: ComputedRef<string | undefined>
+    inactiveColor: ComputedRef<string | undefined>
     vertical: ComputedRef<boolean>
     name: ComputedRef<string | undefined>
 }
@@ -39,7 +39,7 @@ export interface Props {
     tabAlign?: string,
     name?: string
 }
-const props = withDefaults(defineProps<Props>(), { color: 'primary', inactiveColor: 'secondary', track: false, tabAlign: 'center', direction: 'horizontal' })
+const props = withDefaults(defineProps<Props>(), { track: false, tabAlign: 'center', direction: 'horizontal' })
 const emit = defineEmits<{ (e: 'update:modelValue', value: number | string): void }>()
 const contentRef = ref<HTMLElement | null>(null)
 

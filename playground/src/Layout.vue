@@ -1,5 +1,5 @@
 <template>
-    <main class="playground" :data-theme="theme">
+    <main class="playground">
         <header class="playground-header">
             <h1>Playground</h1>
             <button class="theme-toggle" @click="toggleTheme">
@@ -27,7 +27,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { useTheme } from "../../src/theme";
+import { useTheme } from "../../src";
 
 const { currentTheme, toggleTheme } = useTheme();
 const theme = computed(() => currentTheme.value);
@@ -41,7 +41,7 @@ const theme = computed(() => currentTheme.value);
     transition: background 0.3s ease;
 }
 
-.playground[data-theme="dark"] {
+:global([data-theme="dark"]) .playground {
     background: linear-gradient(135deg, #121212, #1e1e1e);
 }
 
@@ -57,7 +57,7 @@ const theme = computed(() => currentTheme.value);
     color: #333;
 }
 
-.playground[data-theme="dark"] .playground-header h1 {
+:global([data-theme="dark"]) .playground-header h1 {
     color: #fafafa;
 }
 
@@ -72,7 +72,7 @@ const theme = computed(() => currentTheme.value);
     transition: all 0.3s ease;
 }
 
-.playground[data-theme="dark"] .theme-toggle {
+:global([data-theme="dark"]) .theme-toggle {
     background: #2a2a2a;
     border-color: #444;
     color: #fafafa;
@@ -112,16 +112,16 @@ const theme = computed(() => currentTheme.value);
     color: #f9fafb;
 }
 
-.playground[data-theme="dark"] .nav a {
+:global([data-theme="dark"]) .nav a {
     background: rgba(17, 24, 39, 0.72);
     color: #e5e7eb;
 }
 
-.playground[data-theme="dark"] .nav a:hover {
+:global([data-theme="dark"]) .nav a:hover {
     background: rgba(17, 24, 39, 0.9);
 }
 
-.playground[data-theme="dark"] .nav a.router-link-active {
+:global([data-theme="dark"]) .nav a.router-link-active {
     background: #f9fafb;
     color: #111827;
 }
@@ -137,7 +137,7 @@ const theme = computed(() => currentTheme.value);
         box-shadow 0.3s ease;
 }
 
-.playground[data-theme="dark"] .block {
+:global([data-theme="dark"]) .block {
     background: #2a2a2a;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
@@ -155,11 +155,11 @@ const theme = computed(() => currentTheme.value);
     letter-spacing: 0.08em;
 }
 
-.playground[data-theme="dark"] .block h2 {
+:global([data-theme="dark"]) .block h2 {
     color: #fafafa;
 }
 
-.playground[data-theme="dark"] .block h3 {
+:global([data-theme="dark"]) .block h3 {
     color: #cbd5e0;
 }
 
@@ -176,7 +176,7 @@ const theme = computed(() => currentTheme.value);
     font-size: 14px;
 }
 
-.playground[data-theme="dark"] .playground-note {
+:global([data-theme="dark"]) .playground-note {
     color: #e2e8f0;
 }
 </style>

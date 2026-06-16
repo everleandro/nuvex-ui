@@ -15,9 +15,12 @@ import EButton from "@/components/button/index.vue";
 import { ButtonProps } from "@/components/button/index.vue";
 export interface Props extends ButtonProps {
     value: string | number
-    to: any
+    to?: any
 }
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+    ripple: true,
+    text: true,
+});
 const Group = inject<Partial<TabGroup> | undefined>("TabGroup", undefined);
 
 const emit = defineEmits<{
@@ -78,16 +81,17 @@ const handleTabNavigation = (evt: KeyboardEvent): void => {
     targetTab.focus()
 }
 
-const color = computed((): string => {
+const color = computed((): string | undefined => {
     if (props.value === undefined)
-        return props.color || 'primary'
-    return active.value ? (props.color || Group?.color?.value || 'primary') : (Group?.inactiveColor?.value || 'secondary')
+        return props.color ?? Group?.color?.value
+    return active.value ? (props.color ?? Group?.color?.value) : Group?.inactiveColor?.value
 })
 const buttonProps = computed((): Partial<ButtonProps> => {
     const propsResult: ButtonProps = {
         ...props,
         color: color.value,
-        text: props.text || true,
+        text: props.text,
+        ripple: props.ripple,
     }
     return propsResult;
 })

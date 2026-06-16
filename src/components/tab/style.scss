@@ -24,18 +24,21 @@
     &-start {
       .e-tab {
         justify-content: flex-start;
+        text-align: left;
       }
     }
 
     &-center {
       .e-tab {
         justify-content: center;
+        text-align: center;
       }
     }
 
     &-end {
       .e-tab {
         justify-content: flex-end;
+        text-align: right;
       }
     }
   }

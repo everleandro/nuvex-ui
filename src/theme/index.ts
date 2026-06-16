@@ -50,8 +50,8 @@ const warnTheme = (message: string): void => {
   }
 };
 
-const normalizeThemeName = (value?: string): string => {
-  return value?.trim() ?? "";
+const normalizeThemeName = (value?: unknown): string => {
+  return typeof value === "string" ? value.trim() : "";
 };
 
 const normalizeThemeDefinition = (

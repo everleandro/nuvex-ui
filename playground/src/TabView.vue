@@ -22,8 +22,8 @@
                 </div>
 
                 <div class="window-demo">
-                    <ETabGroup v-model="state.mainTab" :tab-align="state.align" :grow="state.grow" color="primary"
-                        inactive-color="secondary">
+                    <ETabGroup v-model="state.mainTab" :tab-align="state.align" :grow="state.grow" 
+                       >
                         <ETab value="overview">Overview</ETab>
                         <ETab value="activity">Activity</ETab>
                         <ETab value="settings">Settings</ETab>
@@ -206,7 +206,7 @@ const statePreview = computed(() => {
 
 .eyebrow,
 .section-kicker {
-    color: #5b6b8a;
+    color: var(--e-text-secondary);
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -216,14 +216,14 @@ const statePreview = computed(() => {
 
 .tab-playground__hero h1,
 .tab-card h2 {
-    color: #172033;
+    color: var(--e-text-primary);
     margin: 0;
 }
 
 .hero-copy,
 .card-copy,
 .selected-copy {
-    color: #596579;
+    color: var(--e-text-secondary);
     line-height: 1.6;
     margin: 0;
 }
@@ -235,7 +235,7 @@ const statePreview = computed(() => {
 }
 
 .tab-card {
-    border: 1px solid rgba(23, 32, 51, 0.08);
+    border: 1px solid var(--e-color-border);
     border-radius: 20px;
     display: grid;
     gap: 18px;
@@ -248,7 +248,7 @@ const statePreview = computed(() => {
 }
 
 .selected-copy strong {
-    color: #172033;
+    color: var(--e-text-primary);
 }
 
 .control-group {
@@ -257,7 +257,7 @@ const statePreview = computed(() => {
 }
 
 .control-group__label {
-    color: #51617d;
+    color: var(--e-text-secondary);
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -272,10 +272,10 @@ const statePreview = computed(() => {
 
 .pill-button {
     appearance: none;
-    background: #eef2f8;
+    background: var(--e-surface);
     border: 1px solid transparent;
     border-radius: 999px;
-    color: #34445e;
+    color: var(--e-text-primary);
     cursor: pointer;
     font: inherit;
     font-size: 13px;
@@ -285,29 +285,29 @@ const statePreview = computed(() => {
 }
 
 .pill-button:hover {
-    background: #e3eaf4;
+    background: var(--e-surface-hover);
 }
 
 .pill-button--active {
-    background: #172033;
-    border-color: #172033;
-    color: #f8fbff;
+    background: var(--e-surface-active);
+    border-color: var(--e-surface-active);
+    color: var(--e-text-primary);
 }
 
 .preview-stage {
-    border: 1px solid rgba(23, 32, 51, 0.08);
+    border: 1px solid var(--e-color-border);
     border-radius: 16px;
     padding: 16px;
 }
 
 .window-demo {
-    border: 1px solid rgba(23, 32, 51, 0.08);
+    border: 1px solid var(--e-color-border);
     border-radius: 16px;
     overflow: hidden;
 }
 
 .window-stage {
-    background: #f8fbff;
+    background: var(--e-surface);
 }
 
 .window-pane {
@@ -315,15 +315,15 @@ const statePreview = computed(() => {
 }
 
 .window-pane p {
-    color: #34445e;
+    color: var(--e-text-primary);
     line-height: 1.6;
     margin: 0;
 }
 
 .payload-preview {
-    background: #111827;
+    background: var(--e-surface);
     border-radius: 16px;
-    color: #d9e2f1;
+    color: var(--e-text-primary);
     font-size: 12px;
     line-height: 1.55;
     margin: 0;

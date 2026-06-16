@@ -6,6 +6,7 @@ import ETab from "./index.vue";
 import ETabGroup from "./group.vue";
 import EWindow from "../window/index.vue";
 import EWindowItem from "../window/item.vue";
+import EButton from "../button/index.vue";
 
 const mountTabHost = (props: Record<string, unknown> = {}, initialValue = "overview") => {
   const Host = defineComponent({
@@ -124,5 +125,16 @@ describe("ETab + ETabGroup", () => {
     const verticalWithTrack = mountTabHost({ track: true, vertical: true });
     await nextTick();
     expect(verticalWithTrack.get('.e-tabs__track').classes()).toContain('e-tabs__track--vertical');
+  });
+
+  it("keeps ripple enabled for tabs by default", async () => {
+    const wrapper = mountTabHost();
+    await nextTick();
+
+    const firstTab = wrapper.findAll('[role="tab"]')[0];
+    expect(firstTab.classes()).toContain("v-ripple-element");
+
+    const firstTabButton = wrapper.findAllComponents(EButton)[0];
+    expect(firstTabButton.props("ripple")).toBe(true);
   });
 });
