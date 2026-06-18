@@ -23,24 +23,32 @@
             </div>
 
             <div class="card-grid">
-                <ECard v-for="sample in colorSamples" :key="sample.name" :color="sample.color"
-                    :outlined="sample.outlined" :depressed="sample.depressed" elevation="sm">
-                    <ECardContainer>
-                        <div class="play-card__meta">
-                            <span>{{ sample.label }}</span>
-                            <strong>{{ sample.name }}</strong>
-                        </div>
+                <ECard
+                    v-for="sample in colorSamples"
+                    :key="sample.name"
+                    :color="sample.color"
+                    :outlined="sample.outlined"
+                    :depressed="sample.depressed"
+                    :title="sample.title"
+                    :subtitle="sample.subtitle"
+                    :prepend-avatar="sample.prependAvatar"
+                    :prepend-avatar-props="sample.prependAvatarProps"
+                    :prepend-icon="sample.prependIcon"
+                    :prepend-icon-props="sample.prependIconProps"
+                    elevation="sm"
+                >
+                    <div class="play-card__meta">
+                        <span>{{ sample.label }}</span>
+                        <strong>{{ sample.name }}</strong>
+                    </div>
+                    <p>{{ sample.copy }}</p>
 
-                        <h3>{{ sample.title }}</h3>
-                        <p>{{ sample.copy }}</p>
-
-                        <div class="play-card__actions">
-                            <EButton :color="sample.actionColor" :outlined="sample.actionOutlined">
-                                Primary action
-                            </EButton>
-                            <EButton text :color="sample.actionColor">Secondary</EButton>
-                        </div>
-                    </ECardContainer>
+                    <div class="play-card__actions">
+                        <EButton :color="sample.actionColor" :outlined="sample.actionOutlined">
+                            Primary action
+                        </EButton>
+                        <EButton text :color="sample.actionColor">Secondary</EButton>
+                    </div>
                 </ECard>
             </div>
         </section>
@@ -59,18 +67,17 @@
 
             <ERow dense>
                 <ECol v-for="variant in outlineSamples" :key="variant.title" :cols="12" :md="6" :lg="4">
-                    <ECard class="play-card play-card--outline" :color="variant.color" outlined>
-                        <ECardContainer>
-                            <div class="play-card__inline-head">
-                                <EAvatar size="small" :color="variant.color" />
-                                <div>
-                                    <strong>{{ variant.title }}</strong>
-                                    <p>{{ variant.caption }}</p>
-                                </div>
-                            </div>
+                    <ECard
+                        class="play-card play-card--outline"
+                        :color="variant.color"
+                        :title="variant.title"
+                        :subtitle="variant.caption"
+                        :prepend-icon="variant.prependIcon"
+                        :prepend-icon-props="variant.prependIconProps"
+                        outlined
+                    >
 
-                            <p>{{ variant.copy }}</p>
-                        </ECardContainer>
+                        <p>{{ variant.copy }}</p>
 
                         <template #footer>
                             <div class="play-card__footer">
@@ -96,42 +103,45 @@
             </div>
 
             <div class="composition-grid">
-                <ECard class="play-card play-card--editor" color="secondary" height="280" elevation="md">
-                    <ECardContainer>
-                        <div class="play-card__inline-head">
-                            <EAvatar size="small" color="secondary" />
-                            <div>
-                                <strong>Editor draft</strong>
-                                <p>Height fija para probar contenido vertical.</p>
-                            </div>
-                        </div>
+                <ECard
+                    class="play-card play-card--editor"
+                    color="secondary"
+                    title="Editor draft"
+                    subtitle="Height fija para probar contenido vertical."
+                    :prepend-icon="iconFactory.pencil"
+                    :prepend-icon-props="{ size: 'small' }"
+                    height="280"
+                    elevation="md"
+                >
 
-                        <div class="editor-preview">
-                            <div class="editor-preview__line editor-preview__line--strong"></div>
-                            <div class="editor-preview__line"></div>
-                            <div class="editor-preview__line editor-preview__line--short"></div>
-                            <div class="editor-preview__panel">
-                                <EButton text :prepend-icon="iconFactory.arrowLeft">Back</EButton>
-                                <EButton color="secondary">Publish</EButton>
-                            </div>
+                    <div class="editor-preview">
+                        <div class="editor-preview__line editor-preview__line--strong"></div>
+                        <div class="editor-preview__line"></div>
+                        <div class="editor-preview__line editor-preview__line--short"></div>
+                        <div class="editor-preview__panel">
+                            <EButton text :prepend-icon="iconFactory.arrowLeft">Back</EButton>
+                            <EButton color="secondary">Publish</EButton>
                         </div>
-                    </ECardContainer>
+                    </div>
                 </ECard>
 
-                <ECard class="play-card play-card--metrics" outlined elevation="sm">
-                    <ECardContainer>
-                        <div class="play-card__inline-head">
-                            <strong>Metrics snapshot</strong>
-                            <span class="status-dot"></span>
-                        </div>
+                <ECard
+                    class="play-card play-card--metrics"
+                    title="Metrics snapshot"
+                    subtitle="Estado actual de tablero"
+                    prepend-avatar="https://i.pravatar.cc/80?img=12"
+                    :prepend-avatar-props="{ size: 'small', elevation: 'sm' }"
+                    outlined
+                    elevation="sm"
+                >
+                    <span class="status-dot"></span>
 
-                        <div class="metrics-grid">
-                            <div v-for="metric in metrics" :key="metric.label" class="metric-box">
-                                <span>{{ metric.label }}</span>
-                                <strong>{{ metric.value }}</strong>
-                            </div>
+                    <div class="metrics-grid">
+                        <div v-for="metric in metrics" :key="metric.label" class="metric-box">
+                            <span>{{ metric.label }}</span>
+                            <strong>{{ metric.value }}</strong>
                         </div>
-                    </ECardContainer>
+                    </div>
 
                     <template #footer>
                         <div class="play-card__footer">
@@ -146,10 +156,8 @@
 </template>
 
 <script setup lang="ts">
-import EAvatar from "../../src/components/avatar.vue";
 import EButton from "../../src/components/button/index.vue";
 import ECard from "../../src/components/card/index.vue";
-import ECardContainer from "../../src/components/card/container.vue";
 import ECol from "../../src/components/grid/col.vue";
 import ERow from "../../src/components/grid/row.vue";
 import iconFactory from "../../src/utils/icons";
@@ -159,6 +167,9 @@ const colorSamples = [
         name: "Default surface",
         label: "surface",
         title: "Card without explicit color",
+        subtitle: "Usa tokens base para comparar el resto de variantes.",
+        prependIcon: iconFactory.menu,
+        prependIconProps: { size: "small" },
         copy: "Usa los tokens de surface base para comparar el resto de variantes.",
         color: undefined,
         outlined: false,
@@ -170,6 +181,9 @@ const colorSamples = [
         name: "Primary",
         label: "semantic",
         title: "Primary background + computed contrast",
+        subtitle: "Contraste resuelto automaticamente desde el tema.",
+        prependAvatar: "https://i.pravatar.cc/80?img=7",
+        prependAvatarProps: { size: "small", elevation: "sm" },
         copy: "Sirve para validar que el contraste de texto y acciones se resuelva desde variables.",
         color: "primary",
         outlined: false,
@@ -181,6 +195,9 @@ const colorSamples = [
         name: "Teal 300",
         label: "primitive",
         title: "Primitive palette token",
+        subtitle: "Color primitivo con contraste legible.",
+        prependIcon: iconFactory.calendar,
+        prependIconProps: { size: "x-small", stateLayer: false },
         copy: "Ayuda a confirmar que un color primitivo tambien actualiza fondo y contraste del card.",
         color: "teal-300",
         outlined: false,
@@ -194,6 +211,8 @@ const outlineSamples = [
     {
         title: "Primary outlined",
         caption: "Semantic token",
+        prependIcon: iconFactory.chevronDown,
+        prependIconProps: { size: "small" },
         copy: "El borde debe seguir el color resuelto del card, no un color de texto heredado por clase.",
         color: "primary",
         token: "color=primary",
@@ -201,6 +220,8 @@ const outlineSamples = [
     {
         title: "Warning outlined",
         caption: "Semantic token",
+        prependIcon: iconFactory.menuDown,
+        prependIconProps: { size: "small", stateLayer: false },
         copy: "Caso util para verificar contraste y legibilidad sobre tonos calidos.",
         color: "warning",
         token: "color=warning",
@@ -208,6 +229,8 @@ const outlineSamples = [
     {
         title: "Blue 700 outlined",
         caption: "Primitive token",
+        prependIcon: iconFactory.clear,
+        prependIconProps: { size: "x-small" },
         copy: "Sirve para revisar el borde con tonos oscuros de la paleta primitiva.",
         color: "blue-700",
         token: "color=blue-700",
@@ -284,7 +307,7 @@ const metrics = [
     overflow: hidden;
 }
 
-.play-card :deep(.e-card__container) {
+.play-card :deep(.e-card__main) {
     display: grid;
     gap: 16px;
     padding: 24px;
@@ -292,7 +315,6 @@ const metrics = [
 
 .play-card__meta,
 .play-card__actions,
-.play-card__inline-head,
 .play-card__footer {
     display: flex;
     align-items: center;
@@ -308,21 +330,11 @@ const metrics = [
     flex-wrap: wrap;
 }
 
-.play-card__inline-head {
-    align-items: flex-start;
-}
-
-.play-card__inline-head > div {
-    display: grid;
-    gap: 4px;
-}
-
 .play-card__footer {
     justify-content: space-between;
-    padding: 16px 24px 24px;
 }
 
-.play-card--outline :deep(.e-card__container) {
+.play-card--outline :deep(.e-card__main) {
     min-height: 190px;
 }
 

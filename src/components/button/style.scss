@@ -36,9 +36,12 @@ $button-sizes: x-small, small, default, large, x-large;
   --button-local-font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
   --button-local-bg: var(--e-btn-color);
   --button-local-text: var(--e-btn-contrast-color);
-  --button-local-state-focus: var(--e-btn-state-focus, 0.12);
-  --button-local-state-hover: var(--e-btn-state-hover, 0.08);
-  --button-local-state-active: var(--e-btn-state-active, 0.12);
+  --button-local-state-focus: var(--e-interactive-state-focus, 0.12);
+  --button-local-state-hover: var(--e-interactive-state-hover, 0.08);
+  --button-local-state-active: var(--e-interactive-state-active, 0.12);
+  --interactive-element-local-state-focus: var(--button-local-state-focus);
+  --interactive-element-local-state-hover: var(--button-local-state-hover);
+  --interactive-element-local-state-active: var(--button-local-state-active);
   --button-local-border-width: var(--e-btn-border-width, 1px);
   --button-local-border-style: var(--e-btn-border-style, solid);
   --button-local-default-elevation: var(--e-btn-elevation,
@@ -64,7 +67,6 @@ $button-sizes: x-small, small, default, large, x-large;
 
   @include button-reset();
   @include prefix(user-select, none);
-  @include button-before($interactive: true);
 
   // Shell
   +.e-btn {
@@ -78,14 +80,6 @@ $button-sizes: x-small, small, default, large, x-large;
   &__content {
     line-height: initial;
     flex-direction: column;
-  }
-
-  &::before {
-    z-index: 0;
-  }
-
-  .v-ripple {
-    z-index: 0;
   }
 
   &__loader,

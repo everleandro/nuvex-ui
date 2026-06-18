@@ -164,7 +164,7 @@ const ariaLabelComputed = computed(() => {
 });
 
 const btnClass = computed((): Array<string> => {
-  const classes = ["e-btn v-ripple-element"];
+  const classes = ["e-btn v-ripple-element interactive-element"];
 
   if (configuration.focused) {
     classes.push("e-btn--focused");

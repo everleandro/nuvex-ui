@@ -1,5 +1,6 @@
 <template>
     <i v-if="mounted" ref="iconElement" v-cloak aria-hidden="true" :class="iconClass" :style="iconStyle">
+        <span v-if="stateLayer" class="e-icon__state-layer" aria-hidden="true"></span>
         <slot>
             <svg v-if="isPath" xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" role="img" aria-hidden="true"
                 class="e-icon__svg">
@@ -26,7 +27,7 @@ const attrs = useAttrs()
 
 const props = withDefaults(defineProps<IconProps>(), { viewBox: '0 0 24 24' })
 
-const booleanClassKeys = ['disabled'] as const
+const booleanClassKeys = ['disabled', 'stateLayer'] as const
 const defaultIconClass = 'icon'
 const defaultIconPrefix = 'icon-'
 
@@ -91,15 +92,17 @@ const { colorStyles: iconStyle } = useResolvedColor({
     colorVar: '--e-icon-color',
 })
 
+const stateLayer = computed(() => props.stateLayer)
+
 const iconClass: ComputedRef<Array<string>> = computed((): Array<string> => {
     const defaultClass = attrs.class ? `${attrs.class}` : ''
     let classes = ['e-icon', resolvedRootConfig.value.iconClass];
 
     defaultClass && classes.push(defaultClass)
-    
-    // Handle size
-    const currentSize = props.size || 'default';
-    classes.push(`e-icon--size-${currentSize}`);
+
+    if (props.size) {
+        classes.push(`e-icon--size-${props.size}`)
+    }
 
     !isPath.value && resolvedStringIcon.value && classes.push(`${resolvedPrefix.value}${resolvedStringIcon.value}`);
 

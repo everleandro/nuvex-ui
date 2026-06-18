@@ -53,10 +53,8 @@ El componente expone `close(force?: boolean)` mediante `ref` y `defineExpose`.
 
     <EDialog v-model="open" :max-width="520">
       <ECard>
-        <ECardContainer>
-          <h3>Confirmar accion</h3>
-          <p>Este dialog se controla con v-model.</p>
-        </ECardContainer>
+        <h3>Confirmar accion</h3>
+        <p>Este dialog se controla con v-model.</p>
       </ECard>
     </EDialog>
   </div>
@@ -76,11 +74,9 @@ const open = ref(false)
   <div>
     <EDialog v-model="open" persistent :max-width="480">
       <ECard>
-        <ECardContainer>
-          <h3>Debes elegir una accion</h3>
-          <p>Click fuera y Escape no cierran el dialog.</p>
-          <EButton color="primary" @click="open = false">Aceptar</EButton>
-        </ECardContainer>
+        <h3>Debes elegir una accion</h3>
+        <p>Click fuera y Escape no cierran el dialog.</p>
+        <EButton color="primary" @click="open = false">Aceptar</EButton>
       </ECard>
     </EDialog>
   </div>

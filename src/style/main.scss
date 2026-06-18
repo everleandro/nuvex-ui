@@ -2,6 +2,7 @@
 @use "reset.scss";
 @use "transitions.scss";
 @use "typography.scss";
+@use "~/public/styles/_mixins.scss" as *;
 
 .v-ripple-element {
   position: relative;
@@ -14,6 +15,27 @@
     position: absolute;
     transform: scale(0);
     animation: v-ripple linear;
+  }
+}
+
+.interactive-element {
+  --interactive-element-local-state-focus: var(--e-interactive-state-focus, 0.12);
+  --interactive-element-local-state-hover: var(--e-interactive-state-hover, 0.08);
+  --interactive-element-local-state-active: var(--e-interactive-state-active, 0.12);
+
+  @include button-before(
+    $interactive: true,
+    $hover-opacity: var(--interactive-element-local-state-hover),
+    $focus-opacity: var(--interactive-element-local-state-focus),
+    $active-opacity: var(--interactive-element-local-state-active)
+  );
+
+  &::before {
+    z-index: 0;
+  }
+
+  .v-ripple {
+    z-index: 0;
   }
 }
 

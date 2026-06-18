@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-`ECard` provee un contenedor visual para agrupar contenido, con soporte de color de texto, altura fija y elevacion.
+`ECard` provee un contenedor visual para agrupar contenido, con espaciado interno nativo, soporte de color, altura fija, elevacion y un encabezado opcional.
 
 ## Importacion
 
@@ -15,9 +15,15 @@ import { ECard } from 'nuvex-ui'
 | Prop | Tipo | Default | Descripcion |
 | --- | --- | --- | --- |
 | `depressed` | `boolean` | `false` | Quita la sombra del card. |
-| `color` | `string` | `undefined` | Agrega la clase `{color}--text` al card. |
+| `color` | `string` | `undefined` | Resuelve fondo y contraste del card a partir de los tokens del tema. |
 | `height` | `string` | `undefined` | Altura fija en px. |
 | `elevation` | `string \| number` | `undefined` | Agrega la clase `e-elevation--{valor}`. |
+| `title` | `string` | `undefined` | Titulo opcional para el encabezado del card. |
+| `subtitle` | `string` | `undefined` | Subtitulo opcional para el encabezado del card. |
+| `prependAvatar` | `string` | `undefined` | URL opcional para renderizar un avatar al inicio del encabezado. |
+| `prependAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props opcionales que se pasan directo a `EAvatar`. |
+| `prependIcon` | `string \| IconPath \| IconPath[]` | `undefined` | Icono opcional al inicio del encabezado. |
+| `prependIconProps` | `Partial<Omit<IconProps, 'icon'>>` | `undefined` | Props opcionales que se pasan directo a `EIcon`. |
 
 ## Slots
 
@@ -26,14 +32,6 @@ import { ECard } from 'nuvex-ui'
 | `default` | Contenido principal del card. |
 | `footer` | Contenido adicional al final del card. |
 
-## Componentes relacionados
-
-`ECardContainer` es un helper estructural que agrega el padding interno estandar del card.
-
-```ts
-import { ECard, ECardContainer } from 'nuvex-ui'
-```
-
 ## Ejemplos
 
 ### Basico
@@ -41,10 +39,52 @@ import { ECard, ECardContainer } from 'nuvex-ui'
 ```vue
 <template>
   <ECard>
-    <ECardContainer>
-      <h3>Titulo</h3>
-      <p>Contenido principal del card.</p>
-    </ECardContainer>
+    <h3>Titulo</h3>
+    <p>Contenido principal del card.</p>
+  </ECard>
+</template>
+```
+
+### Con encabezado
+
+```vue
+<template>
+  <ECard
+    title="Titulo del card"
+    subtitle="Subtitulo opcional"
+    :prepend-icon="iconFactory.calendar"
+  >
+    <p>Contenido principal del card.</p>
+  </ECard>
+</template>
+```
+
+### Con prependIconProps
+
+```vue
+<template>
+  <ECard
+    title="Actividad"
+    subtitle="Resumen semanal"
+    :prepend-icon="iconFactory.calendar"
+    :prepend-icon-props="{ size: 'small', stateLayer: true }"
+  >
+    <p>Contenido principal del card.</p>
+  </ECard>
+</template>
+```
+
+### Con prependAvatar
+
+```vue
+<template>
+  <ECard
+    title="Jane Doe"
+    subtitle="Product Designer"
+    prepend-avatar="https://example.com/avatar.jpg"
+    :prepend-avatar-props="{ size: 'small', elevation: 'sm' }"
+  >
+    <p>Contenido principal del card.</p>
   </ECard>
 </template>
 ```
@@ -54,7 +94,7 @@ import { ECard, ECardContainer } from 'nuvex-ui'
 ```vue
 <template>
   <ECard depressed>
-    <ECardContainer>Card sin elevacion visual.</ECardContainer>
+    Card sin elevacion visual.
   </ECard>
 </template>
 ```
@@ -64,16 +104,12 @@ import { ECard, ECardContainer } from 'nuvex-ui'
 ```vue
 <template>
   <ECard elevation="lg">
-    <ECardContainer>
-      <h3>Resumen</h3>
-      <p>Informacion principal.</p>
-    </ECardContainer>
+    <h3>Resumen</h3>
+    <p>Informacion principal.</p>
 
     <template #footer>
-      <ECardContainer>
-        <EButton text>Cancelar</EButton>
-        <EButton color="primary">Aceptar</EButton>
-      </ECardContainer>
+      <EButton text>Cancelar</EButton>
+      <EButton color="primary">Aceptar</EButton>
     </template>
   </ECard>
 </template>
@@ -88,7 +124,7 @@ import { ECard, ECardContainer } from 'nuvex-ui'
 
 ## Errores comunes
 
-- Esperar que `color` cambie el fondo: hoy solo agrega una clase de color de texto.
+- Esperar que `color` solo afecte texto: `ECard` ahora resuelve fondo y contraste desde tokens.
 - Pasar `height` esperando unidades CSS libres: el componente agrega `px`, por lo que espera un valor numerico o string numerico.
-- Usar contenido suelto sin `ECardContainer` y luego sorprenderse por falta de padding interno.
-- Mezclar multiples patrones de espaciado (padding manual + `ECardContainer`) y terminar con layouts inconsistentes.
+- Asumir que `title` y `subtitle` siempre renderizan: el header solo aparece cuando al menos una prop del encabezado tiene valor.
+- Pasar `prependAvatar` y `prependIcon` al mismo tiempo esperando ambos: `prependAvatar` tiene prioridad sobre `prependIcon`.

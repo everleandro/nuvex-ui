@@ -12,7 +12,21 @@ export interface RippleBinding {
   center?: boolean;
   disabled?: boolean;
   keyboard?: boolean;
+  interactive?: boolean;
 }
+
+const ensureRippleClasses = (
+  el: El,
+  binding?: Record<"value", RippleBinding>
+) => {
+  if (!el.classList.contains("v-ripple-element")) {
+    el.classList.add("v-ripple-element");
+  }
+
+  if (binding?.value?.interactive !== false && !el.classList.contains("interactive-element")) {
+    el.classList.add("interactive-element");
+  }
+};
 
 const createRipple = (
   el: El,
@@ -22,9 +36,7 @@ const createRipple = (
 ) => {
   if (binding?.value?.disabled) return;
 
-  if (!el.classList.contains("v-ripple-element")) {
-    el.classList.add("v-ripple-element");
-  }
+  ensureRippleClasses(el, binding);
 
   const circle = document.createElement("span");
   el.appendChild(circle);
@@ -107,14 +119,13 @@ const addRippleListeners = (el: El, binding?: Record<"value", RippleBinding>) =>
 
 export const ripple = {
   mounted(el: El, binding?: Record<"value", RippleBinding>) {
-    if (!el.classList.contains("v-ripple-element")) {
-      el.classList.add("v-ripple-element");
-    }
+    ensureRippleClasses(el, binding);
 
     addRippleListeners(el, binding);
   },
 
   updated(el: El, binding?: Record<"value", RippleBinding>) {
+    ensureRippleClasses(el, binding);
     removeRippleListeners(el);
     addRippleListeners(el, binding);
   },

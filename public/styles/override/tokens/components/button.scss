@@ -10,7 +10,7 @@ $btn-rounded-border-radius: 28px !default;
 $btn-text-transform: none !default;
 $btn-transition-duration: 0.3s !default;
 
-$btn-states: map.merge(
+$interactive-states: map.merge(
     (
         focus: 0.12,
         hover: 0.08,

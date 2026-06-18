@@ -3,11 +3,13 @@
   --card-bg: var(--e-color-surface-1, #ffffff);
   --card-text: var(--e-contrast-surface-1, #000000);
   --card-border-color: var(--card-bg);
+  --card-padding: calc(var(--e-space-base, 4px) * 4);
+  --card-gap: calc(var(--e-space-base, 4px) * 3);
 
   background-color: var(--card-bg);
   color: var(--card-text);
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   position: relative;
 
   &--outlined {
@@ -18,23 +20,41 @@
     box-shadow: none;
   }
 
-  &__container {
-    padding: var(--e-space-base, 4px);
+  &__main {
+    display: grid;
+    gap: var(--card-gap);
+    padding: var(--card-padding);
     flex: 1;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: calc(var(--e-space-base, 4px) * 3);
+  }
+
+  &__prepend {
+    display: inline-flex;
+    align-self: center;
+  }
+
+  &__headline {
+    display: grid;
+    gap: var(--e-space-base, 4px);
+    min-width: 0;
+  }
+
+  &__title,
+  &__subtitle {
+    margin: 0;
+  }
+
+  &__subtitle {
+    opacity: 0.8;
   }
 
   &__footer {
     flex: 1;
-
-    &-content {
-      padding: var(--e-space-base, 4px);
-      flex: 1;
-    }
-  }
-
-  &>.e-avatar {
-    &__wrapper {
-      padding: var(--e-space-base, 4px);
-    }
+    padding: var(--card-padding);
   }
 }

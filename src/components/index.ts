@@ -1,7 +1,6 @@
 export { default as EButton } from "./button/index.vue";
 export { default as EIcon } from "./icon/index.vue";
 export { default as ECard } from "./card/index.vue";
-export { default as ECardContainer } from "./card/container.vue";
 export { default as EDatePicker } from "./date-picker/index.vue";
 export { default as EDialog } from "./dialog/index.vue";
 export { default as EMenu } from "./menu/index.vue";
