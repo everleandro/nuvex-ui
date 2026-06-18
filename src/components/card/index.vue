@@ -11,9 +11,17 @@
                 </span>
 
                 <div class="e-card__headline">
-                    <p v-if="title" class="e-card__title">{{ title }}</p>
-                    <p v-if="subtitle" class="e-card__subtitle">{{ subtitle }}</p>
+                    <p v-if="title" class="title e-card__title">{{ title }}</p>
+                    <p v-if="subtitle" class="subtitle e-card__subtitle">{{ subtitle }}</p>
                 </div>
+
+                <span v-if="appendAvatar" class="e-card__append">
+                    <EAvatar v-bind="resolvedAppendAvatarProps"/>
+                </span>
+
+                <span v-else-if="appendIcon" class="e-card__append">
+                    <EIcon v-bind="resolvedAppendIconProps"/>
+                </span>
             </div>
 
             <slot> </slot>
@@ -43,6 +51,10 @@ export interface Props extends ElevationProps {
     prependAvatarProps?: Partial<Omit<AvatarProps, 'src'>>
     prependIcon?: Array<IconPath> | IconPath | string
     prependIconProps?: Partial<Omit<IconProps, 'icon'>>
+    appendAvatar?: string
+    appendAvatarProps?: Partial<Omit<AvatarProps, 'src'>>
+    appendIcon?: Array<IconPath> | IconPath | string
+    appendIconProps?: Partial<Omit<IconProps, 'icon'>>
 }
 const props = defineProps<Props>()
 const slots = useSlots()
@@ -69,6 +81,10 @@ const prependAvatar = computed(() => props.prependAvatar)
 const prependAvatarProps = computed(() => props.prependAvatarProps)
 const prependIcon = computed(() => props.prependIcon)
 const prependIconProps = computed(() => props.prependIconProps)
+const appendAvatar = computed(() => props.appendAvatar)
+const appendAvatarProps = computed(() => props.appendAvatarProps)
+const appendIcon = computed(() => props.appendIcon)
+const appendIconProps = computed(() => props.appendIconProps)
 
 const resolvedPrependAvatarProps = computed(() => {
     return {
@@ -84,7 +100,23 @@ const resolvedPrependIconProps = computed(() => {
         icon: prependIcon.value,
     }
 })
-const hasHeader = computed(() => !!title.value || !!subtitle.value || !!prependAvatar.value || !!prependIcon.value)
+
+const resolvedAppendAvatarProps = computed(() => {
+    return {
+        ...(appendAvatarProps.value || {}),
+        src: appendAvatar.value,
+    }
+})
+
+const resolvedAppendIconProps = computed(() => {
+    return {
+        stateLayer: true,
+        ...(appendIconProps.value || {}),
+        icon: appendIcon.value,
+    }
+})
+
+const hasHeader = computed(() => !!title.value || !!subtitle.value || !!prependAvatar.value || !!prependIcon.value || !!appendAvatar.value || !!appendIcon.value)
 const hasFooter = computed(() => !!slots.footer)
 
 const { colorStyles } = useResolvedColor({

@@ -38,10 +38,17 @@
     align-self: center;
   }
 
+  &__append {
+    display: inline-flex;
+    align-self: center;
+    margin-inline-start: auto;
+  }
+
   &__headline {
     display: grid;
     gap: var(--e-space-base, 4px);
     min-width: 0;
+    flex: 1;
   }
 
   &__title,
