@@ -44,7 +44,7 @@ $list-item-affix-types: icon, avatar, slot;
   padding: 8px 0;
   position: static;
   transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  --before-opacity: var(--e-list-item-state-active, 0.12);
+  --before-opacity: var(--e-list-item-state-active, var(--e-interactive-state-active, 0.12));
   border-radius: var(--e-list-border-radius, var(--e-border-radius-root, 4px));
   overflow: hidden;
 
@@ -73,6 +73,12 @@ $list-item-affix-types: icon, avatar, slot;
   }
 
   &-item {
+    --list-item-local-state-hover: var(--e-list-item-state-hover, var(--e-interactive-state-hover, 0.08));
+    --list-item-local-state-focus: var(--e-list-item-state-focus, var(--e-interactive-state-focus, 0.18));
+    --list-item-local-state-active: var(--e-list-item-state-active, var(--e-interactive-state-active, 0.12));
+    --interactive-element-local-state-hover: var(--list-item-local-state-hover);
+    --interactive-element-local-state-focus: var(--list-item-local-state-focus);
+    --interactive-element-local-state-active: var(--list-item-local-state-active);
     --padding-inline: var(--list-item-padding-inline, var(--e-list-padding-inline, calc(var(--e-space-base, 4px) * 4)));
     --list-item-affix-size: var(--list-item-affix-width, calc(var(--list-item-height, var(--e-list-item-height-default, 3rem)) - (var(--e-space-base, 4px) * 2)));
     border-radius: var(--list-item-border-radius, 4px);
@@ -123,15 +129,15 @@ $list-item-affix-types: icon, avatar, slot;
     }
 
     &:hover:before {
-      --before-opacity: var(--e-list-item-state-hover, 0.08);
+      --before-opacity: var(--list-item-local-state-hover);
     }
 
     &:active:before {
-      --before-opacity: var(--e-list-item-state-active, 0.12);
+      --before-opacity: var(--list-item-local-state-active);
     }
 
     &:focus:before {
-      --before-opacity: var(--e-list-item-state-focus, 0.18);
+      --before-opacity: var(--list-item-local-state-focus);
     }
 
     &:focus-visible {
@@ -174,12 +180,15 @@ $list-item-affix-types: icon, avatar, slot;
 
     @include button-before();
 
+    &.interactive-element--active:before,
+    &.interactive-element--active:hover:before,
+    &.interactive-element--active:focus:before,
     &--active:before,
     &.router-link-active:before,
     &.router-link-active:hover:before,
     &--active:hover:before,
-    &:focus:before {
-      opacity: var(--before-opacity);
+    &.router-link-active:focus:before {
+      opacity: var(--list-item-local-state-active);
     }
 
     &__content {

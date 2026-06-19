@@ -197,6 +197,7 @@ const availableRootClasses = {
     clickeable: "e-list-item--clickeable",
     root: "e-list-item",
     ripple: "v-ripple-element",
+    interactiveActive: "interactive-element--active",
     active: "e-list-item--active",
 };
 
@@ -257,6 +258,7 @@ const listItemCLass = computed((): Array<unknown> => {
         classes.push([availableRootClasses.clickeable, availableRootClasses.ripple].join(' '))
     }
     if (active.value) {
+        classes.push(availableRootClasses.interactiveActive)
         classes.push(props.activeClass || '')
     }
 
