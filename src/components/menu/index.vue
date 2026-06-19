@@ -1,5 +1,5 @@
 <template>
-    <slot name="activator" :onClick="handleActivatorClick" :onKeydown="handleActivatorKeydown"
+    <slot name="activator" :attrs="activatorAttrs" :onClick="handleActivatorClick" :onKeydown="handleActivatorKeydown"
         :ref="setActivatorReference" :aria-haspopup="resolvedAriaHaspopup" :aria-expanded="String(opened)" :aria-controls="resolvedAriaControls"
         :aria-disabled="String(Boolean(props.disableMenu))" :openMenu="openMenu" :closeMenu="closeMenu" />
 
@@ -200,6 +200,16 @@ const resolveCurrentActivator = (): HTMLElement | null => {
 }
 
 const currentActivator = computed(() => resolveCurrentActivator())
+
+const activatorAttrs = computed(() => ({
+    ref: setActivatorReference,
+    onClick: handleActivatorClick,
+    onKeydown: handleActivatorKeydown,
+    'aria-haspopup': resolvedAriaHaspopup.value,
+    'aria-expanded': String(opened.value),
+    'aria-controls': resolvedAriaControls.value,
+    'aria-disabled': String(Boolean(props.disableMenu)),
+}))
 
 const dataId = computed(() => {
     const child = currentActivator.value?.closest('.e-menu-container__wrapper')?.getAttribute('data-id')
