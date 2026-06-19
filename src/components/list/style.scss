@@ -37,7 +37,7 @@ $list-item-affix-types: icon, avatar, slot;
 }
 
 .e-list {
-  --list-item-border-radius: var(--e-list-item-border-radius, var(--e-border-radius-root));
+  --list-item-border-radius: 0;
   color: var(--e-list-color, inherit);
   font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
   display: block;
@@ -70,6 +70,11 @@ $list-item-affix-types: icon, avatar, slot;
 
   &--outlined {
     border: 1px solid var(--e-color-border);
+  }
+
+  &--inset {
+    padding-inline: 8px;
+    --list-item-border-radius: var(--e-list-item-border-radius, var(--e-border-radius-root));
   }
 
   &-item {

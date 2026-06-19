@@ -24,6 +24,7 @@ export interface Props extends ElevationProps, SizeProps {
     disabled?: boolean
     outlined?: boolean
     dense?: boolean
+    inset?: boolean
     color?: string
     group?: ListModelProp,
     modelValue?: ListModelProp
@@ -61,7 +62,7 @@ const group = computed<ListModelProp>({
     }
 })
 
-const booleanClassKeys = ['disabled', 'dense', 'outlined'] as const
+const booleanClassKeys = ['disabled', 'dense', 'outlined', 'inset'] as const
 
 const explicitRole = computed((): string | undefined => {
     return typeof attrs.role === 'string' ? attrs.role : undefined

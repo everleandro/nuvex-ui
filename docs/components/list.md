@@ -23,6 +23,7 @@ import { EList, EListItem, EListGroup } from 'nuvex-ui'
 | `disabled` | `boolean` | `false` | Deshabilita interaccion de toda la lista. |
 | `outlined` | `boolean` | `false` | Aplica la variante outlined cuando exista en estilos del contexto. |
 | `dense` | `boolean` | `false` | Reduce alturas, paddings y tipografia secundaria. |
+| `inset` | `boolean` | `false` | Agrega padding horizontal al contenedor y habilita el border radius visual de los `EListItem`. |
 | `size` | `'x-small' \| 'small' \| 'default' \| 'large' \| 'x-large'` | `undefined` | Define el size por defecto de los `EListItem` hijos que no declaren uno propio. |
 | `color` | `string` | `undefined` | Agrega la clase `{color}--text`. |
 | `elevation` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `undefined` | Aplica una clase `e-elevation--*` al contenedor de la lista. |
