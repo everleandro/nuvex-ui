@@ -223,6 +223,7 @@ const updatemenuContentStyle = async (): Promise<void> => {
         result.minWidth = `${width}px`;
         result.maxWidth = `${width}px`;
     } else if (props.width === undefined) {
+        result.width = `${menuWidth}px`
         result.minWidth = `${menuWidth}px`
     }
 
@@ -434,8 +435,9 @@ const getWidth = () => {
 const getContentWidth = (): number => {
     const el = wrapper.value as HTMLElement
     if (!el) return 0
+    if (typeof document === 'undefined') return 0
 
-    const measure = (): number => {
+    const measureCurrent = (): number => {
         const firstChild = el.firstElementChild as HTMLElement | null
         if (!firstChild) {
             return Math.max(el.offsetWidth, el.scrollWidth)
@@ -449,20 +451,47 @@ const getContentWidth = (): number => {
         )
     }
 
+    const measureIntrinsic = (): number => {
+        const firstChild = el.firstElementChild as HTMLElement | null
+        if (!firstChild) return 0
+
+        const host = document.createElement('div')
+        host.style.position = 'absolute'
+        host.style.left = '-9999px'
+        host.style.top = '0'
+        host.style.visibility = 'hidden'
+        host.style.pointerEvents = 'none'
+        host.style.width = 'max-content'
+        host.style.maxWidth = 'none'
+        host.style.minWidth = '0'
+
+        const clone = firstChild.cloneNode(true) as HTMLElement
+        clone.style.width = 'max-content'
+        clone.style.maxWidth = 'none'
+        clone.style.minWidth = '0'
+
+        host.appendChild(clone)
+        document.body.appendChild(host)
+
+        const value = Math.ceil(clone.getBoundingClientRect().width)
+        document.body.removeChild(host)
+        return value
+    }
+
     const elStyle = window.getComputedStyle(el)
     const elDisplay = elStyle.display
     const elPosition = elStyle.position
     const elVisibility = elStyle.visibility
 
     if (elDisplay !== 'none') {
-        return measure()
+        return Math.max(measureCurrent(), measureIntrinsic())
     }
 
     el.style.position = 'absolute'
     el.style.visibility = 'hidden'
     el.style.display = 'block'
 
-    const wantedWidth = measure()
+    const wantedWidth = Math.max(measureCurrent(), measureIntrinsic())
 
     el.style.display = elDisplay
     el.style.position = elPosition
