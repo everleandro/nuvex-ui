@@ -14,4 +14,9 @@ export interface Menu {
   opened: Ref<boolean>;
 }
 
-export type MenuTypeTarget = HTMLElement | string | undefined | null;
+export type MenuTypeTarget =
+  | HTMLElement
+  | string
+  | Ref<HTMLElement | null | undefined>
+  | undefined
+  | null;

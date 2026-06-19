@@ -45,7 +45,7 @@ export interface Props extends ElevationProps {
 
 import EMenuContainer from './container.vue'
 
-import { computed, nextTick, onMounted, onUnmounted, ref, useAttrs, useId, watch } from 'vue'
+import { computed, isRef, nextTick, onMounted, onUnmounted, ref, useAttrs, useId, watch } from 'vue'
 
 const id = `e-menu-${useId()}`
 const contentId = `${id}-content`
@@ -95,11 +95,15 @@ const setActivatorReference = (value: unknown) => {
     syncActivatorBehavior()
 }
 
+const isHTMLElementValue = (value: unknown): value is HTMLElement => {
+    return typeof HTMLElement !== 'undefined' && value instanceof HTMLElement
+}
+
 const resolveActivatorElement = (value: unknown): HTMLElement | null => {
-    if (value instanceof HTMLElement) return value
+    if (isHTMLElementValue(value)) return value
     if (value && typeof value === 'object' && '$el' in (value as Record<string, unknown>)) {
         const element = (value as { $el?: unknown }).$el
-        return element instanceof HTMLElement ? element : null
+        return isHTMLElementValue(element) ? element : null
     }
     return null
 }
@@ -156,16 +160,40 @@ const syncActivatorBehavior = async (): Promise<void> => {
     }
 }
 
+const unwrapActivatorTarget = (target: unknown): unknown => {
+    if (isRef(target)) {
+        return target.value
+    }
+    return target
+}
+
 const resolveCurrentActivator = (): HTMLElement | null => {
-    if (typeof props.activator === 'string') {
+    const rawActivator = unwrapActivatorTarget(props.activator)
+
+    if (typeof rawActivator === 'string') {
+        const selector = rawActivator.trim()
+        if (!selector) {
+            return MenuReference.value
+        }
+
         if (typeof document === 'undefined') {
             return null
         }
-        return (document.querySelector(props.activator) || null) as HTMLElement | null
+
+        try {
+            return (document.querySelector(selector) || null) as HTMLElement | null
+        } catch {
+            return null
+        }
     }
 
-    if (props.activator instanceof HTMLElement) {
-        return props.activator
+    if (isHTMLElementValue(rawActivator)) {
+        return rawActivator
+    }
+
+    const activatorAsElement = resolveActivatorElement(rawActivator)
+    if (activatorAsElement) {
+        return activatorAsElement
     }
 
     return MenuReference.value

@@ -16,7 +16,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { Ref, computed, nextTick, onMounted, onUnmounted, provide, ref, useId, watch } from 'vue';
+import { Ref, computed, isRef, nextTick, onMounted, onUnmounted, provide, ref, useId, watch } from 'vue';
 import { useResolvedColor } from '@/composables/color'
 import type { ElevationProps, MenuTypeTarget } from '@/types'
 import { useMenuStack } from '@/composables/menu-stack'
@@ -98,14 +98,30 @@ const closeMenu = (): boolean => {
 
 const handleContentClick = (): boolean => Boolean(props.closeOnContentClick) && closeMenu()
 
+const unwrapTarget = (target: unknown): unknown => {
+    if (isRef(target)) {
+        return target.value
+    }
+    return target
+}
+
 const resolveTarget = (): HTMLElement | null => {
     if (typeof document === 'undefined') return null
 
-    if (typeof props.target === 'string') {
-        return (document.querySelector(props.target) || null) as HTMLElement | null
+    const rawTarget = unwrapTarget(props.target)
+
+    if (typeof rawTarget === 'string') {
+        const selector = rawTarget.trim()
+        if (!selector) return null
+
+        try {
+            return (document.querySelector(selector) || null) as HTMLElement | null
+        } catch {
+            return null
+        }
     }
 
-    return props.target ? (props.target as HTMLElement) : null
+    return rawTarget ? (rawTarget as HTMLElement) : null
 }
 
 const targetDOMRect = (): DOMRect | null => resolveTarget()?.getBoundingClientRect() || null
