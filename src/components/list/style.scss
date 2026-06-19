@@ -151,7 +151,8 @@ $list-item-affix-types: icon, avatar, slot;
     }
 
     &--active,
-    &.router-link-active {
+    &.router-link-active,
+    &.router-link-exact-active {
       color: inherit;
     }
 
@@ -191,8 +192,11 @@ $list-item-affix-types: icon, avatar, slot;
     &--active:before,
     &.router-link-active:before,
     &.router-link-active:hover:before,
+    &.router-link-exact-active:before,
+    &.router-link-exact-active:hover:before,
     &--active:hover:before,
-    &.router-link-active:focus:before {
+    &.router-link-active:focus:before,
+    &.router-link-exact-active:focus:before {
       opacity: var(--list-item-local-state-active);
     }
 
