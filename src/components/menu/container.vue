@@ -211,12 +211,19 @@ const updatemenuContentStyle = async (): Promise<void> => {
     const { width, top, left, height } = rect;
     const result: Record<string, string | number> = {}
     const menuHeight = getHeight()
-    const menuWidth = getWidth()
+    const contentWidth = getContentWidth()
+    const activatorWidth = Math.ceil(width)
+    const explicitWidth = typeof props.width === 'number' ? props.width : undefined
+    const menuWidth = props.fullWidth
+        ? activatorWidth
+        : explicitWidth ?? Math.max(activatorWidth, contentWidth)
     const margin = 12
 
     if (props.fullWidth) {
         result.minWidth = `${width}px`;
         result.maxWidth = `${width}px`;
+    } else if (props.width === undefined) {
+        result.minWidth = `${menuWidth}px`
     }
 
     const origin: Array<string> = props.origin.split(' ');
@@ -302,8 +309,14 @@ const updatemenuContentStyle = async (): Promise<void> => {
     if (zIndex !== null) {
         result.zIndex = `${zIndex}`
     }
-    props.maxWidth && (result.maxWidth = `${props.maxWidth}px`);
-    props.width && (result.width = `${props.width}px`);
+    if (props.maxWidth !== undefined) {
+        result.maxWidth = typeof props.maxWidth === 'number' ? `${props.maxWidth}px` : String(props.maxWidth)
+    }
+
+    if (props.width !== undefined) {
+        result.width = typeof props.width === 'number' ? `${props.width}px` : String(props.width)
+    }
+
     await nextTick();
     menuContentStyle.value = result
 }
@@ -416,6 +429,46 @@ const getWidth = () => {
     el.style.visibility = el_visibility;
 
     return wanted_width;
+}
+
+const getContentWidth = (): number => {
+    const el = wrapper.value as HTMLElement
+    if (!el) return 0
+
+    const measure = (): number => {
+        const firstChild = el.firstElementChild as HTMLElement | null
+        if (!firstChild) {
+            return Math.max(el.offsetWidth, el.scrollWidth)
+        }
+
+        return Math.max(
+            el.offsetWidth,
+            el.scrollWidth,
+            firstChild.offsetWidth,
+            firstChild.scrollWidth,
+        )
+    }
+
+    const elStyle = window.getComputedStyle(el)
+    const elDisplay = elStyle.display
+    const elPosition = elStyle.position
+    const elVisibility = elStyle.visibility
+
+    if (elDisplay !== 'none') {
+        return measure()
+    }
+
+    el.style.position = 'absolute'
+    el.style.visibility = 'hidden'
+    el.style.display = 'block'
+
+    const wantedWidth = measure()
+
+    el.style.display = elDisplay
+    el.style.position = elPosition
+    el.style.visibility = elVisibility
+
+    return wantedWidth
 }
 
 provide("EMenuContainer", {
