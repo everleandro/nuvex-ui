@@ -24,6 +24,8 @@
                 </span>
             </div>
 
+            <p v-if="description" class="text-body e-card__description">{{ description }}</p>
+
             <slot> </slot>
         </div>
 
@@ -47,6 +49,7 @@ export interface Props extends ElevationProps {
     depressed?: boolean
     title?: string
     subtitle?: string
+    description?: string
     prependAvatar?: string
     prependAvatarProps?: Partial<Omit<AvatarProps, 'src'>>
     prependIcon?: Array<IconPath> | IconPath | string
@@ -77,6 +80,14 @@ const subtitle = computed(() => {
     return props.subtitle.trim()
 })
 
+const description = computed(() => {
+    if (!props.description) {
+        return ''
+    }
+
+    return props.description.trim()
+})
+
 const prependAvatar = computed(() => props.prependAvatar)
 const prependAvatarProps = computed(() => props.prependAvatarProps)
 const prependIcon = computed(() => props.prependIcon)
@@ -95,7 +106,6 @@ const resolvedPrependAvatarProps = computed(() => {
 
 const resolvedPrependIconProps = computed(() => {
     return {
-        stateLayer: true,
         ...(prependIconProps.value || {}),
         icon: prependIcon.value,
     }
@@ -110,7 +120,6 @@ const resolvedAppendAvatarProps = computed(() => {
 
 const resolvedAppendIconProps = computed(() => {
     return {
-        stateLayer: true,
         ...(appendIconProps.value || {}),
         icon: appendIcon.value,
     }

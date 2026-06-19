@@ -31,6 +31,7 @@
                     :depressed="sample.depressed"
                     :title="sample.title"
                     :subtitle="sample.subtitle"
+                    :description="sample.description"
                     :prepend-avatar="sample.prependAvatar"
                     :prepend-avatar-props="sample.prependAvatarProps"
                     :prepend-icon="sample.prependIcon"
@@ -72,6 +73,7 @@
                         :color="variant.color"
                         :title="variant.title"
                         :subtitle="variant.caption"
+                        :description="variant.description"
                         :prepend-icon="variant.prependIcon"
                         :prepend-icon-props="variant.prependIconProps"
                         outlined
@@ -108,6 +110,7 @@
                     color="secondary"
                     title="Editor draft"
                     subtitle="Height fija para probar contenido vertical."
+                    description="Incluye una vista previa breve para validar jerarquia tipografica en encabezados extensos."
                     :prepend-icon="iconFactory.pencil"
                     :prepend-icon-props="{ size: 'small' }"
                     height="280"
@@ -129,6 +132,7 @@
                     class="play-card play-card--metrics"
                     title="Metrics snapshot"
                     subtitle="Estado actual de tablero"
+                    description="Resumen rapido de indicadores clave para seguimiento semanal."
                     prepend-avatar="https://i.pravatar.cc/80?img=12"
                     :prepend-avatar-props="{ size: 'small', elevation: 'sm' }"
                     outlined
@@ -168,6 +172,7 @@ const colorSamples = [
         label: "surface",
         title: "Card without explicit color",
         subtitle: "Usa tokens base para comparar el resto de variantes.",
+        description: "Variante neutral para validar contraste y espaciado del encabezado.",
         prependIcon: iconFactory.menu,
         prependIconProps: { size: "small" },
         copy: "Usa los tokens de surface base para comparar el resto de variantes.",
@@ -182,6 +187,7 @@ const colorSamples = [
         label: "semantic",
         title: "Primary background + computed contrast",
         subtitle: "Contraste resuelto automaticamente desde el tema.",
+        description: "Combina superficie semantica con acciones para verificar legibilidad.",
         prependAvatar: "https://i.pravatar.cc/80?img=7",
         prependAvatarProps: { size: "small", elevation: "sm" },
         copy: "Sirve para validar que el contraste de texto y acciones se resuelva desde variables.",
@@ -196,6 +202,7 @@ const colorSamples = [
         label: "primitive",
         title: "Primitive palette token",
         subtitle: "Color primitivo con contraste legible.",
+        description: "Ideal para comparar paleta primitiva contra tokens semanticos.",
         prependIcon: iconFactory.calendar,
         prependIconProps: { size: "x-small", stateLayer: false },
         copy: "Ayuda a confirmar que un color primitivo tambien actualiza fondo y contraste del card.",
@@ -211,6 +218,7 @@ const outlineSamples = [
     {
         title: "Primary outlined",
         caption: "Semantic token",
+        description: "Caso base para revisar borde y jerarquia textual en encabezado.",
         prependIcon: iconFactory.chevronDown,
         prependIconProps: { size: "small" },
         copy: "El borde debe seguir el color resuelto del card, no un color de texto heredado por clase.",
@@ -220,6 +228,7 @@ const outlineSamples = [
     {
         title: "Warning outlined",
         caption: "Semantic token",
+        description: "Valida lectura en tonos de advertencia con texto auxiliar.",
         prependIcon: iconFactory.menuDown,
         prependIconProps: { size: "small", stateLayer: false },
         copy: "Caso util para verificar contraste y legibilidad sobre tonos calidos.",
@@ -229,6 +238,7 @@ const outlineSamples = [
     {
         title: "Blue 700 outlined",
         caption: "Primitive token",
+        description: "Comprueba contraste en tonalidades oscuras de la paleta primitiva.",
         prependIcon: iconFactory.clear,
         prependIconProps: { size: "x-small" },
         copy: "Sirve para revisar el borde con tonos oscuros de la paleta primitiva.",

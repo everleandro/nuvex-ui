@@ -20,6 +20,7 @@ import { ECard } from 'nuvex-ui'
 | `elevation` | `string \| number` | `undefined` | Agrega la clase `e-elevation--{valor}`. |
 | `title` | `string` | `undefined` | Titulo opcional para el encabezado del card. |
 | `subtitle` | `string` | `undefined` | Subtitulo opcional para el encabezado del card. |
+| `description` | `string` | `undefined` | Descripcion opcional para el cuerpo del card. |
 | `prependAvatar` | `string` | `undefined` | URL opcional para renderizar un avatar al inicio del encabezado. |
 | `prependAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props opcionales que se pasan directo a `EAvatar`. |
 | `prependIcon` | `string \| IconPath \| IconPath[]` | `undefined` | Icono opcional al inicio del encabezado. |
@@ -52,6 +53,7 @@ import { ECard } from 'nuvex-ui'
   <ECard
     title="Titulo del card"
     subtitle="Subtitulo opcional"
+    description="Texto adicional para ampliar el contexto del card."
     :prepend-icon="iconFactory.calendar"
   >
     <p>Contenido principal del card.</p>
@@ -126,5 +128,5 @@ import { ECard } from 'nuvex-ui'
 
 - Esperar que `color` solo afecte texto: `ECard` ahora resuelve fondo y contraste desde tokens.
 - Pasar `height` esperando unidades CSS libres: el componente agrega `px`, por lo que espera un valor numerico o string numerico.
-- Asumir que `title` y `subtitle` siempre renderizan: el header solo aparece cuando al menos una prop del encabezado tiene valor.
+- Asumir que `title`, `subtitle` y `description` siempre renderizan: el header solo aparece cuando al menos una prop del encabezado tiene valor, mientras `description` se renderiza en el cuerpo.
 - Pasar `prependAvatar` y `prependIcon` al mismo tiempo esperando ambos: `prependAvatar` tiene prioridad sobre `prependIcon`.
