@@ -49,6 +49,20 @@
                     </EMenu>
                 </div>
 
+                <div class="menu-demo-row">
+                    <EMenu v-model="listMenuOpen">
+                        <template #activator="{ attrs }">
+                            <EButton color="primary" v-bind="attrs" :icon="iconFactory.arrowUp" />
+                        </template>
+
+                        <EList>
+                            <EListItem title="Profile" />
+                            <EListItem title="Billing and Subscription" />
+                            <EListItem title="Notifications" />
+                        </EList>
+                    </EMenu>
+                </div>
+
                 <p class="status-copy">
                     Estado actual: <strong>{{ simpleMenuOpen ? "abierto" : "cerrado" }}</strong>
                 </p>
@@ -63,7 +77,7 @@
                 </p>
 
                 <div class="menu-demo-row">
-                    <EButton color="teal-900" >
+                    <EButton color="teal-900">
                         spacer
                     </EButton>
                     <EMenu v-model="simpleMenuOpen2">
@@ -131,7 +145,11 @@ import { ref } from "vue";
 
 import EButton from "../../src/components/button/index.vue";
 import ECard from "../../src/components/card/index.vue";
+import EList from "../../src/components/list/index.vue";
+import EListItem from "../../src/components/list/item.vue";
 import EMenu from "../../src/components/menu/index.vue";
+
+import iconFactory from "../../src/utils/icons";
 
 type ActivatorBindings = {
     onClick?: (evt?: Event) => void;
@@ -142,6 +160,7 @@ type ActivatorBindings = {
 
 const simpleMenuOpen = ref(false);
 const simpleMenuOpen1 = ref(false);
+const listMenuOpen = ref(false);
 const simpleMenuOpen2 = ref(false);
 const parentMenuOpen = ref(false);
 const childMenuOpen = ref(false);
