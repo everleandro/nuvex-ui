@@ -26,6 +26,7 @@ import { EList, EListItem, EListGroup } from 'nuvex-ui'
 | `inset` | `boolean` | `false` | Agrega padding horizontal al contenedor y habilita el border radius visual de los `EListItem`. |
 | `size` | `'x-small' \| 'small' \| 'default' \| 'large' \| 'x-large'` | `undefined` | Define el size por defecto de los `EListItem` hijos que no declaren uno propio. |
 | `color` | `string` | `undefined` | Agrega la clase `{color}--text`. |
+| `activeColor` | `string` | `undefined` | Define el color de texto solo cuando el item esta activo (`interactive-element--active`, `router-link-active`, `router-link-exact-active`, `e-list-item--active` o `e-list-item-active`). |
 | `elevation` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `undefined` | Aplica una clase `e-elevation--*` al contenedor de la lista. |
 | `modelValue` | `string \| number \| Array<string \| number> \| undefined \| null` | `undefined` | Estado de seleccion de items. Si es array, la lista trabaja en multiple seleccion. |
 | `group` | `string \| number \| Array<string \| number> \| undefined \| null` | estado interno | Estado de grupos abiertos. Es opcional; si no se pasa, `EList` administra su propio estado. |

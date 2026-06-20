@@ -2,7 +2,7 @@
     <ul
         ref="listNode"
         :class="listCLass"
-        :style="listStyle"
+        :style="mergedListStyle"
         :role="listRole"
         :aria-disabled="props.disabled || undefined"
         :aria-orientation="listOrientation"
@@ -26,6 +26,7 @@ export interface Props extends ElevationProps, SizeProps {
     dense?: boolean
     inset?: boolean
     color?: string
+    activeColor?: string
     group?: ListModelProp,
     modelValue?: ListModelProp
 }
@@ -105,6 +106,19 @@ const { resolvedColor, colorStyles: listStyle } = useResolvedColor({
     inheritedColor: computed(() => parentList?.color?.value),
     colorVar: '--e-list-color',
     contrastVar: '--e-list-contrast',
+})
+
+const { resolvedColor: resolvedActiveColor, colorStyles: listActiveColorStyle } = useResolvedColor({
+    color: computed(() => props.activeColor),
+    inheritedColor: computed(() => parentList?.activeColor?.value),
+    colorVar: '--e-list-active-color',
+})
+
+const mergedListStyle = computed((): Record<string, string> => {
+    return {
+        ...listStyle.value,
+        ...listActiveColorStyle.value,
+    }
 })
 
 const changeModelValue = (value: ListValue): void => {
@@ -293,6 +307,7 @@ provide(LIST_KEY, {
     modelValue,
     group,
     color: resolvedColor,
+    activeColor: resolvedActiveColor,
     size: computed(() => props.size),
     disabled: computed(() => !!props.disabled),
     isListbox,

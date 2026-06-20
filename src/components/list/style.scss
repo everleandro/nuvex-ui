@@ -186,10 +186,21 @@ $list-item-affix-types: icon, avatar, slot;
 
     @include button-before();
 
+    &.interactive-element--active,
+    &--active,
+    &.e-list-item-active,
+    &.router-link-active,
+    &.router-link-exact-active {
+      color: var(--e-list-active-color, var(--e-list-color, currentColor));
+    }
+
     &.interactive-element--active:before,
     &.interactive-element--active:hover:before,
     &.interactive-element--active:focus:before,
     &--active:before,
+    &.e-list-item-active:before,
+    &.e-list-item-active:hover:before,
+    &.e-list-item-active:focus:before,
     &.router-link-active:before,
     &.router-link-active:hover:before,
     &.router-link-exact-active:before,
