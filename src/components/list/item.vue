@@ -1,6 +1,6 @@
 <template>
     <component ref="node" v-ripple="{ disabled: !clickeableType() }" :is="tagResult" :active-class="activeClass"
-        v-bind="liBindingOptions" :class="listItemCLass" :style="listItemStyle" @click="handleItemClick" @focus="handleItemFocus"
+        v-bind="liBindingOptions" :class="listItemCLass" :style="mergedListItemStyle" @click="handleItemClick" @focus="handleItemFocus"
         @keydown="handleItemKeydown" @keyup="handleItemKeyup">
         <div v-if="hasPrepend" :class="prependClass">
             <slot name="prepend">
@@ -46,6 +46,7 @@ export interface Props extends SizeProps {
     subtitle?: string
     tag?: string
     color?: string
+    activeColor?: string
     value?: string | number | undefined
 }
 
@@ -240,11 +241,24 @@ const appendTypeClass = computed((): string | undefined => {
     return undefined
 })
 
-const { colorStyles: listItemStyle } = useResolvedColor({
+const { colorStyles: listItemColorStyle } = useResolvedColor({
     color: computed(() => props.color),
     inheritedColor: computed(() => parentList?.color?.value),
     colorVar: '--e-list-color',
     contrastVar: '--e-list-contrast',
+})
+
+const { colorStyles: listItemActiveColorStyle } = useResolvedColor({
+    color: computed(() => props.activeColor),
+    inheritedColor: computed(() => parentList?.activeColor?.value),
+    colorVar: '--e-list-active-color',
+})
+
+const mergedListItemStyle = computed((): Record<string, string> => {
+    return {
+        ...listItemColorStyle.value,
+        ...listItemActiveColorStyle.value,
+    }
 })
 
 const listItemCLass = computed((): Array<unknown> => {

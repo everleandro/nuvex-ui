@@ -47,6 +47,7 @@ import { EList, EListItem, EListGroup } from 'nuvex-ui'
 | `subtitle` | `string` | `undefined` | Texto secundario del item. |
 | `tag` | `string` | `undefined` | Override del elemento raiz. |
 | `color` | `string` | `undefined` | Agrega la clase `{color}--text`. |
+| `activeColor` | `string` | `undefined` | Color de texto cuando el item esta activo. Tiene prioridad sobre `activeColor` definido en `EList`. |
 | `value` | `string \| number` | `undefined` | Valor explicito del item para seleccion. |
 | `size` | `'x-small' \| 'small' \| 'default' \| 'large' \| 'x-large'` | `'default'` | Define el tamano del item usando el mismo contrato que `EButton`. |
 
