@@ -10,7 +10,7 @@
   margin-right: auto;
   margin-left: auto;
   width: 100%;
-  padding: var(--e-space-base, 4px);
+  padding: calc(var(--e-space-base, 4px) * 4);
   box-sizing: border-box;
   max-width: 1185px;
 
