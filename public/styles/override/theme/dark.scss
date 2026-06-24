@@ -10,13 +10,45 @@ html.dark,
     --e-color-#{$color-name}: #{$color-value};
   }
 
+  // Semantic surface aliases (non-breaking)
+  --e-color-surface-canvas: var(--e-color-surface-0);
+  --e-color-surface-base: var(--e-color-surface-1);
+  --e-color-surface-raised: var(--e-color-surface-2);
+  --e-color-surface-subtle: var(--e-color-surface-3);
+
   @each $color-name, $color-value in setting.$semantic-contrast-tokens-dark {
     --e-contrast-#{$color-name}: #{$color-value};
   }
 
+  --e-contrast-surface-canvas: var(--e-contrast-surface-0);
+  --e-contrast-surface-base: var(--e-contrast-surface-1);
+  --e-contrast-surface-raised: var(--e-contrast-surface-2);
+  --e-contrast-surface-subtle: var(--e-contrast-surface-3);
+
   // App surface
   --e-app-background: #{map.get(setting.$semantic-color-tokens-dark, "surface-0")};
   --e-app-color: #{map.get(setting.$semantic-contrast-tokens-dark, "surface-0")};
+
+  // Dark-specific elevation overrides tuned for softer contrast.
+  --e-elevation-xs:
+    0 1px 2px rgba(0, 0, 0, .24),
+    0 1px 2px rgba(0, 0, 0, .12);
+
+  --e-elevation-sm:
+    0 1px 2px rgba(0, 0, 0, .3),
+    0 1px 3px 1px rgba(0, 0, 0, .15);
+
+  --e-elevation-md:
+    0 2px 4px rgba(0, 0, 0, .34),
+    0 3px 6px 2px rgba(0, 0, 0, .17);
+
+  --e-elevation-lg:
+    0 3px 6px rgba(0, 0, 0, .38),
+    0 4px 8px 3px rgba(0, 0, 0, .19);
+
+  --e-elevation-xl:
+    0 4px 8px rgba(0, 0, 0, .42),
+    0 6px 12px 4px rgba(0, 0, 0, .22);
 
 
 }
