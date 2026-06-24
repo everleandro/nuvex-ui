@@ -1,6 +1,6 @@
 <template>
     <div :class="rootClass" :style="fieldStyle">
-        <div v-if="hasPrependContent" class="e-field__prepend" aria-hidden="true">
+        <div v-if="hasPrependContent" class="e-field__prepend" :aria-hidden="!hasPrependSlot ? 'true' : undefined">
             <div v-if="prependIcon" class="e-field__icon e-field__icon--prepend">
                 <EIcon :icon="prependIcon" />
             </div>
@@ -14,7 +14,8 @@
             },
         ]" @mouseenter="handleHover(true)" @mouseleave="handleHover(false)" @mousedown="handleFrameMousedown"
             @click="handleFrameClick">
-            <div v-if="hasPrependInnerContent" class="e-field__prepend-inner" aria-hidden="true">
+            <div v-if="hasPrependInnerContent" class="e-field__prepend-inner"
+                :aria-hidden="!hasPrependInnerSlot ? 'true' : undefined">
                 <EIcon v-if="prependInnerIcon" :icon="prependInnerIcon" />
                 <slot v-if="hasPrependInnerSlot" name="prepend-inner"></slot>
             </div>
@@ -23,13 +24,14 @@
                 <slot name="label">{{ label }}</slot>
             </label>
             <slot v-bind="slotProps"></slot>
-            <div v-if="hasAppendInnerContent" class="e-field__append-inner" aria-hidden="true">
+            <div v-if="hasAppendInnerContent" class="e-field__append-inner"
+                :aria-hidden="!hasAppendInnerSlot ? 'true' : undefined">
                 <slot v-if="hasAppendInnerSlot" name="append-inner" v-bind="appendInnerSlotProps"></slot>
                 <EIcon v-if="appendInnerIcon" :icon="appendInnerIcon" />
             </div>
             <div v-if="!isOutlined" class="e-field__line"></div>
         </div>
-        <div v-if="hasAppendContent" class="e-field__append" aria-hidden="true">
+        <div v-if="hasAppendContent" class="e-field__append" :aria-hidden="!hasAppendSlot ? 'true' : undefined">
             <slot v-if="hasAppendSlot" name="append"></slot>
             <div v-if="appendIcon" class="e-field__icon e-field__icon--append">
                 <EIcon :icon="appendIcon" />

@@ -8,9 +8,20 @@
     --e-color-#{$color-name}: #{$color-value};
   }
 
+  // Semantic surface aliases (non-breaking)
+  --e-color-surface-canvas: var(--e-color-surface-0);
+  --e-color-surface-base: var(--e-color-surface-1);
+  --e-color-surface-raised: var(--e-color-surface-2);
+  --e-color-surface-subtle: var(--e-color-surface-3);
+
   @each $color-name, $color-value in setting.$semantic-contrast-tokens-light {
     --e-contrast-#{$color-name}: #{$color-value};
   }
+
+  --e-contrast-surface-canvas: var(--e-contrast-surface-0);
+  --e-contrast-surface-base: var(--e-contrast-surface-1);
+  --e-contrast-surface-raised: var(--e-contrast-surface-2);
+  --e-contrast-surface-subtle: var(--e-contrast-surface-3);
 
   // App surface
   --e-app-background: #{map.get(setting.$semantic-color-tokens-light, "surface-0")};

@@ -75,6 +75,7 @@
     "preserve": "vite build",
     "serve": "vite preview --port 5050",
     "typecheck": "vue-tsc --noEmit",
+    "lint:surface:targets": "node ./scripts/check-surface-semantic-targets.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

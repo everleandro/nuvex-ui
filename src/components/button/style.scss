@@ -35,6 +35,9 @@ $button-sizes: x-small, small, default, large, x-large;
   --button-local-rounded-radius: var(--e-btn-rounded-border-radius, 28px);
   --button-local-font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
   --button-local-bg: var(--e-btn-color);
+  --button-local-solid-bg: var(--e-btn-color, var(--e-color-surface-subtle, var(--e-color-surface-3, transparent)));
+  --button-local-icon-bg: var(--e-btn-color, var(--e-color-surface-subtle, var(--e-color-surface-3, transparent)));
+  --button-local-accent: var(--e-btn-color, currentColor);
   --button-local-text: var(--e-btn-contrast-color);
   --button-local-state-focus: var(--e-interactive-state-focus, 0.12);
   --button-local-state-hover: var(--e-interactive-state-hover, 0.08);
@@ -62,8 +65,8 @@ $button-sizes: x-small, small, default, large, x-large;
   border-radius: var(--button-local-radius);
   font-family: var(--button-local-font-family);
   color: var(--button-local-text);
-  background-color: var(--button-local-bg);
-  border-color: var(--button-local-bg);
+  background-color: var(--button-local-solid-bg);
+  border-color: var(--button-local-solid-bg);
 
   @include button-reset();
   @include prefix(user-select, none);
@@ -157,8 +160,8 @@ $button-sizes: x-small, small, default, large, x-large;
   // Icon-like variants
 
   &--icon {
-    color: var(--button-local-text);
-    background-color: transparent;
+    color: var(--e-btn-contrast-color, var(--button-local-accent));
+    background-color: var(--button-local-icon-bg);
     padding: 0;
     width: var(--button-local-height);
   }
@@ -211,8 +214,11 @@ $button-sizes: x-small, small, default, large, x-large;
   // State variants
 
   &--disabled {
-    --e-btn-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
-    --e-btn-text: var(--e-contrast-disabled, white);
+    --button-local-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-solid-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-icon-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-accent: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-text: var(--e-contrast-disabled, white);
     pointer-events: none;
     cursor: not-allowed;
   }

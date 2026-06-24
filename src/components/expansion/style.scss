@@ -46,10 +46,10 @@
   &-panel {
     --panel-border-radius: var(--e-expansion-panel-border-radius, 4px);
     --panel-space-base: 0px;
-    --panel-header-height: var(--e-expansion-header-height, 2.5rem);
-    --panel-inline-padding: calc(var(--e-space-base, 4px) * 3);
-    --panel-body-padding-inline: calc(var(--e-space-base, 4px) * 3);
-    --panel-body-padding-bottom: calc(var(--e-space-base, 4px) * 2);
+    --panel-header-height: var(--e-expansion-header-height, 3rem);
+    --panel-inline-padding: calc(var(--e-space-base, 4px) * 6);
+    --panel-body-padding-inline: calc(var(--e-space-base, 4px) * 6);
+    --panel-body-padding-bottom: calc(var(--e-space-base, 4px) * 4);
     --panel-margin-transition: margin-top 0.3s ease;
     --panel-content-transition: height 0.3s ease;
     --panel-icon-transition: transform 0.5s ease;
@@ -80,8 +80,6 @@
       padding: 0;
 
       &-button {
-        display: flex;
-        flex: 1 0 auto;
         width: 100%;
         text-transform: uppercase;
         color: var(--e-expansion-panel-button-color, var(--e-contrast-surface-1, #000000));
@@ -91,10 +89,10 @@
         line-height: var(--e-typography-label-line-height-lg, 1.25rem);
         font-weight: var(--e-typography-label-font-weight-lg, 500);
         letter-spacing: var(--e-typography-label-letter-spacing-lg, 0.01em);
-        padding: 0 var(--panel-inline-padding);
         @include prefix(user-select, none);
         @include button-reset();
         @include button-before($interactive: true);
+        padding: 0 var(--panel-inline-padding);
 
         &-content {
           transition: var(--panel-content-transition);
@@ -135,7 +133,7 @@
       padding-top: 0;
 
       &-content-wrapper {
-        padding: var(--e-space-base, 4px) var(--panel-body-padding-inline) var(--panel-body-padding-bottom);
+        padding: calc(var(--e-space-base, 4px) * 2) var(--panel-body-padding-inline) var(--panel-body-padding-bottom);
       }
 
       &-content {
@@ -146,7 +144,7 @@
     }
 
     &--opened {
-      --e-expansion-header-height: var(--e-expansion-header-height-opened, 3.25rem);
+      --e-expansion-header-height: var(--e-expansion-header-height-opened, 4rem);
 
       &:not(.e-expansion-panel--disable-icon-rotation) {
         .e-expansion-panel__header-button-icon i {

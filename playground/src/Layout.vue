@@ -1,182 +1,92 @@
 <template>
-    <main class="playground">
-        <header class="playground-header">
-            <h1>Playground</h1>
-            <button class="theme-toggle" @click="toggleTheme">
-                {{ theme === "light" ? "🌙 Dark" : "☀️ Light" }}
-            </button>
-        </header>
-        <nav class="nav">
-            <router-link to="/">Inicio</router-link>
-            <router-link to="/card">Card</router-link>
-            <router-link to="/date-picker">Date Picker</router-link>
-            <router-link to="/form">Formulario</router-link>
-            <router-link to="/textarea">Textarea</router-link>
-            <router-link to="/time-picker">Time Picker</router-link>
-            <router-link to="/progress">Progress</router-link>
-            <router-link to="/radio">Radios</router-link>
-            <router-link to="/checkbox">Checkboxes</router-link>
-            <router-link to="/schedule">Schedule</router-link>
-            <router-link to="/tab">Tabs</router-link>
-            <router-link to="/menu">Menu</router-link>
-            <router-link to="/palette">Paleta</router-link>
-        </nav>
-        <router-view />
-    </main>
+    <EApp>
+        <EBar app clipped fixed outlined>
+            <EButton :icon="iconFactory.menu" aria-label="Toggle navigation" @click="drawerModel = !drawerModel" />
+            <div class="playground-brand">
+                <p class="playground-brand__kicker">Nuvex UI</p>
+                <h1 class="playground-brand__title">Playground</h1>
+            </div>
+            <ESpacer />
+            <EButton
+                :icon="iconFactory.themeDarkLight"
+                :aria-label="themeToggleLabel"
+                :title="themeToggleLabel"
+                @click="toggleTheme"
+            />
+        </EBar>
+
+        <EDrawer v-model="drawerModel" nav>
+            <EList v-model:group="openGroups" inset dense>
+                <EListGroup v-for="group in navigationGroups" :key="group.id" :value="group.id">
+                    <template #activator="{ attrs }">
+                        <EListItem v-bind="attrs" :title="group.title" />
+                    </template>
+                    <EListItem
+                        v-for="item in group.children"
+                        :key="item.id"
+                        :title="item.title"
+                        :to="item.to"
+                        active-color="primary"
+                    />
+                </EListGroup>
+            </EList>
+        </EDrawer>
+
+        <EMain>
+            <EContainer class="playground-container p-4" max-width="980px">
+                <router-view />
+            </EContainer>
+        </EMain>
+    </EApp>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import { useTheme } from "../../src";
+import { findOpenGroupIdsByPath, navigationGroups } from "./navigation";
+import iconFactory from "./icons.ts";
+const route = useRoute();
+const drawerModel = ref(true);
+const openGroups = ref(findOpenGroupIdsByPath(route.path));
 
 const { currentTheme, toggleTheme } = useTheme();
-const theme = computed(() => currentTheme.value);
+
+const themeToggleLabel = computed(() =>
+    currentTheme.value === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro",
+);
+
+watch(
+    () => route.path,
+    (path) => {
+        openGroups.value = findOpenGroupIdsByPath(path);
+    },
+    { immediate: true },
+);
 </script>
 
 <style scoped>
-.playground {
-    min-height: 100vh;
-    padding: 24px;
-    background: linear-gradient(135deg, #f7f9fb, #eef4ff);
-    transition: background 0.3s ease;
-}
-
-:global([data-theme="dark"]) .playground {
-    background: linear-gradient(135deg, #121212, #1e1e1e);
-}
-
-.playground-header {
+.playground-brand {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.playground-header h1 {
+.playground-brand__kicker {
     margin: 0;
-    color: #333;
-}
-
-:global([data-theme="dark"]) .playground-header h1 {
-    color: #fafafa;
-}
-
-.theme-toggle {
-    padding: 8px 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: white;
-    color: #333;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-:global([data-theme="dark"]) .theme-toggle {
-    background: #2a2a2a;
-    border-color: #444;
-    color: #fafafa;
-}
-
-.theme-toggle:hover {
-    opacity: 0.8;
-}
-
-.nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 24px;
-}
-
-.nav a {
-    padding: 8px 12px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.78);
-    color: #1f2937;
-    text-decoration: none;
-    font-weight: 600;
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
-}
-
-.nav a:hover {
-    transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.96);
-}
-
-.nav a.router-link-active {
-    background: #111827;
-    color: #f9fafb;
-}
-
-:global([data-theme="dark"]) .nav a {
-    background: rgba(17, 24, 39, 0.72);
-    color: #e5e7eb;
-}
-
-:global([data-theme="dark"]) .nav a:hover {
-    background: rgba(17, 24, 39, 0.9);
-}
-
-:global([data-theme="dark"]) .nav a.router-link-active {
-    background: #f9fafb;
-    color: #111827;
-}
-
-.block {
-    margin-bottom: 24px;
-    padding: 16px;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    transition:
-        background,
-        box-shadow 0.3s ease;
-}
-
-:global([data-theme="dark"]) .block {
-    background: #2a2a2a;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-.block h2 {
-    color: #333;
-    margin-top: 0;
-}
-
-.block h3 {
-    margin: 0 0 12px;
-    color: #4a5568;
-    font-size: 14px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    opacity: 0.75;
 }
 
-:global([data-theme="dark"]) .block h2 {
-    color: #fafafa;
+.playground-brand__title {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.1;
 }
 
-:global([data-theme="dark"]) .block h3 {
-    color: #cbd5e0;
-}
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-}
-
-.playground-note {
-    margin: 20px 0 0;
-    color: #4a5568;
-    font-size: 14px;
-}
-
-:global([data-theme="dark"]) .playground-note {
-    color: #e2e8f0;
+.playground-container {
+    width: 100%;
 }
 </style>

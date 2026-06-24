@@ -1,1381 +1,218 @@
 <template>
-    <section class="form-playground">
-        <div class="form-playground__hero">
-            <p class="eyebrow">Playground</p>
-            <h1>Form Playground</h1>
-            <p class="hero-copy">
-                Esta vista concentra pruebas de <strong>ETextfield</strong> y
-                <strong>ESelect</strong>, <strong>ETimePicker</strong> y <strong>ESwitch</strong> para iterar
-                validacion, foco, detalles, overlay y estados visuales sin mezclar
-                otros componentes.
-            </p>
+  <section class="form-page">
+    <header class="form-page__header">
+      <p class="form-page__eyebrow">Components</p>
+      <h2 class="form-page__title">Form Playground</h2>
+      <p class="form-page__lead">
+        Vista integrada para probar varios componentes de formulario en un flujo real de captura.
+      </p>
+    </header>
+
+    <article class="form-demo">
+      <h3>Contact Form</h3>
+      <p class="form-demo__caption">
+        Combina EForm, ETextfield, ESelect, ERadioGroup, ECheckbox, ESwitch y acciones de submit.
+      </p>
+
+      <EForm
+        v-model="formValid"
+        validate-on-submit
+        label-behavior="floating"
+        class="form-demo__grid"
+        @submit="handleSubmit"
+        @submit-invalid="handleInvalid"
+      >
+        <ETextfield
+          v-model="fullName"
+          label="Full name"
+          :rules="nameRules"
+          detail="Write your first and last name"
+          clearable
+        />
+
+        <ETextfield
+          v-model="email"
+          label="Work email"
+          :rules="emailRules"
+          detail="We will only use this for demo notifications"
+          clearable
+        />
+
+        <ESelect
+          v-model="priority"
+          :items="priorities"
+          label="Request priority"
+          detail="Choose the urgency level"
+          clearable
+        />
+
+        <ERadioGroup
+          v-model="contactChannel"
+          row
+          label="Preferred contact"
+          detail="Select how we should reach out"
+        >
+          <ERadio model-value="email" label="Email" />
+          <ERadio model-value="slack" label="Slack" />
+          <ERadio model-value="phone" label="Phone" />
+        </ERadioGroup>
+
+        <ECheckbox
+          v-model="acceptTerms"
+          label="I accept terms and privacy policy"
+        />
+
+        <ESwitch
+          v-model="notifyByEmail"
+          label="Send confirmation email"
+          detail="Toggle to receive a copy of this request"
+        />
+
+        <div class="form-demo__actions">
+          <EButton type="submit" color="primary">Submit</EButton>
+          <EButton outlined type="button" @click="resetFields">Reset</EButton>
         </div>
-        <e-card class="p-4" elevation="md">
-
-            <EForm field-color="teal-900">
-                <ESelect v-model="selectState.role" :cols="12" :md="6" clearable label="Rol principal"
-                    placeholder="Selecciona un rol" detail="dense" :items="roleOptions" />
-
-                <ESelect v-model="selectState.stack" v-model:search="selectState.stackSearch" :cols="12" :md="6"
-                    multiple chip clearable label="floating dense multiple" placeholder="Elige una o varias tecnologias"
-                    autocomplete label-behavior="floating" dense
-                    detail="Seleccion multiple con chips y cierre individual." :items="filteredStackOptions" />
-
-                <ESelect v-model="selectState.stack" v-model:search="selectState.stackSearch" :cols="12" :md="6"
-                    multiple chip clearable label="floating chip multiple" placeholder="Elige una o varias tecnologias"
-                    autocomplete label-behavior="floating" detail="Seleccion multiple con chips y cierre individual."
-                    :items="filteredStackOptions" />
-
-                <ESelect v-model="selectState.location" v-model:search="selectState.locationSearch" :cols="12"
-                    autocomplete clearable label="default" placeholder="Escribe para filtrar"
-                    detail="Autocomplete con filtro local usando update:search." :items="filteredLocationOptions" />
-
-                <ESelect v-model="selectState.stack2" :cols="12" :md="6" clearable label="default floating"
-                    label-behavior="floating" placeholder="Elige una tecnologias" multiple
-                    detail="Seleccion multiple sin chips." :items="stackOptions2" />
-
-            </EForm>
-        </e-card>
-
-        <e-card class="p-4 my-4" elevation="md">
-            <EForm ref="formRef" v-model="formValid" class="demo-form" field-color="cyan-800" 
-                @submit="handleSubmit">
-                <ETextfield v-model.trim="form.fullName" :cols="12" :md="6" clearable dense label="dense" :prepend-inner-icon="iconFactory.person" :append-inner-icon="iconFactory.person"
-                    placeholder="Ada Lovelace" 
-                    detail="Se usa para personalizar la experiencia." :rules="nameRules">
-                    <template #prepend-inner>
-                         <EIcon :icon="iconFactory.person" />
-                    </template>
-                     <!-- <template #append-inner>
-                         <EIcon :icon="iconFactory.calendar" />
-                    </template> -->
-                </ETextfield>
-
-                <ETextfield v-model.trim="form.email" label-behavior="floating" :cols="12" :md="6" clearable dense
-                    label="dense floating" placeholder="ada@analytical.engine" autocomplete="email"
-                    :append-icon="iconFactory.person" detail="Te enviaremos confirmaciones y alertas importantes."
-                    :rules="emailRules" />
-
-                <ETextfield v-model="form.company" :cols="12" :md="6" label="default"
-                    placeholder="Analytical Engines Lab" :prepend-icon="iconFactory.calendar"
-                    detail="Prueba label, helper message y comportamiento ." :rules="companyRules" />
-
-                <ETextfield v-model.number="form.hourlyRate" :cols="12" :md="6" label="default floating" prefix="$"
-                    label-behavior="floating" suffix="USD" placeholder="120" detail="Solo numeros, sin separadores."
-                    :rules="rateRules" />
-
-                <ETextfield v-model="form.username" :cols="12" clearable label="Identificador publico" prefix="@"
-                    placeholder="ada-l" detail="Debe ser unico y sin espacios." :rules="usernameRules"
-                    @input="pushEvent('input', $event)" @change="pushEvent('change', $event)"
-                    @keydown="pushKeyboardEvent('keydown', $event)" @keyup="pushKeyboardEvent('keyup', $event)"
-                    @keydown:enter="pushKeyboardEvent('keydown:enter', $event)" />
-
-                <ETextfield v-model="form.phone" :cols="12" :md="6" clearable label="Telefono"
-                    placeholder="+34 600 000 000" detail="Ejemplo de mascara libre con validacion simple."
-                    :rules="phoneRules" />
-
-                <ETextfield v-model="form.website" :cols="12" :md="6" clearable label="Sitio o portfolio"
-                    placeholder="https://portfolio.dev" detail="Puedes dejarlo vacio o usar una URL valida."
-                    :rules="websiteRules" />
-
-                <ETextfield v-model="form.notes" :cols="12" clearable counter :limit="160" label-behavior="floating"
-                    label="Notas para el equipo" placeholder="Objetivos, contexto, restricciones o ideas clave"
-                    detail="Aqui puedes probar contador, mensajes y clear." :rules="notesRules" />
-
-                <ETextfield v-model="form.inlineLabelValue" :cols="12" label="Codigo interno" placeholder="TF-ALPHA-01"
-                    detail="Prueba label inline y ancho minimo de etiqueta." :rules="inlineRules" />
-            </EForm>
-        </e-card>
-        <ERow dense>
-            <ECol :cols="12">
-                <ECard elevation="md" class="form-card">
-                    <div class="time-picker-lab">
-                        <div class="time-picker-lab__header">
-                            <div>
-                                <p class="section-kicker">Time picker</p>
-                                <h2>Casos base para ETimePicker</h2>
-                            </div>
-                            <p class="table-lab__copy">
-                                Este bloque deja visible la version modernizada del
-                                componente usando <strong>EMenu</strong>, color de campo,
-                                pasos distintos y variantes visuales.
-                            </p>
-                        </div>
-
-                        <EForm field-color="cyan-800" style="width:100%">
-                            <ETimePicker v-model="timePickerState.kickoff" :cols="12" :md="4" label-behavior="floating"
-                                label="Kickoff" detail="Caso base con pasos de 15 minutos." />
-
-                            <ETimePicker v-model="timePickerState.review" :cols="12" :md="4" label="Revision"
-                                color="teal-900" outlined :minutes-step="5" :prepend-icon="iconFactory.arrowRight"
-                                detail="Variante outlined con ajustes mas finos." />
-
-                            <ETimePicker v-model="timePickerState.publish" :cols="12" :md="4"
-                                :append-icon="iconFactory.arrowRight" label="Publicacion" color="secondary"
-                                :hours-step="2" :minutes-step="30"
-                                detail="Prueba saltos mas grandes para ventanas prefijadas." />
-                        </EForm>
-
-                        <div class="time-picker-lab__summary">
-                            <div>
-                                <span>Kickoff</span>
-                                <strong>{{ formatTimePreview(timePickerState.kickoff) }}</strong>
-                            </div>
-                            <div>
-                                <span>Revision</span>
-                                <strong>{{ formatTimePreview(timePickerState.review) }}</strong>
-                            </div>
-                            <div>
-                                <span>Publicacion</span>
-                                <strong>{{ formatTimePreview(timePickerState.publish) }}</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="switch-lab">
-                        <div class="switch-lab__header">
-                            <div>
-                                <p class="section-kicker">Switch</p>
-                                <h2>Casos base para ESwitch</h2>
-                            </div>
-                            <p class="table-lab__copy">
-                                Este bloque sirve para probar integracion con formulario,
-                                `detail`, estados bloqueados y valores custom sin salir del playground.
-                            </p>
-                        </div>
-
-                        <EForm class="switch-demo-form" field-color="teal-900" label-behavior="floating" dense>
-                            <ESwitch v-model="switchState.notifications" :cols="12" :md="4" label="Notificaciones"
-                                detail="Caso booleano simple para validar foco y helper text." />
-
-                            <ESwitch v-model="switchState.releaseGate" :cols="12" :md="4" label="Release gate"
-                                detail="Usa valores custom publish/draft para probar modelValue." color="secondary"
-                                true-value="publish" false-value="draft" />
-
-                            <ESwitch v-model="switchState.analytics" :cols="12" :md="4" label="Analytics en vivo"
-                                detail="Bloqueado en loading para revisar disabled + spinner." color="cyan-800"
-                                :loading="true" :true-value="1" :false-value="0" />
-
-                            <ESwitch v-model="switchState.readonlyPreview" :cols="12" readonly
-                                label="Preview solo lectura"
-                                detail="Sirve para comprobar que el valor no cambia al interactuar." />
-                        </EForm>
-
-                        <div class="switch-lab__summary">
-                            <div>
-                                <span>Notificaciones</span>
-                                <strong>{{ switchState.notifications ? "Activas" : "Pausadas" }}</strong>
-                            </div>
-                            <div>
-                                <span>Release gate</span>
-                                <strong>{{ switchState.releaseGate }}</strong>
-                            </div>
-                            <div>
-                                <span>Analytics</span>
-                                <strong>{{ switchState.analytics }}</strong>
-                            </div>
-                            <div>
-                                <span>Readonly</span>
-                                <strong>{{ switchState.readonlyPreview ? "On" : "Off" }}</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="radio-lab">
-                        <div class="radio-lab__header">
-                            <div>
-                                <p class="section-kicker">Radio Group</p>
-                                <h2>Casos base para ERadioGroup</h2>
-                            </div>
-                            <p class="table-lab__copy">
-                                Esta seccion sirve para probar radio controls,
-                                integracion con <strong>EForm</strong>, herencia de estados
-                                y el comportamiento de <strong>labelBehavior</strong> en modo row.
-                            </p>
-                        </div>
-
-                        <EForm class="radio-demo-form" field-color="teal-900" label-behavior="floating" dense>
-                            <ERadioGroup v-model="radioState.contactChannel" :cols="12" :md="6" row
-                                label="Canal de contacto"
-                                detail="En modo row el label floating debe seguir el comportamiento del field.">
-                                <ERadio model-value="email" label="Email" />
-                                <ERadio model-value="slack" label="Slack" />
-                                <ERadio model-value="meet" label="Meet" />
-                            </ERadioGroup>
-
-                            <ERadioGroup v-model="radioState.releaseTrack" :cols="12" :md="6" label="Release track"
-                                detail="En columna el label se mantiene estatico aunque el form use floating."
-                                color="secondary">
-                                <ERadio model-value="stable" label="Stable" />
-                                <ERadio model-value="beta" label="Beta" />
-                                <ERadio model-value="canary" label="Canary" />
-                            </ERadioGroup>
-                        </EForm>
-
-                        <EForm class="radio-demo-form" field-color="cyan-800" disabled>
-                            <ERadioGroup v-model="radioState.approvalStage" :cols="12" row outlined
-                                label="Aprobacion final"
-                                detail="Este grupo hereda disabled desde el formulario para validar la integracion.">
-                                <ERadio model-value="pending" label="Pending" />
-                                <ERadio model-value="approved" label="Approved" />
-                                <ERadio model-value="rejected" label="Rejected" />
-                            </ERadioGroup>
-                        </EForm>
-
-                        <div class="radio-lab__summary">
-                            <div>
-                                <span>Canal</span>
-                                <strong>{{ radioState.contactChannel }}</strong>
-                            </div>
-                            <div>
-                                <span>Track</span>
-                                <strong>{{ radioState.releaseTrack }}</strong>
-                            </div>
-                            <div>
-                                <span>Aprobacion</span>
-                                <strong>{{ radioState.approvalStage }}</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="selection-lab">
-                        <div class="selection-lab__header">
-                            <div>
-                                <p class="section-kicker">Selection controls</p>
-                                <h2>Casos base para ECheckbox</h2>
-                            </div>
-                            <p class="table-lab__copy">
-                                Esta seccion centraliza controles de seleccion.
-                                En esta iteracion solo incluye <strong>ECheckbox</strong>;
-                                radio y switch se migraran despues.
-                            </p>
-                        </div>
-
-                        <EForm class="selection-demo-form" field-color="teal-900" label-behavior="floating" dense>
-                            <ECheckbox v-model="checkboxState.termsAccepted" :cols="12" :md="4" label="Acepto terminos"
-                                detail="Caso booleano simple para revisar color, focus y detalles." />
-
-                            <ECheckbox v-model="checkboxState.releaseChecklist" :cols="12" :md="4"
-                                label="Checklist de release"
-                                detail="Usa valores custom ready/hold para probar modelValue." color="secondary"
-                                true-value="ready" false-value="hold" />
-
-                            <ECheckbox v-model="checkboxState.readonlyAudit" :cols="12" :md="4" readonly
-                                label="Auditoria readonly"
-                                detail="Sirve para comprobar que readonly mantiene el valor." />
-                        </EForm>
-
-                        <div class="selection-lab__summary">
-                            <div>
-                                <span>Terminos</span>
-                                <strong>{{ checkboxState.termsAccepted ? "Aceptados" : "Pendientes" }}</strong>
-                            </div>
-                            <div>
-                                <span>Release checklist</span>
-                                <strong>{{ checkboxState.releaseChecklist }}</strong>
-                            </div>
-                            <div>
-                                <span>Readonly</span>
-                                <strong>{{ checkboxState.readonlyAudit ? "On" : "Off" }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                </ECard>
-            </ECol>
-            <ECol :cols="12" :lg="8">
-                <ECard class="form-card secondary--text" elevation="md">
-                    <div class="form-card__header">
-                        <div>
-                            <p class="section-kicker">Demo integrada</p>
-                            <h2 class="secondary--text">Suite de textfields</h2>
-                        </div>
-                        <div class="status-pill" :class="formValid ? 'status-pill--valid' : 'status-pill--invalid'">
-                            {{ formValid ? "Formulario valido" : "Pendiente de validacion" }}
-                        </div>
-                    </div>
-
-                    <EForm ref="formRef" label-behavior="floating" v-model="formValid" class="demo-form"
-                        field-color="cyan-800" label-min-width="136" dense @submit="handleSubmit">
-                        <ETextfield v-model.trim="form.fullName" label-behavior="floating" :cols="12" :md="6" clearable
-                            label="Nombre completo" placeholder="Ada Lovelace" :prepend-icon="iconFactory.arrowRight"
-                            detail="Se usa para personalizar la experiencia." :rules="nameRules" />
-
-                        <ETextfield v-model.trim="form.email" label-behavior="floating" :cols="12" :md="6" clearable
-                            label="Email de trabajo" placeholder="ada@analytical.engine" autocomplete="email"
-                            detail="Te enviaremos confirmaciones y alertas importantes." :rules="emailRules" />
-
-                        <ETextfield v-model="form.company" :cols="12" :md="6" label="Empresa o equipo"
-                            placeholder="Analytical Engines Lab" prepend-icon=""
-                            detail="Prueba label, helper message y comportamiento ." :rules="companyRules" />
-
-                        <ETextfield v-model.number="form.hourlyRate" :cols="12" :md="6" label="Tarifa esperada"
-                            prefix="$" suffix="USD" placeholder="120" detail="Solo numeros, sin separadores."
-                            :rules="rateRules" />
-
-                        <ETextfield v-model="form.username" :cols="12" clearable label="Identificador publico"
-                            prefix="@" placeholder="ada-l" detail="Debe ser unico y sin espacios."
-                            :rules="usernameRules" @input="pushEvent('input', $event)"
-                            @change="pushEvent('change', $event)" @keydown="pushKeyboardEvent('keydown', $event)"
-                            @keyup="pushKeyboardEvent('keyup', $event)"
-                            @keydown:enter="pushKeyboardEvent('keydown:enter', $event)" />
-
-                        <ETextfield v-model="form.phone" :cols="12" :md="6" clearable label="Telefono"
-                            placeholder="+34 600 000 000" detail="Ejemplo de mascara libre con validacion simple."
-                            :rules="phoneRules" />
-
-                        <ETextfield v-model="form.website" :cols="12" :md="6" clearable label="Sitio o portfolio"
-                            placeholder="https://portfolio.dev" detail="Puedes dejarlo vacio o usar una URL valida."
-                            :rules="websiteRules" />
-
-                        <ETextfield v-model="form.notes" :cols="12" clearable counter :limit="160"
-                            label-behavior="floating" label="Notas para el equipo"
-                            placeholder="Objetivos, contexto, restricciones o ideas clave"
-                            detail="Aqui puedes probar contador, mensajes y clear." :rules="notesRules" />
-
-                        <ETextfield v-model="form.inlineLabelValue" :cols="12" label="Codigo interno"
-                            placeholder="TF-ALPHA-01" detail="Prueba label inline y ancho minimo de etiqueta."
-                            :rules="inlineRules" />
-                    </EForm>
-
-                    <div class="action-row">
-                        <EButton color="primary" @click="handleValidate">Validar formulario</EButton>
-                        <EButton color="secondary" outlined @click="handleSubmit">Simular submit</EButton>
-                        <EButton text @click="handleReset">Restablecer</EButton>
-                    </div>
-
-                    <div class="select-lab">
-                        <div class="select-lab__header">
-                            <div>
-                                <p class="section-kicker">Select</p>
-                                <h2>Casos base para ESelect</h2>
-                            </div>
-                            <p class="table-lab__copy">
-                                Esta seccion agrega un punto de partida para trabajar el
-                                componente con seleccion simple, multiple con chips y
-                                autocomplete filtrado en vivo.
-                            </p>
-                        </div>
-
-                        <EForm class="select-demo-form" field-color="teal-900" dense>
-                            <ESelect v-model="selectState.role" :cols="12" :md="6" clearable label="Rol principal"
-                                placeholder="Selecciona un rol" detail="Seleccion simple usando items con text/value."
-                                :items="roleOptions" />
-
-                            <ESelect v-model="selectState.stack" v-model:search="selectState.stackSearch" :cols="12"
-                                :md="6" multiple chip clearable label="Stack activo"
-                                placeholder="Elige una o varias tecnologias" autocomplete label-behavior="floating"
-                                detail="Seleccion multiple con chips y cierre individual."
-                                :items="filteredStackOptions" />
-
-                            <ESelect v-model="selectState.location" v-model:search="selectState.locationSearch"
-                                :cols="12" autocomplete clearable label="Ubicacion del equipo"
-                                placeholder="Escribe para filtrar"
-                                detail="Autocomplete con filtro local usando update:search."
-                                :items="filteredLocationOptions" />
-
-                            <ESelect v-model="selectState.stack2" :cols="12" :md="6" multiple clearable
-                                label="Stack activo" placeholder="Elige una o varias tecnologias"
-                                detail="Seleccion multiple sin chips." :items="stackOptions2" />
-
-                        </EForm>
-
-                        <div class="select-lab__summary">
-                            <div>
-                                <span>Rol</span>
-                                <strong>{{ selectedRoleLabel }}</strong>
-                            </div>
-                            <div>
-                                <span>Stack</span>
-                                <strong>{{ selectedStackLabel }}</strong>
-                            </div>
-                            <div>
-                                <span>Ubicacion</span>
-                                <strong>{{ selectedLocationLabel }}</strong>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class="table-lab">
-                        <div class="table-lab__header">
-                            <div>
-                                <p class="section-kicker">Modo tabla</p>
-                                <h2>Grilla con separadores de 1px</h2>
-                            </div>
-                            <p class="table-lab__copy">
-                                Estos ejemplos usan la nueva prop <strong>table</strong> del
-                                formulario. El primer bloque usa el fallback por defecto y el
-                                segundo usa <strong>tableLineColor</strong> para las lineas y
-                                <strong>tableCellBackgroundColor</strong> para el fondo de las celdas.
-                            </p>
-                        </div>
-
-                        <div class="table-lab__grid">
-                            <div class="table-lab__panel">
-                                <p class="table-lab__label">Default table</p>
-                                <EForm table>
-                                    <ETextfield v-model="tableForm.code" :cols="12" :md="4" label="Codigo"
-                                        placeholder="TB-001" />
-                                    <ETextfield v-model="tableForm.description" :cols="12" :md="8" label="Descripcion"
-                                        placeholder="Fila base con lineas por contraste" />
-                                    <ETextfield v-model="tableForm.owner" :cols="12" :md="4" label="Owner"
-                                        placeholder="Ada" />
-                                    <ETextfield v-model="tableForm.status" :cols="12" :md="4" label="Estado"
-                                        placeholder="Activo" color="green-700" />
-                                    <ETextfield v-model="tableForm.amount" :cols="12" :md="4" label="Monto" prefix="$"
-                                        placeholder="1280" />
-                                </EForm>
-                            </div>
-
-                            <div class="table-lab__panel">
-                                <p class="table-lab__label">Tinted table</p>
-                                <EForm table table-line-color="teal-900" label-behavior="floating" disabled
-                                    class="table-demo-form">
-                                    <ETextfield v-model="tintedTableForm.ticket" :cols="12" :md="3" label="Ticket"
-                                        placeholder="OPS-42" />
-                                    <ETextfield v-model="tintedTableForm.assignee" :cols="12" :md="5"
-                                        label="Responsable" placeholder="Equipo plataforma" />
-                                    <ETextfield v-model="tintedTableForm.priority" :cols="12" :md="4" label="Prioridad"
-                                        placeholder="Alta" retain-color />
-                                    <ETextfield v-model="tintedTableForm.window" :cols="12" :md="6" label="Ventana"
-                                        placeholder="09:00 - 11:00" />
-                                    <ETextfield v-model="tintedTableForm.note" :cols="12" :md="6" label="Nota"
-                                        placeholder="Cambiar color de fondo sin tocar la linea" />
-                                </EForm>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="elevation-lab">
-                        <div class="elevation-lab__header">
-                            <div>
-                                <p class="section-kicker">Elevacion</p>
-                                <h2>Sombras para el contenedor del formulario</h2>
-                            </div>
-                            <p class="table-lab__copy">
-                                Esta seccion prueba la nueva prop <strong>elevation</strong> en
-                                <strong>EForm</strong> usando la misma escala que ya existe en
-                                <strong>EButton</strong> y <strong>ECard</strong>.
-                            </p>
-                        </div>
-
-                        <div class="elevation-lab__grid">
-                            <div v-for="example in elevationExamples" :key="example.level" class="elevation-lab__panel">
-                                <div class="elevation-lab__meta">
-                                    <p class="table-lab__label">{{ example.title }}</p>
-                                    <span>{{ example.copy }}</span>
-                                </div>
-
-                                <EForm :elevation="example.level" class="elevation-demo-form" label-behavior="floating"
-                                    gap="3">
-                                    <ETextfield v-model="elevationPreview[example.level].name" :cols="12" :md="6"
-                                        label="Nombre" placeholder="Ada Lovelace" />
-                                    <ETextfield v-model="elevationPreview[example.level].context" :cols="12" :md="6"
-                                        label="Contexto" placeholder="Shadow preview" />
-                                </EForm>
-                            </div>
-                        </div>
-                    </div>
-                </ECard>
-            </ECol>
-
-            <ECol :cols="12" :lg="4">
-                <div class="sidebar-stack">
-                    <ECard class="form-card" elevation="sm">
-                        <p class="section-kicker">Estado</p>
-                        <h2>Resumen vivo</h2>
-
-                        <div class="summary-grid">
-                            <div>
-                                <span>Validez</span>
-                                <strong>{{
-                                    formValid ? "Valido" : "Con errores o incompleto"
-                                }}</strong>
-                            </div>
-                            <div>
-                                <span>Nombre</span>
-                                <strong>{{ form.fullName || "Sin definir" }}</strong>
-                            </div>
-                            <div>
-                                <span>Email</span>
-                                <strong>{{ form.email || "Sin definir" }}</strong>
-                            </div>
-                            <div>
-                                <span>Longitud notas</span>
-                                <strong>{{ form.notes.length }} / 160</strong>
-                            </div>
-                        </div>
-
-                        <div class="feedback" :class="submitState.kind ? `feedback--${submitState.kind}` : ''">
-                            {{ submitState.message }}
-                        </div>
-                    </ECard>
-
-                    <ECard class="form-card" elevation="sm">
-                        <p class="section-kicker">Payload</p>
-                        <h2>Datos actuales</h2>
-                        <pre class="payload-preview">{{ payloadPreview }}</pre>
-                    </ECard>
-
-                    <ECard class="form-card" elevation="sm">
-                        <p class="section-kicker">Select state</p>
-                        <h2>Estado del ejemplo</h2>
-                        <pre class="payload-preview">{{ selectPreview }}</pre>
-                    </ECard>
-
-                    <ECard class="form-card" elevation="sm">
-                        <p class="section-kicker">Time picker state</p>
-                        <h2>Estado del ejemplo</h2>
-                        <pre class="payload-preview">{{ timePickerPreview }}</pre>
-                    </ECard>
-
-                    <ECard class="form-card" elevation="sm">
-                        <p class="section-kicker">Switch state</p>
-                        <h2>Estado del ejemplo</h2>
-                        <pre class="payload-preview">{{ switchPreview }}</pre>
-                    </ECard>
-
-                    <ECard class="form-card" elevation="sm">
-                        <p class="section-kicker">Radio state</p>
-                        <h2>Estado del ejemplo</h2>
-                        <pre class="payload-preview">{{ radioPreview }}</pre>
-                    </ECard>
-
-                    <ECard class="form-card" elevation="sm">
-                        <p class="section-kicker">Eventos</p>
-                        <h2>Traza del textfield</h2>
-                        <p class="event-note">
-                            El campo <strong>Identificador publico</strong> registra `input`,
-                            `change`, `keydown`, `keyup` y `keydown:enter`.
-                        </p>
-                        <div class="event-log">
-                            <div v-for="entry in eventLog" :key="entry.id" class="event-log__item">
-                                <strong>{{ entry.name }}</strong>
-                                <span>{{ entry.summary }}</span>
-                            </div>
-                        </div>
-                    </ECard>
-                </div>
-            </ECol>
-        </ERow>
-    </section>
+      </EForm>
+    </article>
+
+    <article class="form-demo form-demo--preview">
+      <h3>Live State</h3>
+      <p class="form-demo__caption">Resumen rapido del estado para validar comportamiento en tiempo real.</p>
+
+      <p class="form-demo__state">Valid now: {{ formValid ? "yes" : "no" }}</p>
+      <p class="form-demo__state">Last submit: {{ submitStatus }}</p>
+
+      <pre class="form-demo__json">{{ payloadPreview }}</pre>
+    </article>
+  </section>
 </template>
 
-<script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+<script setup>
+import { computed, ref } from "vue";
 
-import EButton from "../../src/components/button/index.vue";
-import ECard from "../../src/components/card/index.vue";
-import ECheckbox from "../../src/components/form/checkbox/index.vue";
-import EForm from "../../src/components/form/form.vue";
-import ERadio from "../../src/components/form/radio/index.vue";
-import ERadioGroup from "../../src/components/form/radio/group.vue";
-import ESelect from "../../src/components/form/select/index.vue";
-import ESwitch from "../../src/components/form/switch/index.vue";
-import ETextfield from "../../src/components/form/textfield/index.vue";
-import ETimePicker from "../../src/components/form/time-picker/index.vue";
-import ECol from "../../src/components/grid/col.vue";
-import ERow from "../../src/components/grid/row.vue";
-import iconFactory from "../../src/utils/icons";
-import EIcon from "@/components/icon/index.vue";
-
-type DemoFormModel = {
-    fullName: string;
-    email: string;
-    company: string;
-    hourlyRate: string | number;
-    username: string;
-    phone: string;
-    website: string;
-    notes: string;
-    inlineLabelValue: string;
-};
-
-type SelectDemoModel = {
-    role: string;
-    stack: Array<string>;
-    stack2: Array<string>;
-    location: string;
-    locationSearch: string;
-    stackSearch: string;
-};
-
-type SubmitState = {
-    kind: "success" | "warning" | "idle";
-    message: string;
-};
-
-type TableFormModel = {
-    code: string;
-    description: string;
-    owner: string;
-    status: string;
-    amount: string;
-};
-
-type TintedTableFormModel = {
-    ticket: string;
-    assignee: string;
-    priority: string;
-    window: string;
-    note: string;
-};
-
-type TimePickerDemoModel = {
-    kickoff: Date;
-    review: Date;
-    publish: Date;
-};
-
-type SwitchDemoModel = {
-    notifications: boolean;
-    releaseGate: string;
-    analytics: number;
-    readonlyPreview: boolean;
-};
-
-type RadioDemoModel = {
-    contactChannel: string;
-    releaseTrack: string;
-    approvalStage: string;
-};
-
-type CheckboxDemoModel = {
-    termsAccepted: boolean;
-    releaseChecklist: string;
-    readonlyAudit: boolean;
-};
-
-type TextFieldValue = string | number | null;
-
-type TextFieldValueEventPayload<EventType extends Event = Event> = {
-    rawValue: string;
-    value: TextFieldValue;
-    event: EventType;
-};
-
-type TextFieldKeyEventPayload = {
-    rawValue: string;
-    value: TextFieldValue;
-    event: KeyboardEvent;
-};
-
-type EventLogEntry = {
-    id: number;
-    name: string;
-    summary: string;
-};
-
-type FormInstance = {
-    validate?: () => Promise<boolean>;
-    reset?: () => void;
-};
-
-const createInitialForm = (): DemoFormModel => ({
-    fullName: "",
-    email: "",
-    company: "",
-    hourlyRate: "",
-    username: "",
-    phone: "",
-    website: "",
-    notes: "",
-    inlineLabelValue: "",
-});
-
-const createInitialTimePickerState = (): TimePickerDemoModel => ({
-    kickoff: new Date("2026-03-25T09:00:00"),
-    review: new Date("2026-03-25T13:30:00"),
-    publish: new Date("2026-03-25T18:45:00"),
-});
-
-const createInitialSwitchState = (): SwitchDemoModel => ({
-    notifications: true,
-    releaseGate: "draft",
-    analytics: 0,
-    readonlyPreview: true,
-});
-
-const createInitialRadioState = (): RadioDemoModel => ({
-    contactChannel: "slack",
-    releaseTrack: "beta",
-    approvalStage: "pending",
-});
-
-const createInitialCheckboxState = (): CheckboxDemoModel => ({
-    termsAccepted: true,
-    releaseChecklist: "hold",
-    readonlyAudit: true,
-});
-
-const roleOptions = [
-    { text: "Frontend Engineer", value: "frontend" },
-    { text: "Design Systems", value: "design-systems" },
-    { text: "Platform", value: "platform" },
-    { text: "Product", value: "product" },
-];
-
-const stackOptions = [
-    { text: "Vue", value: "vue" },
-    { text: "TypeScript", value: "typescript" },
-    { text: "SCSS", value: "scss" },
-    { text: "Vitest", value: "vitest" },
-    { text: "Storybook", value: "storybook" },
-];
-const stackOptions2 = [
-    { text: "Vue", value: "vue" },
-    { text: "TypeScript", value: "typescript" },
-    { text: "SCSS", value: "scss" },
-    { text: "Vitest", value: "vitest" },
-    { text: "Storybook", value: "storybook" },
-    { text: "React", value: "react" },
-    { text: "Angular", value: "angular" },
-    { text: "Svelte", value: "svelte" },
-];
-
-const locationOptions = [
-    { text: "Madrid", value: "madrid" },
-    { text: "Ciudad de Mexico", value: "cdmx" },
-    { text: "Bogota", value: "bogota" },
-    { text: "Buenos Aires", value: "buenos-aires" },
-    { text: "Remoto", value: "remote" },
-];
-
-const formRef = ref<FormInstance | null>(null);
 const formValid = ref(false);
-const form = reactive<DemoFormModel>(createInitialForm());
-const selectState = reactive<SelectDemoModel>({
-    role: "frontend",
-    stack: ["vue", "typescript"],
-    stack2: ["vue"],
-    location: "remote",
-    locationSearch: "",
-    stackSearch: "",
-});
+const fullName = ref("");
+const email = ref("");
+const priority = ref("Medium");
+const contactChannel = ref("email");
+const acceptTerms = ref(false);
+const notifyByEmail = ref(true);
+const submitStatus = ref("No submit yet");
 
+const priorities = ["Low", "Medium", "High", "Critical"];
 
-const tableForm = reactive<TableFormModel>({
-    code: "TB-001",
-    description: "Separadores construidos con gap y color del contenedor.",
-    owner: "Ada Lovelace",
-    status: "Activo",
-    amount: "1280",
-});
-const tintedTableForm = reactive<TintedTableFormModel>({
-    ticket: "OPS-42",
-    assignee: "Equipo plataforma",
-    priority: "Alta",
-    window: "09:00 - 11:00",
-    note: "La linea usa cyan y la celda neutral-50.",
-});
-const timePickerState = reactive<TimePickerDemoModel>(createInitialTimePickerState());
-const switchState = reactive<SwitchDemoModel>(createInitialSwitchState());
-const radioState = reactive<RadioDemoModel>(createInitialRadioState());
-const checkboxState = reactive<CheckboxDemoModel>(createInitialCheckboxState());
-const eventSequence = ref(0);
-const eventLog = ref<Array<EventLogEntry>>([]);
-const submitState = reactive<SubmitState>({
-    kind: "idle",
-    message:
-        "Completa el formulario y usa validar o submit para probar el flujo.",
-});
-
-const pushEvent = (name: string, payload: TextFieldValueEventPayload): void => {
-    eventSequence.value += 1;
-    eventLog.value = [
-        {
-            id: eventSequence.value,
-            name,
-            summary: `raw="${payload.rawValue}" value="${payload.value ?? ""}"`,
-        },
-        ...eventLog.value,
-    ].slice(0, 8);
-};
-
-const pushKeyboardEvent = (
-    name: string,
-    payload: TextFieldKeyEventPayload,
-): void => {
-    eventSequence.value += 1;
-    eventLog.value = [
-        {
-            id: eventSequence.value,
-            name,
-            summary: `key="${payload.event.key}" raw="${payload.rawValue}" value="${payload.value ?? ""}"`,
-        },
-        ...eventLog.value,
-    ].slice(0, 8);
-};
-
-const requiredText = (value: unknown) => {
-    return `${value ?? ""}`.trim().length > 0 || "Este campo es obligatorio.";
-};
-
-const validEmail = (value: unknown) => {
-    return (
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(`${value ?? ""}`) ||
-        "Ingresa un email valido."
-    );
-};
-
-const minNameLength = (value: unknown) => {
-    return `${value ?? ""}`.trim().length >= 3 || "Usa al menos 3 caracteres.";
-};
-
-const validRate = (value: unknown) => {
-    return (
-        /^\d{2,4}$/.test(`${value ?? ""}`) ||
-        "Ingresa un numero entre 2 y 4 digitos."
-    );
-};
-
-const validUsername = (value: unknown) => {
-    return (
-        /^@[a-z0-9-_.]*$/.test(`@${`${value ?? ""}`.replace(/^@/, "")}`) ||
-        "Usa solo letras, numeros, guiones o puntos."
-    );
-};
-
-const validPhone = (value: unknown) => {
-    return (
-        /^[+\d\s()-]{8,20}$/.test(`${value ?? ""}`) || "Ingresa un telefono valido."
-    );
-};
-
-const validWebsite = (value: unknown) => {
-    const normalized = `${value ?? ""}`.trim();
-    if (!normalized) return true;
-
-    try {
-        new URL(normalized);
-        return true;
-    } catch {
-        return "Ingresa una URL valida incluyendo http:// o https://.";
-    }
-};
-
-const maxNotesLength = (value: unknown) => {
-    return (
-        `${value ?? ""}`.length <= 160 ||
-        "El mensaje no puede superar 160 caracteres."
-    );
-};
-
-const alphaDashCode = (value: unknown) => {
-    return (
-        /^[A-Z0-9-]{4,24}$/.test(`${value ?? ""}`) ||
-        "Usa mayusculas, numeros y guiones."
-    );
-};
-
-const nameRules = [requiredText, minNameLength];
-const emailRules = [requiredText, validEmail];
-const companyRules = [requiredText];
-const rateRules = [requiredText, validRate];
-const usernameRules = [requiredText, validUsername];
-const phoneRules = [requiredText, validPhone];
-const websiteRules = [validWebsite];
-const notesRules = [maxNotesLength];
-const inlineRules = [requiredText, alphaDashCode];
-
-const elevationExamples = [
-    {
-        level: "xs",
-        title: "Elevation xs",
-        copy: "Separacion sutil para bloques livianos.",
-    },
-    {
-        level: "sm",
-        title: "Elevation sm",
-        copy: "Buena opcion por defecto para agrupar campos.",
-    },
-    {
-        level: "md",
-        title: "Elevation md",
-        copy: "Aumenta la jerarquia visual sin verse pesada.",
-    },
-    {
-        level: "lg",
-        title: "Elevation lg",
-        copy: "Util para formularios protagonistas o modales.",
-    },
-] as const;
-
-const elevationPreview = reactive({
-    xs: {
-        name: "Ada Lovelace",
-        context: "Sombra minima",
-    },
-    sm: {
-        name: "Grace Hopper",
-        context: "Agrupacion estandar",
-    },
-    md: {
-        name: "Katherine Johnson",
-        context: "Jerarquia intermedia",
-    },
-    lg: {
-        name: "Radia Perlman",
-        context: "Contenedor destacado",
-    },
-});
-
-const filteredLocationOptions = computed(() => {
-    const query = selectState.locationSearch.trim().toLowerCase();
-
-    if (!query) {
-        return locationOptions;
-    }
-
-    return locationOptions.filter((item) =>
-        item.text.toLowerCase().includes(query),
-    );
-});
-
-const filteredStackOptions = computed(() => {
-    const query = selectState.stackSearch.trim().toLowerCase();
-
-    if (!query) {
-        return stackOptions;
-    }
-
-    return stackOptions.filter((item) =>
-        item.text.toLowerCase().includes(query),
-    );
-});
-
-const selectedRoleLabel = computed(() => {
-    return (
-        roleOptions.find((item) => item.value === selectState.role)?.text ||
-        "Sin definir"
-    );
-});
-
-const selectedStackLabel = computed(() => {
-    return selectState.stack.length
-        ? stackOptions
-            .filter((item) => selectState.stack.includes(item.value))
-            .map((item) => item.text)
-            .join(", ")
-        : "Sin definir";
-});
-
-const selectedLocationLabel = computed(() => {
-    return (
-        locationOptions.find((item) => item.value === selectState.location)?.text ||
-        "Sin definir"
-    );
-});
+const nameRules = [(v) => !!`${v || ""}`.trim() || "Name is required"];
+const emailRules = [
+  (v) => !!`${v || ""}`.trim() || "Email is required",
+  (v) => /.+@.+\..+/.test(`${v || ""}`) || "Email must be valid",
+];
 
 const payloadPreview = computed(() => {
-    return JSON.stringify(form, null, 2);
+  return JSON.stringify(
+    {
+      fullName: fullName.value,
+      email: email.value,
+      priority: priority.value,
+      contactChannel: contactChannel.value,
+      acceptTerms: acceptTerms.value,
+      notifyByEmail: notifyByEmail.value,
+    },
+    null,
+    2,
+  );
 });
 
-const selectPreview = computed(() => {
-    return JSON.stringify(
-        {
-            ...selectState,
-            visibleLocationOptions: filteredLocationOptions.value.map((item) => item.text),
-            visibleStackOptions: filteredStackOptions.value.map((item) => item.text),
-        },
-        null,
-        2,
-    );
-});
-
-const formatTimePreview = (value: Date): string => {
-    return new Intl.DateTimeFormat("es", {
-        hour: "2-digit",
-        minute: "2-digit",
-    }).format(value);
+const handleSubmit = () => {
+  submitStatus.value = `Submitted at ${new Date().toLocaleTimeString()}`;
 };
 
-const timePickerPreview = computed(() => {
-    return JSON.stringify(
-        {
-            kickoff: timePickerState.kickoff.toISOString(),
-            review: timePickerState.review.toISOString(),
-            publish: timePickerState.publish.toISOString(),
-        },
-        null,
-        2,
-    );
-});
-
-const switchPreview = computed(() => {
-    return JSON.stringify(switchState, null, 2);
-});
-
-const radioPreview = computed(() => {
-    return JSON.stringify(radioState, null, 2);
-});
-
-const handleValidate = async (): Promise<void> => {
-    const valid = (await formRef.value?.validate?.()) ?? false;
-
-    submitState.kind = valid ? "success" : "warning";
-    submitState.message = valid
-        ? "Todo esta listo. El formulario paso la validacion interna."
-        : "Todavia hay campos pendientes o con errores. Revisa los mensajes debajo de cada control.";
+const handleInvalid = () => {
+  submitStatus.value = "Blocked by validation";
 };
 
-const handleSubmit = async (): Promise<void> => {
-    const valid = (await formRef.value?.validate?.()) ?? false;
-
-    submitState.kind = valid ? "success" : "warning";
-    submitState.message = valid
-        ? `Submit simulado correctamente para ${form.fullName || "el usuario actual"}.`
-        : "No se puede enviar hasta que el formulario sea valido.";
-};
-
-const handleReset = (): void => {
-    Object.assign(form, createInitialForm());
-    Object.assign(timePickerState, createInitialTimePickerState());
-    Object.assign(switchState, createInitialSwitchState());
-    Object.assign(radioState, createInitialRadioState());
-    formRef.value?.reset?.();
-    formValid.value = false;
-    submitState.kind = "idle";
-    submitState.message =
-        "Formulario restablecido. Ya puedes probar de nuevo el flujo completo.";
+const resetFields = () => {
+  fullName.value = "";
+  email.value = "";
+  priority.value = "Medium";
+  contactChannel.value = "email";
+  acceptTerms.value = false;
+  notifyByEmail.value = true;
+  submitStatus.value = "Form reset";
 };
 </script>
 
 <style scoped>
-.form-playground {
-    display: grid;
-    padding: 24px;
+.form-page {
+  display: grid;
+  gap: 20px;
 }
 
-.form-playground__hero {
-    display: grid;
-    gap: 8px;
-    max-width: 760px;
+.form-page__header {
+  display: grid;
+  gap: 6px;
 }
 
-.eyebrow,
-.section-kicker {
-    color: #5b6b8a;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    margin: 0;
-    text-transform: uppercase;
+.form-page__eyebrow {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.72;
 }
 
-.form-playground__hero h1,
-.form-card h2 {
-    color: #172033;
-    margin: 0;
+.form-page__title {
+  margin: 0;
 }
 
-.hero-copy {
-    color: #596579;
-    line-height: 1.6;
-    margin: 0;
+.form-page__lead {
+  margin: 0;
+  opacity: 0.84;
 }
 
-.form-card {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 20px;
-    padding: 24px;
-    flex-direction: column;
+.form-demo {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
 }
 
-.form-card__header {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 20px;
+.form-demo h3 {
+  margin: 0;
 }
 
-.status-pill {
-    background: rgba(91, 107, 138, 0.12);
-    border-radius: 999px;
-    color: #40506f;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 8px 14px;
-    white-space: nowrap;
+.form-demo__caption {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
-.status-pill--valid {
-    background: rgba(42, 138, 90, 0.14);
-    color: #1f7a4d;
+.form-demo__grid {
+  display: grid;
+  gap: 14px;
 }
 
-.status-pill--invalid {
-    background: rgba(196, 116, 37, 0.14);
-    color: #a55b1b;
+.form-demo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.action-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 24px;
+.form-demo--preview {
+  align-content: start;
 }
 
-.select-lab,
-.time-picker-lab,
-.switch-lab,
-.radio-lab,
-.selection-lab,
-.table-lab,
-.elevation-lab {
-    border-top: 1px solid rgba(23, 32, 51, 0.08);
-    display: grid;
-    gap: 18px;
-    margin-top: 28px;
-    padding-top: 24px;
+.form-demo__state {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.78;
 }
 
-.select-lab__header,
-.time-picker-lab__header,
-.switch-lab__header,
-.radio-lab__header,
-.selection-lab__header,
-.table-lab__header,
-.elevation-lab__header,
-.elevation-lab__meta {
-    display: grid;
-    gap: 10px;
-}
-
-.select-demo-form {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-}
-
-.time-picker-demo-form {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-}
-
-.switch-demo-form {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-}
-
-.radio-demo-form {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-}
-
-.selection-demo-form {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-}
-
-.select-lab__summary {
-    display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.time-picker-lab__summary {
-    display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.switch-lab__summary {
-    display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.radio-lab__summary {
-    display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.selection-lab__summary {
-    display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.select-lab__summary div,
-.time-picker-lab__summary div,
-.switch-lab__summary div,
-.radio-lab__summary div,
-.selection-lab__summary div,
-.table-lab__panel {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-}
-
-.select-lab__summary span,
-.time-picker-lab__summary span,
-.switch-lab__summary span,
-.radio-lab__summary span,
-.selection-lab__summary span,
-.table-lab__label,
-.summary-grid span {
-    color: #51617d;
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin: 0 0 4px;
-    text-transform: uppercase;
-}
-
-.select-lab__summary strong,
-.time-picker-lab__summary strong,
-.switch-lab__summary strong,
-.radio-lab__summary strong,
-.selection-lab__summary strong,
-.summary-grid strong {
-    color: #172033;
-    font-size: 14px;
-}
-
-.table-lab__copy,
-.elevation-lab__meta span,
-.event-note {
-    color: #5f6f86;
-    line-height: 1.6;
-    margin: 0;
-}
-
-.elevation-lab__grid {
-    display: grid;
-    gap: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.elevation-lab__panel {
-    display: grid;
-    gap: 12px;
-}
-
-.elevation-demo-form {
-    background: linear-gradient(180deg, #ffffff, #f7f9fc);
-    border-radius: 18px;
-    padding: 16px;
-}
-
-.table-lab__grid {
-    display: grid;
-    gap: 16px;
-}
-
-.table-lab__panel {
-    display: grid;
-    gap: 12px;
-}
-
-.table-demo-form {
-    width: 100%;
-}
-
-.sidebar-stack {
-    display: grid;
-    gap: 16px;
-}
-
-.summary-grid {
-    display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin-top: 18px;
-}
-
-.feedback {
-    background: #f3f5f8;
-    border-radius: 14px;
-    color: #526075;
-    line-height: 1.5;
-    margin-top: 20px;
-    padding: 14px 16px;
-}
-
-.feedback--success {
-    background: rgba(42, 138, 90, 0.1);
-    color: #1f7a4d;
-}
-
-.feedback--warning {
-    background: rgba(196, 116, 37, 0.12);
-    color: #9b5317;
-}
-
-.payload-preview {
-    background: #111827;
-    border-radius: 16px;
-    color: #d9e2f1;
-    font-size: 12px;
-    line-height: 1.55;
-    margin: 18px 0 0;
-    overflow: auto;
-    padding: 16px;
-}
-
-.event-note {
-    margin: 16px 0 12px;
-}
-
-.event-log {
-    display: grid;
-    gap: 10px;
-}
-
-.event-log__item {
-    background: #f6f8fb;
-    border-radius: 12px;
-    color: #40506f;
-    display: grid;
-    gap: 4px;
-    padding: 12px 14px;
-}
-
-.event-log__item strong {
-    color: #172033;
-    font-size: 13px;
-}
-
-.event-log__item span {
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 12px;
-}
-
-@media (max-width: 960px) {
-    .form-playground {
-        padding: 16px;
-    }
-
-    .form-card {
-        padding: 18px;
-    }
-
-    .form-card__header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .summary-grid,
-    .select-lab__summary,
-    .time-picker-lab__summary,
-    .switch-lab__summary,
-    .radio-lab__summary,
-    .selection-lab__summary {
-        grid-template-columns: 1fr;
-    }
-
-    .table-lab__panel,
-    .select-lab__summary div {
-        padding: 14px;
-    }
+.form-demo__json {
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-x: auto;
 }
 </style>

@@ -1,7 +1,7 @@
 .e-card {
   border-radius: var(--e-border-radius-root, 4px);
-  --card-bg: var(--e-color-surface-1, #ffffff);
-  --card-text: var(--e-contrast-surface-1, #000000);
+  --card-bg: var(--e-color-surface-base, var(--e-color-surface-1, #ffffff));
+  --card-text: var(--e-contrast-surface-base, var(--e-contrast-surface-1, #000000));
   --card-border-color: var(--e-color-border);
   --card-padding: calc(var(--e-space-base, 4px) * 4);
   --card-gap: calc(var(--e-space-base, 4px) * 3);

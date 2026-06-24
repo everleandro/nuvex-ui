@@ -1,37 +1,46 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import App from './App.vue';
-import CardView from './CardView.vue';
-import CheckboxView from './CheckboxView.vue';
-import DatePickerView from './DatePickerView.vue';
-import FormView from './FormView.vue';
-import MenuView from './MenuView.vue';
-import PaletteView from './PaletteView.vue';
-import ProgressView from './ProgressView.vue';
-import RadioView from './RadioView.vue';
-import ScheduleView from './ScheduleView.vue';
-import TabView from './TabView.vue';
-import TextareaView from './TextareaView.vue';
-import TimePickerView from './TimePickerView.vue';
+import { createRouter, createWebHistory } from "vue-router";
+import PlaygroundPage from "./PlaygroundPage.vue";
+import ExpansionPanelsView from "./ExpansionPanelsView.vue";
+import ButtonView from "./ButtonView.vue";
+import FormView from "./FormView.vue";
+import { navigationGroups } from "./navigation";
+
+const routeComponentById = {
+  "components-button": ButtonView,
+  "components-form": FormView,
+  "components-expansion-panels": ExpansionPanelsView,
+};
+
+const navigationItems = navigationGroups.flatMap((group) =>
+  group.children.map((item) => ({
+    groupTitle: group.title,
+    item,
+  })),
+);
+
+const firstItem = navigationItems[0]?.item;
 
 const routes = [
-  { path: '/', component: App },
-  { path: '/card', component: CardView },
-  { path: '/date-picker', component: DatePickerView },
-  { path: '/form', component: FormView },
-  { path: '/textarea', component: TextareaView },
-  { path: '/time-picker', component: TimePickerView },
-  { path: '/progress', component: ProgressView },
-  { path: '/radio', component: RadioView },
-  { path: '/checkbox', component: CheckboxView },
-  { path: '/schedule', component: ScheduleView },
-  { path: '/tab', component: TabView },
-  { path: '/menu', component: MenuView },
-  { path: '/palette', component: PaletteView },
+  {
+    path: "/",
+    redirect: firstItem?.to || "/playground/getting-started",
+  },
+  ...navigationItems.map(({ groupTitle, item }) => ({
+    path: item.to,
+    name: item.id,
+    component: routeComponentById[item.id] || PlaygroundPage,
+    meta: {
+      title: item.title,
+      groupTitle,
+    },
+  })),
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: firstItem?.to || "/playground/getting-started",
+  },
 ];
 
-const router = createRouter({
+export default createRouter({
   history: createWebHistory(),
   routes,
 });
-
-export default router;
