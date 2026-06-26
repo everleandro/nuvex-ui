@@ -42,4 +42,55 @@ describe("EButton", () => {
     expect(wrapper.classes()).not.toContain("e-btn--elevated");
     expect(wrapper.classes().some((className) => className.startsWith("e-elevation--"))).toBe(false);
   });
+
+  it("keeps text buttons flat even when elevation is provided", () => {
+    const wrapper = mount(EButton, {
+      props: {
+        text: true,
+        tonal: true,
+        elevation: "lg",
+      },
+      slots: {
+        default: "Save",
+      },
+    });
+
+    expect(wrapper.classes()).toContain("e-btn--text");
+    expect(wrapper.classes()).not.toContain("e-btn--elevated");
+    expect(wrapper.classes().some((className) => className.startsWith("e-elevation--"))).toBe(false);
+  });
+
+  it("adds tonal class when tonal mode is enabled", () => {
+    const wrapper = mount(EButton, {
+      props: {
+        tonal: true,
+      },
+      slots: {
+        default: "Save",
+      },
+    });
+
+    expect(wrapper.classes()).toContain("e-btn--tonal");
+    expect(wrapper.classes()).toContain("interactive-element--tonal");
+    expect(wrapper.classes()).not.toContain("e-btn--elevated");
+  });
+
+  it("prioritizes text mode in conflict combinations", () => {
+    const wrapper = mount(EButton, {
+      props: {
+        text: true,
+        tonal: true,
+        outlined: true,
+        fab: true,
+        elevation: "xl",
+      },
+      slots: {
+        default: "T",
+      },
+    });
+
+    expect(wrapper.classes()).toContain("e-btn--text");
+    expect(wrapper.classes()).not.toContain("e-btn--elevated");
+    expect(wrapper.classes().some((className) => className.startsWith("e-elevation--"))).toBe(false);
+  });
 });

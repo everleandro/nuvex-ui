@@ -55,6 +55,11 @@ export const navigationGroups = [
         to: "/components/card",
       },
       {
+        id: "components-bar",
+        title: "Bar",
+        to: "/components/bar",
+      },
+      {
         id: "components-list",
         title: "List",
         to: "/components/list",

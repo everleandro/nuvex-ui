@@ -24,13 +24,14 @@
 
   &--outlined,
   &--depressed {
-    box-shadow: none !important;
+    box-shadow: none;
   }
 
   &__content {
     align-items: center;
     display: flex;
     padding: var(--e-bar-vertical-padding, 0px) var(--e-bar-inline-padding, 16px);
+    gap: var(--e-bar-inline-gap, 16px);
     position: relative;
     z-index: 1;
     height: 100%;

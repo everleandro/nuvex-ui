@@ -22,6 +22,7 @@
   --interactive-element-local-state-focus: var(--e-interactive-state-focus, 0.12);
   --interactive-element-local-state-hover: var(--e-interactive-state-hover, 0.08);
   --interactive-element-local-state-active: var(--e-interactive-state-active, 0.12);
+  --interactive-element-local-tonal-opacity: var(--e-interactive-tonal-opacity, 0.08);
 
   @include button-before(
     $interactive: true,
@@ -36,6 +37,12 @@
 
   .v-ripple {
     z-index: 0;
+  }
+
+  &--tonal {
+    &::before {
+      opacity: var(--interactive-element-local-tonal-opacity);
+    }
   }
 }
 

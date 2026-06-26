@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from "vue-router";
 import PlaygroundPage from "./PlaygroundPage.vue";
 import ExpansionPanelsView from "./ExpansionPanelsView.vue";
 import ButtonView from "./ButtonView.vue";
+import BarView from "./BarView.vue";
 import FormView from "./FormView.vue";
 import { navigationGroups } from "./navigation";
 
 const routeComponentById = {
   "components-button": ButtonView,
+  "components-bar": BarView,
   "components-form": FormView,
   "components-expansion-panels": ExpansionPanelsView,
 };

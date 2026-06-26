@@ -16,6 +16,7 @@ import { normalizeCssSize } from '@/utils/style'
 
 let el: Ref<HTMLHeadElement | null> = ref(null)
 let resizeObserver: ResizeObserver | null = null
+let hasRegisteredAppBar = false
 const slots = useSlots()
 const props = defineProps<BarProps>()
 const { setAppBarLayout, resetAppBarLayout, barLayoutStyle } = useLayout()
@@ -34,31 +35,23 @@ const computedHeight = computed(() => {
 
 watch(() => [props.clipped, props.fixed, props.absolute, props.app, props.dense, computedHeight.value], () => {
     nextTick(() => {
-        refreshLayoutStyle()
+        syncLayoutTracking()
     })
 });
 
 onMounted(() => {
-    refreshLayoutStyle()
-    
-    if (el.value) {
-        resizeObserver = new ResizeObserver(() => {
-            refreshLayoutStyle()
-        })
-        resizeObserver.observe(el.value)
-    }
+    syncLayoutTracking()
 })
 
 onBeforeUnmount(() => {
-    if (resizeObserver && el.value) {
-        resizeObserver.unobserve(el.value)
-        resizeObserver.disconnect()
-        resizeObserver = null
-    }
+    stopResizeObserver()
 })
 
 onUnmounted(() => {
-    resetAppBarLayout()
+    if (hasRegisteredAppBar) {
+        resetAppBarLayout()
+        hasRegisteredAppBar = false
+    }
 })
 
 const barClass: ComputedRef<Array<string>> = computed((): Array<string> => {
@@ -69,6 +62,10 @@ const barClass: ComputedRef<Array<string>> = computed((): Array<string> => {
             classes.push(`e-bar--${key}`)
         }
     })
+
+    if (props.elevation) {
+        classes.push(`e-elevation--${props.elevation}`)
+    }
 
     return classes
 })
@@ -87,13 +84,53 @@ const style = computed((): Record<string, string> => {
 
 })
 
-const mergedStyle = computed((): Record<string, string> => ({
-    ...barLayoutStyle.value,
-    ...style.value,
-}))
+const mergedStyle = computed((): Record<string, string> => {
+    if (!props.app) {
+        return { ...style.value }
+    }
+
+    return {
+        ...barLayoutStyle.value,
+        ...style.value,
+    }
+})
+
+const startResizeObserver = (): void => {
+    if (!props.app || !el.value || resizeObserver) return
+
+    resizeObserver = new ResizeObserver(() => {
+        refreshLayoutStyle()
+    })
+
+    resizeObserver.observe(el.value)
+}
+
+const stopResizeObserver = (): void => {
+    if (resizeObserver && el.value) {
+        resizeObserver.unobserve(el.value)
+        resizeObserver.disconnect()
+        resizeObserver = null
+    }
+}
+
+const syncLayoutTracking = (): void => {
+    if (!props.app) {
+        stopResizeObserver()
+
+        if (hasRegisteredAppBar) {
+            resetAppBarLayout()
+            hasRegisteredAppBar = false
+        }
+
+        return
+    }
+
+    startResizeObserver()
+    refreshLayoutStyle()
+}
 
 const refreshLayoutStyle = (): void => {
-    if (!el.value) return
+    if (!props.app || !el.value) return
     
     const height = el.value.getBoundingClientRect().height
     setAppBarLayout({
@@ -104,6 +141,8 @@ const refreshLayoutStyle = (): void => {
         absolute: !!props.absolute,
         fixed: !!props.fixed,
     })
+
+    hasRegisteredAppBar = true
 }
 
 </script>

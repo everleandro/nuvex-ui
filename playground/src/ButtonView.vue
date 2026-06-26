@@ -53,12 +53,13 @@
             </div>
         </article>
 
+
         <article class="button-demo">
             <h3>Icons</h3>
             <p class="button-demo__caption">Casos con prepend, append, icon-only y FAB.</p>
 
             <div class="button-row">
-                <EButton :prepend-icon="iconFactory.arrowLeft" color="secondary">Back</EButton>
+                <EButton :prepend-icon="iconFactory.heart" color="secondary">Back</EButton>
                 <EButton :append-icon="iconFactory.arrowRight" color="secondary">Continue</EButton>
                 <EButton :icon="iconFactory.menu" aria-label="Open menu" color="primary" />
                 <EButton fab :icon="iconFactory.trash" aria-label="Add item" color="primary" />
@@ -66,7 +67,30 @@
                 <EButton :icon="iconFactory.heart" aria-label="Close" />
             </div>
         </article>
+        <article class="button-demo">
+            <h3>Button text</h3>
+            <p class="button-demo__caption">Variantes de botones tipo texto.</p>
 
+            <div class="button-row">
+                <EButton :icon="iconFactory.menu" text aria-label="icon text primary" color="primary" />
+                <EButton fab :icon="iconFactory.trash" text aria-label="fab text button" />
+                <EButton :icon="iconFactory.heart" text aria-label="icon text secondary" color="secondary" />
+                <EButton :icon="iconFactory.heart" text aria-label="icon text default" />
+                <EButton text aria-label="default text default" >Default</EButton>
+            </div>
+        </article>
+        <article class="button-demo">
+            <h3>Button tonal</h3>
+            <p class="button-demo__caption">Variantes de botones tipo tonal.</p>
+
+            <div class="button-row">
+                <EButton :icon="iconFactory.menu" tonal aria-label="icon tonal primary" color="primary" />
+                <EButton fab :icon="iconFactory.trash" tonal aria-label="fab tonal button" />
+                <EButton :icon="iconFactory.heart" tonal aria-label="icon tonal secondary" color="secondary" />
+                <EButton :icon="iconFactory.heart" tonal aria-label="icon tonal default" />
+                <EButton tonal aria-label="default tonal default" >Default</EButton>
+            </div>
+        </article>
         <ECard>
             <article class="button-demo">
                 <h3>Links</h3>

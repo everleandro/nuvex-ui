@@ -70,6 +70,7 @@ $button-sizes: x-small, small, default, large, x-large;
 
   @include button-reset();
   @include prefix(user-select, none);
+  --e-icon-size-default: var(--button-local-font-size);
 
 
   .e-icon__svg {
@@ -108,19 +109,13 @@ $button-sizes: x-small, small, default, large, x-large;
     box-shadow: var(--button-local-default-elevation);
   }
 
-  &--disabled,
-  &--text {
+  &--disabled {
     box-shadow: none;
   }
 
   &--focused:not(.e-btn--disabled):not(.e-btn--loading) {
     outline: 2px solid var(--e-btn-bg);
     outline-offset: 2px;
-  }
-
-  &--text {
-    background-color: transparent;
-    color: var(--button-local-bg);
   }
 
   &--block {
@@ -182,6 +177,7 @@ $button-sizes: x-small, small, default, large, x-large;
     pointer-events: none;
 
     .e-btn {
+
       &__content,
       &__append,
       &__prepend {
@@ -226,7 +222,16 @@ $button-sizes: x-small, small, default, large, x-large;
     border-color: currentColor;
   }
 
+
+
   &--use-contrast-color {
     color: var(--button-local-text);
+  }
+
+  &--tonal,
+  &--text {
+    box-shadow: none;
+    background-color: transparent;
+    color: var(--button-local-bg);
   }
 }
