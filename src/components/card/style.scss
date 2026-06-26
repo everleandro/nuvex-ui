@@ -21,8 +21,9 @@
   }
 
   &__main {
-    display: grid;
+    display: flex;
     gap: var(--card-gap);
+    flex-direction: column;
     padding: var(--card-padding);
     flex: 1;
   }

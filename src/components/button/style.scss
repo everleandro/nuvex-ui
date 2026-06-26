@@ -71,10 +71,6 @@ $button-sizes: x-small, small, default, large, x-large;
   @include button-reset();
   @include prefix(user-select, none);
 
-  // Shell
-  +.e-btn {
-    margin-left: var(--e-space-base, 4px);
-  }
 
   .e-icon__svg {
     fill: currentColor;
