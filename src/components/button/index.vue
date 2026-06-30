@@ -73,6 +73,7 @@ const configuration = reactive({
 const attrs = useAttrs();
 const props = withDefaults(defineProps<ButtonProps>(), {
   ripple: true,
+  elevation: 'sm',
 });
 
 const booleanClassKeys = [
