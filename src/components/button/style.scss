@@ -2,28 +2,7 @@
 
 $button-sizes: x-small, small, default, large, x-large;
 
-@mixin button-size-variant($size) {
-  &--size-#{$size} {
-    --btn-font-size: var(--e-btn-font-size-#{$size});
-    --btn-height: var(--e-btn-height-#{$size});
-
-    &.e-btn--icon {
-      --btn-font-size: var(--e-icon-size-#{$size});
-    }
-
-    &.e-btn--fab {
-      --btn-height: var(--e-fab-height-#{$size});
-      --btn-font-size: var(--e-fab-font-size-#{$size});
-    }
-
-    &.e-btn--stacked {
-      --btn-height: var(--e-stacked-height-#{$size});
-    }
-  }
-}
-
-.e-btn {
-  // Theme contract
+@mixin button-contract-vars() {
   --button-local-height: var(--btn-height, unset);
   --button-local-height-responsive: var(--btn-height-responsive, var(--btn-height, unset));
   --button-local-font-size: var(--btn-font-size, inherit);
@@ -47,14 +26,12 @@ $button-sizes: x-small, small, default, large, x-large;
   --interactive-element-local-state-active: var(--button-local-state-active);
   --button-local-border-width: var(--e-btn-border-width, 1px);
   --button-local-border-style: var(--e-btn-border-style, solid);
-  --button-local-default-elevation: var(--e-btn-elevation,
-      var(--e-elevation-sm,
-        0 1px 3px 0 rgba(0, 0, 0, 0.2),
-        0 1px 1px 0 rgba(0, 0, 0, 0.14),
-        0 2px 1px -1px rgba(0, 0, 0, 0.12)));
   --button-local-inline-gap: 0.5rem;
   --button-local-stacked-gap: 0.25rem;
+  --e-icon-size-default: var(--btn-icon-size, var(--button-local-font-size));
+}
 
+@mixin button-base-rules() {
   height: var(--button-local-height);
   font-size: var(--button-local-font-size);
   font-weight: var(--button-local-font-weight);
@@ -70,9 +47,30 @@ $button-sizes: x-small, small, default, large, x-large;
 
   @include button-reset();
   @include prefix(user-select, none);
-  --e-icon-size-default: var(--button-local-font-size);
+}
 
+@mixin button-size-variant($size) {
+  &--size-#{$size} {
+    --btn-font-size: var(--e-btn-font-size-#{$size});
+    --btn-icon-size: var(--e-btn-icon-size-#{$size});
+    --btn-height: var(--e-btn-height-#{$size});
 
+    &.e-btn--icon {
+      --btn-font-size: var(--e-btn-icon-size-#{$size});
+    }
+
+    &.e-btn--fab {
+      --btn-height: var(--e-fab-height-#{$size});
+      --btn-font-size: var(--e-fab-font-size-#{$size});
+    }
+
+    &.e-btn--stacked {
+      --btn-height: var(--e-stacked-height-#{$size});
+    }
+  }
+}
+
+@mixin button-slot-rules() {
   .e-icon__svg {
     fill: currentColor;
   }
@@ -88,42 +86,6 @@ $button-sizes: x-small, small, default, large, x-large;
   &__append {
     position: relative;
     z-index: 1;
-  }
-
-  &.e-btn {
-
-    &--icon,
-    &--fab {
-      padding: 0;
-      min-width: 0;
-      border-radius: 50%;
-    }
-  }
-
-  // Variants
-  &--rounded {
-    border-radius: var(--button-local-rounded-radius);
-  }
-
-  &--elevated {
-    box-shadow: var(--button-local-default-elevation);
-  }
-
-  &--disabled {
-    box-shadow: none;
-  }
-
-  &--focused:not(.e-btn--disabled):not(.e-btn--loading) {
-    outline: 2px solid var(--e-btn-bg);
-    outline-offset: 2px;
-  }
-
-  &--block {
-    &:not(.e-btn--fab):not(.e-btn--icon) {
-      display: flex;
-      flex: 1 0 auto;
-      min-width: 100% !important;
-    }
   }
 
   &__prepend {
@@ -148,7 +110,37 @@ $button-sizes: x-small, small, default, large, x-large;
     }
   }
 
-  // Icon-like variants
+  &__loader {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}
+
+@mixin button-variant-rules() {
+  &--icon,
+  &--fab {
+    padding: 0;
+    min-width: 0;
+    border-radius: 50%;
+  }
+
+  &--rounded {
+    border-radius: var(--button-local-rounded-radius);
+  }
+
+  &--block {
+    &:not(.e-btn--fab):not(.e-btn--icon) {
+      display: flex;
+      flex: 1 0 auto;
+      min-width: 100% !important;
+    }
+  }
 
   &--icon {
     color: var(--e-btn-contrast-color, var(--button-local-accent));
@@ -159,7 +151,7 @@ $button-sizes: x-small, small, default, large, x-large;
 
   &--fab {
     border-radius: 100%;
-    width: var(--btn-height, unset);
+    --e-icon-size-default: var(--button-local-font-size);
   }
 
   &--fab,
@@ -173,56 +165,12 @@ $button-sizes: x-small, small, default, large, x-large;
     }
   }
 
-  &--loading {
-    pointer-events: none;
-
-    .e-btn {
-
-      &__content,
-      &__append,
-      &__prepend {
-        opacity: 0;
-      }
-    }
-  }
-
-  // Sizes
-
-  @each $size in $button-sizes {
-    @include button-size-variant($size);
-  }
-
-  &__loader {
-    align-items: center;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
-
-  // State variants
-
-  &--disabled {
-    --button-local-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
-    --button-local-solid-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
-    --button-local-icon-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
-    --button-local-accent: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
-    --button-local-text: var(--e-contrast-disabled, white);
-    pointer-events: none;
-    cursor: not-allowed;
-  }
-
   &--outlined {
     border: var(--button-local-border-width) var(--button-local-border-style);
     background-color: unset;
     color: var(--button-local-bg);
     border-color: currentColor;
   }
-
-
 
   &--use-contrast-color {
     color: var(--button-local-text);
@@ -233,5 +181,48 @@ $button-sizes: x-small, small, default, large, x-large;
     box-shadow: none;
     background-color: transparent;
     color: var(--button-local-bg);
+  }
+}
+
+@mixin button-state-rules() {
+  &--disabled {
+    box-shadow: none;
+    --button-local-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-solid-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-icon-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-accent: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-text: var(--e-contrast-disabled, white);
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  &--focused:not(.e-btn--disabled):not(.e-btn--loading) {
+    outline: 2px solid var(--e-btn-bg);
+    outline-offset: 2px;
+  }
+
+  &--loading {
+    pointer-events: none;
+
+    .e-btn__content,
+    .e-btn__append,
+    .e-btn__prepend {
+      opacity: 0;
+    }
+  }
+}
+
+.e-btn {
+  // Theme contract + base styles
+  @include button-contract-vars();
+  @include button-base-rules();
+  @include button-slot-rules();
+  @include button-variant-rules();
+  @include button-state-rules();
+
+  // Sizes
+
+  @each $size in $button-sizes {
+    @include button-size-variant($size);
   }
 }

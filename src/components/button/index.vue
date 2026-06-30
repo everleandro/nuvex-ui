@@ -193,8 +193,6 @@ const btnClass = computed((): Array<string> => {
   // Handle elevation
   if (props.elevation && props.elevation !== "none" && !props.text && !props.outlined && !props.tonal) {
     classes.push(`e-elevation--${props.elevation}`);
-  } else if (props.elevation === undefined && !props.text && !props.outlined && !props.tonal) {
-    classes.push("e-btn--elevated");
   }
 
   return classes;

@@ -44,9 +44,9 @@
   .#{$color} {
     background-color: var(--e-color-#{$color}) !important;
     border-color: var(--e-color-#{$color}) !important;
-    ;
+    
     color: var(--e-contrast-#{$color}, #{$contrast-fallback}) !important;
-    ;
+    
 
     &--text {
       color: var(--e-color-#{$color}) !important;
@@ -244,7 +244,7 @@ $directions: (
   flex-direction: row;
 }
 
-.flex-col {
+.flex-column {
   flex-direction: column;
 }
 

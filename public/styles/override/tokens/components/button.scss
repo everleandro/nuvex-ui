@@ -31,12 +31,23 @@ $btn-font-sizes: map.merge(
     ()
 ) !default;
 
+$btn-icon-sizes: map.merge(
+    (
+        x-small: 1.125rem,
+        small: 1.25rem,
+        default: 1.5rem,
+        large: 1.75rem,
+        x-large: 2rem,
+    ),
+    ()
+) !default;
+
 $fab-font-sizes: map.merge(
     (
         x-small: 1.25rem,
         small: 1.25rem,
         default: 1.5rem,
-        large: 0.714rem,
+        large: 1.714rem,
         x-large: 2rem,
     ),
     ()
@@ -75,5 +86,4 @@ $btn-height: map.merge(
     ()
 ) !default;
 
- $btn-bg: transparent;
-  $btn-text: currentColor;
+$btn-text: currentColor;

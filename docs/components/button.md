@@ -23,7 +23,7 @@ import { EButton } from 'nuvex-ui'
 | `color` | `string` | `undefined` | Color base. Resuelve `--e-color-{color}` y `--e-contrast-{color}`. |
 | `hoverColor` | `string` | `undefined` | Color al hover. Si existe, reemplaza `color` mientras hover esta activo. |
 | `fab` | `boolean` | `false` | Variante circular flotante. |
-| `elevation` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| 'none'` | `undefined` | Define la elevacion explicita. Usa `none` para forzar un boton plano. |
+| `elevation` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| 'none'` | `undefined` | Controla la elevacion del boton. Si no se define, el boton no aplica clase de elevacion. Usa `none` para forzar modo plano de forma explicita. |
 | `text` | `boolean` | `false` | Variante texto (fondo transparente). |
 | `useContrastColor` | `boolean` | `false` | En variantes transparentes como `text` y `outlined`, usa el color de contraste resuelto para `color`. |
 | `outlined` | `boolean` | `false` | Variante outlined. |
@@ -54,15 +54,17 @@ import { EButton } from 'nuvex-ui'
 
 ## Ejemplos
 
-### Elevacion por variable CSS
+### Elevacion explicita
 
-```css
-:root {
-  --e-btn-elevation: var(--e-elevation-md);
-}
+`EButton` solo aplica elevacion cuando defines la prop `elevation`.
+
+```vue
+<template>
+  <EButton elevation="md">Guardar</EButton>
+</template>
 ```
 
-Sin pasar `elevation`, el boton contenido usa `--e-btn-elevation` como sombra base. Si necesitas quitarla por completo, usa `elevation="none"`.
+Para dejarlo plano de manera explicita, usa `elevation="none"`.
 
 ### Basico
 
