@@ -1,0 +1,34 @@
+.e-textarea {
+    .e-field__slot {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+.e-textarea__input {
+    padding-top: var(--field-first-line-start-y);
+    padding-bottom: var(--e-field-slot-padding-base);
+    --e-textarea-mask-first-line-start-y: var(--field-first-line-start-y, var(--field-layout-content-padding-top, 0px));
+    --e-textarea-mask-top-start: max(0px, calc(var(--e-textarea-mask-first-line-start-y) - 6px));
+    --e-textarea-mask-top-end: calc(var(--e-textarea-mask-first-line-start-y) + var(--e-space-base, 4px));
+    --e-textarea-mask-scrollbar-cut: calc(100% - var(--e-textarea-scrollbar-width, 16px));
+
+    -webkit-mask-image:
+        linear-gradient(to bottom,
+            transparent,
+            transparent var(--e-textarea-mask-top-start),
+            black var(--e-textarea-mask-top-end)),
+        linear-gradient(to right,
+            transparent,
+            transparent var(--e-textarea-mask-scrollbar-cut),
+            black var(--e-textarea-mask-scrollbar-cut));
+    mask-image:
+        linear-gradient(to bottom,
+            transparent,
+            transparent var(--e-textarea-mask-top-start),
+            black var(--e-textarea-mask-top-end)),
+        linear-gradient(to right,
+            transparent,
+            transparent var(--e-textarea-mask-scrollbar-cut),
+            black var(--e-textarea-mask-scrollbar-cut));
+}

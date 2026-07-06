@@ -17,6 +17,7 @@ export { default as ESelect } from "./form/select/index.vue";
 export { default as EDetails } from "./form/details.vue";
 export { default as ESwitch } from "./form/switch/index.vue";
 export { default as ETextfield } from "./form/textfield/index.vue";
+export { default as ETextarea } from "./form/textarea/index.vue";
 export { default as EFormColumn } from "./form/column.vue";
 export { default as EForm } from "./form/form.vue";
 export { default as ECol } from "./grid/col.vue";

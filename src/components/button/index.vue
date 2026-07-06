@@ -19,7 +19,7 @@
       </slot>
     </span>
     <span v-if="appendIcon" class="e-btn__append">
-      <EIcon  :icon="appendIcon" />
+      <EIcon :icon="appendIcon" />
     </span>
   </component>
 </template>

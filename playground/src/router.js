@@ -4,12 +4,18 @@ import ExpansionPanelsView from "./ExpansionPanelsView.vue";
 import ButtonView from "./ButtonView.vue";
 import BarView from "./BarView.vue";
 import FormView from "./FormView.vue";
+import SelectView from "./SelectView.vue";
+import TextfieldView from "./TextfieldView.vue";
+import TextareaView from "./TextareaView.vue";
 import { navigationGroups } from "./navigation";
 
 const routeComponentById = {
   "components-button": ButtonView,
   "components-bar": BarView,
   "components-form": FormView,
+  "components-select": SelectView,
+  "components-textfield": TextfieldView,
+  "components-textarea": TextareaView,
   "components-expansion-panels": ExpansionPanelsView,
 };
 

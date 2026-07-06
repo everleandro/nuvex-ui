@@ -25,6 +25,11 @@ export const navigationGroups = [
         to: "/components/text-field",
       },
       {
+        id: "components-textarea",
+        title: "Textarea",
+        to: "/components/textarea",
+      },
+      {
         id: "components-select",
         title: "Select",
         to: "/components/select",

@@ -499,8 +499,6 @@ const isInputFocused = (): boolean => {
 };
 
 const handleSelectInteractionIntent = (): void => {
-  if (!props.loading) return;
-
   pendingOpenAfterLoading.value = true;
 };
 

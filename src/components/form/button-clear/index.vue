@@ -1,6 +1,6 @@
 <template>
     <transition name="scale">
-        <EButton v-show="show" class="e-field__clear" :icon="iconClear" elevation="none" aria-label="Clear"
+        <EButton v-show="show" class="e-field__clear" :icon="iconClear" elevation="none" tonal aria-label="Clear"
             size="x-small" @click.stop.prevent="() => emit('clear')" />
     </transition>
 </template>
