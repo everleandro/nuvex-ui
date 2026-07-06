@@ -29,8 +29,8 @@
                 :placeholder="resolvePlaceholder(isLabelFloating, shouldFloatLabel)" :spellcheck="spellcheck"
                 :autocapitalize="autocapitalize" :enterkeyhint="enterkeyhint" :aria-invalid="hasError"
                 :aria-describedby="detailsId" :aria-disabled="isDisabled" :aria-readonly="textInputReadonly"
-                :class="['e-textarea__input', slotClass]" :style="inputStyle" @blur="handleBlur" @change="handleChange"
-                @focus="handleFocus" @input="handleInput" @keydown="handleKeydown" @keyup="handleKeyup"
+                :class="['e-textarea__input', slotClass]" :style="inputStyle" @blur="(event) => handleInputBlur(event, handleBlur)" @change="handleChange"
+                @focus="(event) => handleInputFocus(event, handleFocus)" @input="handleInput" @keydown="handleKeydown" @keyup="handleKeyup"
                 @compositionstart="handleCompositionStart" @compositionend="handleCompositionEnd"></textarea>
 
             <div v-if="suffix" class="e-textarea__suffix e-field__suffix" aria-hidden="true" @click="handleFocus">
@@ -111,6 +111,22 @@ const resolvePlaceholder = (
     if (!isLabelFloating) return props.placeholder;
 
     return shouldFloatLabel ? props.placeholder : undefined;
+};
+
+const handleInputFocus = (
+    event: FocusEvent,
+    handleFieldFocus: (event?: FocusEvent) => void,
+): void => {
+    handleFieldFocus(event);
+    emit("focus", event);
+};
+
+const handleInputBlur = (
+    event: FocusEvent,
+    handleFieldBlur: (event?: Event) => void,
+): void => {
+    handleFieldBlur(event);
+    emit("blur", event);
 };
 
 const {

@@ -30,7 +30,7 @@
         {{ prefix }}
       </div>
 
-      <div :class="['e-select__selections', slotClass]">
+      <div :class="['e-select__selections', slotClass]" @mousedown="handleSelectInteractionIntent">
         <div v-if="showPlaceholderSelection" class="e-select__selection" :style="selectionStyle">
           <span class="e-select__selection-placeholder">
             {{ props.placeholder }}
@@ -89,7 +89,8 @@
           :aria-readonly="inputReadonly"
           :placeholder="props.placeholder"
           autocomplete="off"
-          @blur="(event) => { clearSelectedChip(); handleBlur(event); }"
+          @mousedown="handleSelectInteractionIntent"
+          @blur="(event) => handleInputBlur(event, handleBlur)"
           @focus="(event) => handleInputFocus(event, handleFocus)"
           @input="handleInput"
           @keydown="handleInputKeydown" />
@@ -193,6 +194,7 @@ const input = ref<HTMLInputElement | null>(null);
 const isMenuOpen = ref<boolean>(false);
 const selectionCache = ref<Record<string, SelectItemType>>({});
 const selectedChipIndex = ref<number>(-1);
+const pendingOpenAfterLoading = ref<boolean>(false);
 
 // Two-way bindings.
 const searchValue = computed<string | number>({
@@ -492,6 +494,34 @@ const canOpenMenu = (): boolean => {
   return props.items.length > 0;
 };
 
+const isInputFocused = (): boolean => {
+  return document.activeElement === input.value;
+};
+
+const handleSelectInteractionIntent = (): void => {
+  if (!props.loading) return;
+
+  pendingOpenAfterLoading.value = true;
+};
+
+const tryOpenMenuAfterLoading = (): void => {
+  if (!pendingOpenAfterLoading.value) return;
+  if (props.loading) return;
+  if (isMenuOpen.value) {
+    pendingOpenAfterLoading.value = false;
+    return;
+  }
+  if (props.disabled || props.readonly) {
+    pendingOpenAfterLoading.value = false;
+    return;
+  }
+  if (props.items.length === 0) return;
+  if (!isInputFocused()) return;
+
+  openMenu();
+  pendingOpenAfterLoading.value = false;
+};
+
 const getOptionElement = (index: number): HTMLElement | null => {
   if (index < 0 || !currentFieldIdBase.value) return null;
 
@@ -523,6 +553,17 @@ const handleInputFocus = (
 ): void => {
   clearSelectedChip();
   handleFieldFocus(event);
+  emit("focus", event);
+};
+
+const handleInputBlur = (
+  event: FocusEvent,
+  handleFieldBlur: (event?: Event) => void,
+): void => {
+  clearSelectedChip();
+  pendingOpenAfterLoading.value = false;
+  handleFieldBlur(event);
+  emit("blur", event);
 };
 
 const handleInput = (event: Event): void => {
@@ -723,8 +764,16 @@ watch(
   () => props.items,
   (items) => {
     syncSelectionCache(items);
+    tryOpenMenuAfterLoading();
   },
   { deep: true },
+);
+
+watch(
+  () => props.loading,
+  () => {
+    tryOpenMenuAfterLoading();
+  },
 );
 
 watch(

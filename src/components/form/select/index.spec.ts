@@ -356,6 +356,77 @@ describe("ESelect", () => {
     expect(wrapper.find(".e-select__menu").exists()).toBe(false);
   });
 
+  it("opens automatically after loading only when there was explicit interaction intent", async () => {
+    const wrapper = mountSelect({ loading: true, items: [] });
+    await nextTick();
+
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("mousedown");
+    (input.element as HTMLInputElement).focus();
+    await input.trigger("focus");
+    await wrapper.setProps({ items: ["Spain", "Mexico"] });
+    await wrapper.setProps({ loading: false });
+    await nextTick();
+
+    expect(input.attributes("aria-expanded")).toBe("true");
+    expect(wrapper.find(".e-select__menu").exists()).toBe(true);
+  });
+
+  it("does not open automatically after loading when focus was passive", async () => {
+    const wrapper = mountSelect({ loading: true, items: [] });
+    await nextTick();
+
+    const input = wrapper.get('input[role="combobox"]');
+
+    (input.element as HTMLInputElement).focus();
+    await input.trigger("focus");
+    await wrapper.setProps({ items: ["Spain", "Mexico"] });
+    await wrapper.setProps({ loading: false });
+    await nextTick();
+
+    expect(input.attributes("aria-expanded")).toBe("false");
+    expect(wrapper.find(".e-select__menu").exists()).toBe(false);
+  });
+
+  it("does not open automatically after loading if the field lost focus", async () => {
+    const wrapper = mountSelect({ loading: true, items: [] });
+    await nextTick();
+
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("mousedown");
+    (input.element as HTMLInputElement).focus();
+    await input.trigger("focus");
+    await input.trigger("blur");
+    await wrapper.setProps({ items: ["Spain", "Mexico"] });
+    await wrapper.setProps({ loading: false });
+    await nextTick();
+
+    expect(input.attributes("aria-expanded")).toBe("false");
+    expect(wrapper.find(".e-select__menu").exists()).toBe(false);
+  });
+
+  it("emits focus and blur events from the input", async () => {
+    const wrapper = mountSelect();
+    await nextTick();
+
+    const input = wrapper.get('input[role="combobox"]');
+
+    await input.trigger("focus");
+    await input.trigger("blur");
+
+    const focusEvents = wrapper.emitted("focus");
+    const blurEvents = wrapper.emitted("blur");
+
+    expect(focusEvents).toBeTruthy();
+    expect(blurEvents).toBeTruthy();
+    expect(focusEvents).toHaveLength(1);
+    expect(blurEvents).toHaveLength(1);
+    expect(focusEvents?.[0]?.[0]).toBeInstanceOf(FocusEvent);
+    expect(blurEvents?.[0]?.[0]).toBeInstanceOf(FocusEvent);
+  });
+
   it("updates search and keeps the menu open in autocomplete mode", async () => {
     const wrapper = mountSelect({ autocomplete: true, multiple: true });
     await nextTick();
