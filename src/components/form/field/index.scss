@@ -30,6 +30,8 @@
     --field-state-border-width: var(--e-field-border-width);
     --field-state-border-color: var(--e-color-border);
     --field-layout-gap: 0.75rem;
+    --field-frame-padding-inline-start: var(--field-layout-gap);
+    --field-frame-padding-inline-end: var(--field-layout-gap);
     --field-control-ripple-display: var(--e-field-control-ripple-display, block);
     --control-size: var(--e-field-control-size);
 
@@ -367,9 +369,8 @@
 
         border-top-left-radius: var(--e-field-border-radius);
         border-top-right-radius: var(--e-field-border-radius);
-
-
-        padding-inline: var(--field-layout-gap);
+    padding-inline-start: var(--field-frame-padding-inline-start);
+    padding-inline-end: var(--field-frame-padding-inline-end);
 
 
         input,

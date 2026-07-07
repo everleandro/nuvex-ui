@@ -5,7 +5,7 @@
         </template>
 
         <template #append-inner>
-            <ButtonClear :icon="iconClear" :show="canClear" @clear="clear" />
+            <ButtonClear v-if="canClear" :icon="iconClear" :show="canClear" @clear="clear" />
             <slot name="append-inner"></slot>
         </template>
 

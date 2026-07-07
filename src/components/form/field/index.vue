@@ -6,11 +6,11 @@
             </div>
             <slot v-if="hasPrependSlot" name="prepend"></slot>
         </div>
-
         <div ref="frameEl" :class="[
             'e-field__frame',
             {
-                'e-field__frame--no-prepend-inner': !hasPrependInnerContent,
+                'e-field__frame--no-prepend': !hasPrependContent,
+                'e-field__frame--no-append-inner': !hasAppendInnerContent,
             },
         ]" @mouseenter="handleHover(true)" @mouseleave="handleHover(false)" @mousedown="handleFrameMousedown"
             @click="handleFrameClick">
@@ -65,7 +65,6 @@ const emit = defineEmits<{
 
 const {
     uid,
-    frameEl,
     dirty,
     hasError,
     rootClass,

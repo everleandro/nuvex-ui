@@ -7,6 +7,7 @@ const fieldPropKeys = [
   "appendInnerIcon",
   "color",
   "cols",
+  "clearable",
   "dense",
   "detail",
   "detailErrors",

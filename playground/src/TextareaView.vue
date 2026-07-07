@@ -20,6 +20,19 @@
         label-behavior="floating"
       />
     </article>
+    <article class="textarea-demo">
+      <h3>rows-1</h3>
+      <p class="textarea-demo__caption">Caso basico con rows 1</p>
+
+      <ETextarea
+        v-model="bio"
+        label="Short bio"
+        rows="1"
+        detail="Tell us about your role and experience"
+        :append-inner-icon="iconFactory.history"
+        placeholder="I am a frontend engineer focused on design systems..."
+      />
+    </article>
 
     <article class="textarea-demo">
       <h3>Counter and limit</h3>
