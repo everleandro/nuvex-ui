@@ -12,16 +12,29 @@
     --e-field-label-line-height: var(--e-typography-label-line-height-md, 1rem);
     --field-center-y: calc(var(--field-layout-active-height) / 2);
     --field-input-center-y: var(--field-center-y);
+    --field-label-anchor-y: var(--field-content-anchor-y);
+    --field-content-anchor-y: var(--field-input-center-y);
+    --field-control-center-y: var(--field-center-y);
     --field-outer-affix-size: var(--e-icon-size-default, 24px);
     --field-inner-affix-size: var(--e-icon-size-default, 24px);
-    --field-label-top-y: #{field-top-from-center(var(--field-center-y), var(--e-field-label-line-height))};
-    --field-input-top-y: #{field-top-from-center(var(--field-input-center-y), var(--e-field-input-line-height))};
+    --field-prepend-affix-size: var(--field-outer-affix-size);
+    --field-append-affix-size: var(--field-outer-affix-size);
+    --field-prepend-inner-affix-size: var(--field-inner-affix-size);
+    --field-append-inner-affix-size: var(--field-inner-affix-size);
+    --field-outer-affix-anchor-y: var(--field-control-center-y);
+    --field-inner-affix-anchor-y: var(--field-content-anchor-y);
+    --field-label-top-y: #{field-top-from-center(var(--field-label-anchor-y), var(--e-field-label-line-height))};
+    --field-input-top-y: #{field-top-from-center(var(--field-content-anchor-y), var(--e-field-input-line-height))};
     --field-slot-content-height: var(--e-field-input-line-height);
-    --field-slot-top-y: #{field-top-from-center(var(--field-input-center-y), var(--field-slot-content-height))};
+    --field-slot-top-y: #{field-top-from-center(var(--field-content-anchor-y), var(--field-slot-content-height))};
     --field-slot-bottom-rest-y: calc(var(--field-layout-active-height) - var(--field-slot-top-y) - var(--field-slot-content-height));
     --field-slot-bottom-y: max(var(--e-field-slot-padding-base), var(--field-slot-bottom-rest-y));
-    --field-outer-affix-top-y: #{field-top-from-center(var(--field-center-y), var(--field-outer-affix-size))};
-    --field-inner-affix-top-y: #{field-top-from-center(var(--field-input-center-y), var(--field-inner-affix-size))};
+    --field-outer-affix-top-y: #{field-top-from-center(var(--field-outer-affix-anchor-y), var(--field-outer-affix-size))};
+    --field-inner-affix-top-y: #{field-top-from-center(var(--field-inner-affix-anchor-y), var(--field-inner-affix-size))};
+    --field-prepend-affix-top-y: #{field-top-from-center(var(--field-outer-affix-anchor-y), var(--field-prepend-affix-size))};
+    --field-append-affix-top-y: #{field-top-from-center(var(--field-outer-affix-anchor-y), var(--field-append-affix-size))};
+    --field-prepend-inner-affix-top-y: #{field-top-from-center(var(--field-inner-affix-anchor-y), var(--field-prepend-inner-affix-size))};
+    --field-append-inner-affix-top-y: #{field-top-from-center(var(--field-inner-affix-anchor-y), var(--field-append-inner-affix-size))};
     --field-label-state-y: var(--field-label-top-y);
     --field-label-state-translate-y: 0;
     --field-label-state-scale: 1;
@@ -241,11 +254,13 @@
     &__prepend {
         grid-column: 1;
         grid-row: 1;
+        padding-top: var(--field-prepend-affix-top-y);
     }
 
     &__append {
         grid-column: 3;
         grid-row: 1;
+        padding-top: var(--field-append-affix-top-y);
     }
 
     &__prepend-inner,
@@ -266,6 +281,7 @@
     &__prepend-inner {
         grid-area: prepend-inner;
         margin-right: auto;
+        padding-top: var(--field-prepend-inner-affix-top-y);
         padding-right: var(--field-layout-gap);
 
     }
@@ -273,6 +289,14 @@
     &__append-inner {
         grid-area: append-inner;
         margin-left: auto;
+        padding-top: var(--field-append-inner-affix-top-y);
+    }
+
+    &__affix-content {
+        display: inline-flex;
+        align-items: inherit;
+        gap: inherit;
+        min-width: 0;
     }
 
     &__prefix {
@@ -432,6 +456,7 @@
     &--label-floating {
         --field-layout-active-height: var(--e-field-height-default-with-label-floating);
         --field-input-center-y: calc((var(--e-field-label-float-scale) * var(--e-field-label-line-height)) + var(--e-field-label-float-y) + var(--e-field-slot-padding-base) + (var(--e-field-input-line-height) / 2));
+        --field-label-top-y: #{field-top-from-center(var(--field-control-center-y), var(--e-field-label-line-height))};
         --field-label-state-translate-y: 0;
         --field-label-state-scale: 1;
 
