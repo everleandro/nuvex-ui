@@ -50,6 +50,11 @@ export const navigationGroups = [
         to: "/components/radio",
       },
       {
+        id: "components-field-alignment",
+        title: "Field Alignment",
+        to: "/components/field-alignment",
+      },
+      {
         id: "components-switch",
         title: "Switch",
         to: "/components/switch",

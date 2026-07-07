@@ -7,6 +7,10 @@ import FormView from "./FormView.vue";
 import SelectView from "./SelectView.vue";
 import TextfieldView from "./TextfieldView.vue";
 import TextareaView from "./TextareaView.vue";
+import CheckboxView from "./CheckboxView.vue";
+import RadioView from "./RadioView.vue";
+import FieldAlignmentMigrationView from "./FieldAlignmentMigrationView.vue";
+import SwitchView from "./SwitchView.vue";
 import { navigationGroups } from "./navigation";
 
 const routeComponentById = {
@@ -16,6 +20,10 @@ const routeComponentById = {
   "components-select": SelectView,
   "components-textfield": TextfieldView,
   "components-textarea": TextareaView,
+  "components-checkbox": CheckboxView,
+  "components-radio": RadioView,
+  "components-field-alignment": FieldAlignmentMigrationView,
+  "components-switch": SwitchView,
   "components-expansion-panels": ExpansionPanelsView,
 };
 
