@@ -13,8 +13,7 @@
             <p class="select-demo__caption"></p>
 
             <ECard title="Interactive controls"
-                subtitle="Ajusta props comunes en vivo para revisar comportamiento base." color="green-100"
-                elevation="sm">
+                subtitle="Ajusta props comunes en vivo para revisar comportamiento base." elevation="sm">
                 <div class="select-controls">
                     <ESelect v-model="playgroundValue" :items="assignees" item-text="name" item-value="id"
                         suffix="Assignee" prefix="User" :label="playgroundLabel" :placeholder="playgroundPlaceholder"
@@ -65,7 +64,13 @@
             <h3>Multiple and chips</h3>
             <p class="select-demo__caption">Patron para tags y seleccion multiple.</p>
             <EForm>
-                <ESelect v-model="selectedTags" lg="6" :items="tagItems" label="Tags" multiple chip clearable />
+                <ESelect v-model="selectedTags" lg="6" :items="tagItems" label="Tags" clearable multiple>
+                    <template #selection="{ selection, attrs }">
+                        <EChip v-bind="attrs" prepend-avatar="https://cdn.vuetifyjs.com/images/john-smirk.png">
+                            test
+                        </EChip>
+                    </template>
+                </ESelect>
                 <ESelect v-model="singleChip" lg="6" :items="statusItems" label="Single chip" chip chip-closable
                     clearable />
             </EForm>

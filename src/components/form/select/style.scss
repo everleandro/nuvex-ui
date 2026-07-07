@@ -2,6 +2,7 @@
   --local-field-line-z-index: 9;
   --selection-placeholder-opacity: 1;
   --e-chip-height-default: var(--e-field-chip-height);
+  --field-slot-content-height: var(--e-select-selection-content-height, var(--e-field-input-line-height));
   font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
 
   .flip-icon {
@@ -82,7 +83,7 @@
   }
 
   &--chip {
-    --field-slot-content-height: var(--e-chip-height-default);
+    --field-slot-content-height: var(--e-select-selection-content-height, var(--e-chip-height-default));
   }
 
   &--autocomplete {

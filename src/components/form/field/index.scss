@@ -455,7 +455,7 @@
 
     &--label-floating {
         --field-layout-active-height: var(--e-field-height-default-with-label-floating);
-        --field-input-center-y: calc((var(--e-field-label-float-scale) * var(--e-field-label-line-height)) + var(--e-field-label-float-y) + var(--e-field-slot-padding-base) + (var(--e-field-input-line-height) / 2));
+        --field-input-center-y: calc((var(--e-field-label-float-scale) * var(--e-field-label-line-height)) + var(--e-field-label-float-y) + var(--e-field-slot-padding-base) + (var(--field-slot-content-height) / 2));
         --field-label-top-y: #{field-top-from-center(var(--field-control-center-y), var(--e-field-label-line-height))};
         --field-label-state-translate-y: 0;
         --field-label-state-scale: 1;

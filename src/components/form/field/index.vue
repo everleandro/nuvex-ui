@@ -85,6 +85,7 @@ const appendInnerAffixEl = ref<HTMLElement | null>(null);
 let affixResizeObserver: ResizeObserver | undefined;
 
 const {
+    frameEl,
     uid,
     dirty,
     hasError,

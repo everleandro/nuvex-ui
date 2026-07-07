@@ -30,37 +30,45 @@
         {{ prefix }}
       </div>
 
-      <div :class="['e-select__selections', slotClass]" @mousedown="handleSelectInteractionIntent">
+      <div ref="selectionsEl" :class="['e-select__selections', slotClass]" @mousedown="handleSelectInteractionIntent">
         <div v-if="showPlaceholderSelection" class="e-select__selection" :style="selectionStyle">
-          <span class="e-select__selection-placeholder">
-            {{ props.placeholder }}
-          </span>
+          <div class="e-select__selection-content">
+            <span class="e-select__selection-placeholder">
+              {{ props.placeholder }}
+            </span>
+          </div>
         </div>
 
         <template v-else-if="multiple && chip">
           <div v-for="(itemValue, index) in selectedItems" :key="index" class="e-select__selection"
             :style="selectionStyle">
-            <slot name="selection" :selection="selectionItem(itemValue)" :attrs="selectionAttrs(itemValue)">
-              <EChip v-if="chip" v-bind="selectionAttrs(itemValue)" :color="color" closable>
-                {{ selectedText(itemValue) }}
-              </EChip>
-            </slot>
+            <div class="e-select__selection-content">
+              <slot name="selection" :selection="selectionItem(itemValue)" :attrs="selectionAttrs(itemValue)">
+                <EChip v-if="chip" v-bind="selectionAttrs(itemValue)" :color="color" closable>
+                  {{ selectedText(itemValue) }}
+                </EChip>
+              </slot>
+            </div>
           </div>
         </template>
 
         <div v-else-if="multiple" class="e-select__selection e-select__selection--text" :style="selectionStyle">
-          <span class="e-select__selection-text" :title="multipleSelectedText">
-            {{ multipleSelectedText }}
-          </span>
+          <div class="e-select__selection-content">
+            <span class="e-select__selection-text" :title="multipleSelectedText">
+              {{ multipleSelectedText }}
+            </span>
+          </div>
         </div>
 
         <div v-else-if="!empty" class="e-select__selection" :style="selectionStyle">
-          <slot name="selection" :selection="selectionItem()" :attrs="selectionAttrs()">
-            <EChip v-if="chip" v-bind="selectionAttrs()" :color="color" :closable="chipClosable">
-              {{ selectedText() }}
-            </EChip>
-            <span v-else>{{ selectedText() }}</span>
-          </slot>
+          <div class="e-select__selection-content">
+            <slot name="selection" :selection="selectionItem()" :attrs="selectionAttrs()">
+              <EChip v-if="chip" v-bind="selectionAttrs()" :color="color" :closable="chipClosable">
+                {{ selectedText() }}
+              </EChip>
+              <span v-else>{{ selectedText() }}</span>
+            </slot>
+          </div>
         </div>
 
         <input ref="input" :value="searchValue" :id="inputId" :readonly="inputReadonly" :disabled="isDisabled"
@@ -117,7 +125,7 @@ import { getNextTabbable, getPrevTabbable } from "@/utils/field";
 import { useUtils } from "@/composables/utils";
 import { useFieldIntegration } from "@/composables/field-integration";
 
-import { computed, nextTick, ref, useSlots, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useSlots, watch } from "vue";
 import ButtonClear from "@/components/form/button-clear/index.vue";
 import EChip from "@/components/chip/index.vue";
 import EField from "@/components/form/field/index.vue";
@@ -149,10 +157,13 @@ const { blur, field, fieldProps, focus, passThroughSlots } = useFieldIntegration
 // Local reactive state.
 const { isObject } = useUtils();
 const input = ref<HTMLInputElement | null>(null);
+const selectionsEl = ref<HTMLElement | null>(null);
 const isMenuOpen = ref<boolean>(false);
 const selectionCache = ref<Record<string, SelectItemType>>({});
 const selectedChipIndex = ref<number>(-1);
 const pendingOpenAfterLoading = ref<boolean>(false);
+const SELECTION_CONTENT_HEIGHT_VAR = "--e-select-selection-content-height";
+let selectionResizeObserver: ResizeObserver | undefined;
 
 // Two-way bindings.
 const searchValue = computed<string | number>({
@@ -301,6 +312,8 @@ const selectClass = computed(() => {
   return result;
 });
 
+const hasSelectionSlot = computed(() => Boolean(slots.selection));
+
 const selectionStyle = computed((): Record<string, string> => {
   return { textAlign: props.inputAlign };
 });
@@ -309,6 +322,76 @@ const isSearchEmpty = computed((): boolean => {
   return `${searchValue.value ?? ""}`.length === 0;
 });
 const currentFieldIdBase = computed((): string => input.value?.dataset.fieldIdBase ?? "");
+
+const getSelectRootElement = (): HTMLElement | null => {
+  return input.value?.closest(".e-select") as HTMLElement | null;
+};
+
+const setSelectionHeightVar = (value: number): void => {
+  const root = getSelectRootElement();
+
+  if (!root) return;
+
+  if (value > 0) {
+    root.style.setProperty(SELECTION_CONTENT_HEIGHT_VAR, `${value}px`);
+  } else {
+    root.style.removeProperty(SELECTION_CONTENT_HEIGHT_VAR);
+  }
+};
+
+const getSelectionContentElements = (): Array<HTMLElement> => {
+  if (!selectionsEl.value) return [];
+
+  return Array.from(
+    selectionsEl.value.querySelectorAll<HTMLElement>(".e-select__selection-content"),
+  );
+};
+
+const measureSelectionContentHeight = (): number => {
+  const elements = getSelectionContentElements();
+  if (!elements.length) return 0;
+
+  return elements.reduce((maxHeight, element) => {
+    const rect = element.getBoundingClientRect();
+    const nextHeight = Number.isFinite(rect.height) ? rect.height : 0;
+
+    return Math.max(maxHeight, nextHeight);
+  }, 0);
+};
+
+const syncSelectionContentHeight = (): void => {
+  if (!hasSelectionSlot.value || empty.value) {
+    setSelectionHeightVar(0);
+    return;
+  }
+
+  setSelectionHeightVar(measureSelectionContentHeight());
+};
+
+const bindSelectionContentMeasurement = (): void => {
+  selectionResizeObserver?.disconnect();
+
+  if (!hasSelectionSlot.value || typeof ResizeObserver === "undefined") {
+    syncSelectionContentHeight();
+    return;
+  }
+
+  const elements = getSelectionContentElements();
+  if (!elements.length) {
+    syncSelectionContentHeight();
+    return;
+  }
+
+  selectionResizeObserver = new ResizeObserver(() => {
+    syncSelectionContentHeight();
+  });
+
+  elements.forEach((element) => {
+    selectionResizeObserver?.observe(element);
+  });
+
+  syncSelectionContentHeight();
+};
 
 // Selection lookup and matching.
 const syncSelectionCache = (items: Array<SelectItemType>): void => {
@@ -721,6 +804,9 @@ watch(
   (items) => {
     syncSelectionCache(items);
     tryOpenMenuAfterLoading();
+    void nextTick(() => {
+      bindSelectionContentMeasurement();
+    });
   },
   { deep: true },
 );
@@ -744,12 +830,35 @@ watch(
 watch(selectedItems, (items) => {
   if (items.length === 0) {
     clearSelectedChip();
-    return;
-  }
-
-  if (selectedChipIndex.value >= items.length) {
+  } else if (selectedChipIndex.value >= items.length) {
     selectedChipIndex.value = items.length - 1;
   }
+
+  void nextTick(() => {
+    bindSelectionContentMeasurement();
+  });
+});
+
+watch(
+  [hasSelectionSlot, empty],
+  () => {
+    void nextTick(() => {
+      bindSelectionContentMeasurement();
+    });
+  },
+  { immediate: true },
+);
+
+onMounted(() => {
+  void nextTick(() => {
+    bindSelectionContentMeasurement();
+  });
+});
+
+onBeforeUnmount(() => {
+  selectionResizeObserver?.disconnect();
+  selectionResizeObserver = undefined;
+  setSelectionHeightVar(0);
 });
 
 // Keyboard interaction.

@@ -9,6 +9,26 @@
         </header>
 
         <article class="textfield-demo">
+            <h3>Slots</h3>
+            <p class="textfield-demo__caption">Diferentes combinaciones de slots para iconos y prefijos/sufijos.</p>
+
+            <ETextfield v-model="slotsModel" label="Search" placeholder="Search components" clearable>
+                <template #prepend>
+                    <EAvatar :icon="iconFactory.account" size="small" color="secondary" />
+                </template>
+                <template #prepend-inner>
+                    <EIcon :icon="iconFactory.account" color="blue"/>
+                </template>
+                <template #append-inner>
+                    <EButton :icon="iconFactory.account" size="small" text />
+                </template>
+                <template #append>
+                    <EButton :icon="iconFactory.account" tonal />
+                </template>
+            </ETextfield>
+        </article>
+
+        <article class="textfield-demo">
             <h3>Basic and label behavior</h3>
             <p class="textfield-demo__caption">Comparativa entre inline y floating para revisar primera linea.</p>
 
@@ -89,6 +109,7 @@ import { ref } from "vue";
 import iconFactory from "./icons.ts";
 
 const fullName = ref("Ada Lovelace");
+const slotsModel = ref("");
 const jobTitle = ref("Design Systems Engineer");
 const budget = ref("1250");
 const weight = ref("8.5");

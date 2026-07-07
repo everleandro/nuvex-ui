@@ -72,6 +72,82 @@
     </article>
 
     <article class="alignment-panel">
+      <h3>Custom Affix Stress</h3>
+      <p class="alignment-panel__caption">
+        Casos de stress para validar alineacion con contenido custom alto en prepend/append y prepend-inner/append-inner.
+      </p>
+
+      <EForm>
+        <ETextfield
+          v-model="stressTextfield"
+          label="Search"
+          detail="Textfield custom affix stress"
+          label-behavior="floating"
+          clearable
+          lg="4"
+        >
+          <template #prepend>
+            <span class="stress-pill stress-pill--outer">Team</span>
+          </template>
+
+          <template #prepend-inner>
+            <span class="stress-pill stress-pill--inner">Aa</span>
+          </template>
+
+          <template #append-inner>
+            <EButton size="small" text>Go</EButton>
+          </template>
+
+          <template #append>
+            <EButton size="small" tonal>Action</EButton>
+          </template>
+        </ETextfield>
+
+        <ETextarea
+          v-model="stressTextarea"
+          label="Notes"
+          rows="2"
+          max-rows="6"
+          auto-grow
+          detail="Textarea custom affix stress"
+          label-behavior="floating"
+          lg="4"
+        >
+          <template #prepend-inner>
+            <span class="stress-pill stress-pill--inner">Tx</span>
+          </template>
+
+          <template #append-inner>
+            <EButton size="small" text>AI</EButton>
+          </template>
+
+          <template #append>
+            <span class="stress-pill stress-pill--outer">Draft</span>
+          </template>
+        </ETextarea>
+
+        <ESelect
+          v-model="stressSelect"
+          :items="countries"
+          item-title="label"
+          item-value="value"
+          label="Country"
+          detail="Select custom affix stress"
+          clearable
+          lg="4"
+        >
+          <template #prepend-inner>
+            <span class="stress-pill stress-pill--inner">Geo</span>
+          </template>
+
+          <template #append>
+            <span class="stress-pill stress-pill--outer">Region</span>
+          </template>
+        </ESelect>
+      </EForm>
+    </article>
+
+    <article class="alignment-panel">
       <h3>Selection Controls</h3>
       <EForm>
         <ECheckbox
@@ -101,6 +177,9 @@ const country = ref(null);
 const tags = ref(["api"]);
 const acceptTerms = ref(false);
 const tier = ref("pro");
+const stressTextfield = ref("Alignment test");
+const stressTextarea = ref("Linea 1\nLinea 2");
+const stressSelect = ref("mx");
 
 const countries = [
   { label: "Mexico", value: "mx" },
@@ -149,6 +228,34 @@ const tagItems = [
   gap: 12px;
   padding: 16px;
   border-radius: 12px;
+}
+
+.alignment-panel__caption {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.82;
+}
+
+.stress-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  border-radius: 999px;
+  padding: 0 10px;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.stress-pill--inner {
+  background: color-mix(in srgb, var(--e-color-primary) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--e-color-primary) 35%, transparent);
+}
+
+.stress-pill--outer {
+  background: color-mix(in srgb, var(--e-color-secondary) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--e-color-secondary) 35%, transparent);
 }
 
 .alignment-panel h3 {
