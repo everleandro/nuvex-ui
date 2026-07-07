@@ -16,6 +16,10 @@
     --field-inner-affix-size: var(--e-icon-size-default, 24px);
     --field-label-top-y: #{field-top-from-center(var(--field-center-y), var(--e-field-label-line-height))};
     --field-input-top-y: #{field-top-from-center(var(--field-input-center-y), var(--e-field-input-line-height))};
+    --field-slot-content-height: var(--e-field-input-line-height);
+    --field-slot-top-y: #{field-top-from-center(var(--field-input-center-y), var(--field-slot-content-height))};
+    --field-slot-bottom-rest-y: calc(var(--field-layout-active-height) - var(--field-slot-top-y) - var(--field-slot-content-height));
+    --field-slot-bottom-y: max(var(--e-field-slot-padding-base), var(--field-slot-bottom-rest-y));
     --field-outer-affix-top-y: #{field-top-from-center(var(--field-center-y), var(--field-outer-affix-size))};
     --field-inner-affix-top-y: #{field-top-from-center(var(--field-input-center-y), var(--field-inner-affix-size))};
     --field-label-state-y: var(--field-label-top-y);
@@ -333,12 +337,13 @@
     }
 
     &__slot {
-        // padding: var(--field-input-top-y) var(--field-layout-control-padding-inline) var(--e-field-slot-padding-base) 0;
-        padding: var(--field-input-top-y) 0 var(--e-field-slot-padding-base) 0;
+        // padding: var(--field-slot-top-y) var(--field-layout-control-padding-inline) var(--field-slot-bottom-y) 0;
+        padding: var(--field-slot-top-y) 0 var(--field-slot-bottom-y) 0;
         align-self: flex-start;
         background: transparent;
         border: 0;
         box-sizing: border-box;
+        height: 100%;
         display: block;
         line-height: var(--e-field-input-line-height);
         width: 100%;
@@ -425,12 +430,7 @@
 
     &--label-floating {
         --field-layout-active-height: var(--e-field-height-default-with-label-floating);
-        --field-input-center-y: calc(
-            (var(--e-field-label-float-scale) * var(--e-field-label-line-height)) +
-            var(--e-field-label-float-y) +
-            var(--e-field-slot-padding-base) +
-            (var(--e-field-input-line-height) / 2)
-        );
+        --field-input-center-y: calc((var(--e-field-label-float-scale) * var(--e-field-label-line-height)) + var(--e-field-label-float-y) + var(--e-field-slot-padding-base) + (var(--e-field-input-line-height) / 2));
         --field-label-state-translate-y: 0;
         --field-label-state-scale: 1;
 

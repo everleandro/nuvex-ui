@@ -38,17 +38,10 @@
         </div>
 
         <template v-else-if="multiple && chip">
-          <div
-            v-for="(itemValue, index) in selectedItems"
-            :key="index"
-            class="e-select__selection"
+          <div v-for="(itemValue, index) in selectedItems" :key="index" class="e-select__selection"
             :style="selectionStyle">
             <slot name="selection" :selection="selectionItem(itemValue)" :attrs="selectionAttrs(itemValue)">
-              <EChip
-                v-if="chip"
-                v-bind="selectionAttrs(itemValue)"
-                :color="color"
-                closable>
+              <EChip v-if="chip" v-bind="selectionAttrs(itemValue)" :color="color" closable>
                 {{ selectedText(itemValue) }}
               </EChip>
             </slot>
@@ -70,30 +63,13 @@
           </slot>
         </div>
 
-        <input
-          ref="input"
-          :value="searchValue"
-          :id="inputId"
-          :readonly="inputReadonly"
-          :disabled="isDisabled"
-          :data-field-id-base="fieldIdBase"
-          class="e-select__input input--text"
-          type="text"
-          role="combobox"
-          :aria-autocomplete="props.autocomplete ? 'list' : 'none'"
-          :aria-controls="getListboxId(fieldIdBase)"
-          :aria-expanded="isMenuOpen"
-          :aria-invalid="hasError"
-          :aria-describedby="detailsId"
-          :aria-disabled="isDisabled"
-          :aria-readonly="inputReadonly"
-          :placeholder="props.placeholder"
-          autocomplete="off"
-          @mousedown="handleSelectInteractionIntent"
-          @blur="(event) => handleInputBlur(event, handleBlur)"
-          @focus="(event) => handleInputFocus(event, handleFocus)"
-          @input="handleInput"
-          @keydown="handleInputKeydown" />
+        <input ref="input" :value="searchValue" :id="inputId" :readonly="inputReadonly" :disabled="isDisabled"
+          :data-field-id-base="fieldIdBase" class="e-select__input input--text" type="text" role="combobox"
+          :aria-autocomplete="props.autocomplete ? 'list' : 'none'" :aria-controls="getListboxId(fieldIdBase)"
+          :aria-expanded="isMenuOpen" :aria-invalid="hasError" :aria-describedby="detailsId" :aria-disabled="isDisabled"
+            :aria-readonly="inputReadonly" :placeholder="props.placeholder" autocomplete="off"
+          @mousedown="handleSelectInteractionIntent" @blur="(event) => handleInputBlur(event, handleBlur)"
+          @focus="(event) => handleInputFocus(event, handleFocus)" @input="handleInput" @keydown="handleInputKeydown" />
       </div>
 
       <div v-if="suffix" class="e-select__suffix e-field__suffix" aria-hidden="true">
@@ -102,35 +78,17 @@
 
       <EProgressLinear v-if="loading" :color="color" :indeterminate="loading" height="3" />
 
-      <EMenu
-        :activator="frameEl"
-        v-model="isMenuOpen"
-        full-width
-        hold-focus
-        check-offset
-        :color="props.menuColor ?? color"
-        :close-on-content-click="false"
-        aria-haspopup="listbox"
-        :aria-controls="getListboxId(fieldIdBase)"
-        content-role="presentation">
-        <div
-          v-focus-outside="{ handler: handleMenuFocusOutside, include: frameEl, enabled: isMenuOpen }"
+      <EMenu :activator="frameEl" v-model="isMenuOpen" full-width hold-focus check-offset
+        :color="props.menuColor ?? color" :close-on-content-click="false" aria-haspopup="listbox"
+        :aria-controls="getListboxId(fieldIdBase)" content-role="presentation">
+        <div v-focus-outside="{ handler: handleMenuFocusOutside, include: frameEl, enabled: isMenuOpen }"
           class="e-select__menu">
-          <e-list
-            :id="getListboxId(fieldIdBase)"
-            role="listbox"
-            :model-value="listModel"
-            :aria-label="listAriaLabel"
-            @update:modelValue="handleListModelValueChange"
-            @keydown="handleMenuKeydown">
+          <e-list :id="getListboxId(fieldIdBase)" role="listbox" :model-value="listModel" :aria-label="listAriaLabel"
+            @update:modelValue="handleListModelValueChange" @keydown="handleMenuKeydown">
             <template v-for="(item, index) in items">
               <slot name="item" :attrs="slotItemAttrs(item, index, fieldIdBase)" :item="item">
-                <e-list-item
-                  v-bind="slotItemAttrs(item, index, fieldIdBase)"
-                  active-class="e-list-item--active"
-                  :isActive="active(item)"
-                  :key="index"
-                  :value="getListItemValue(item)">
+                <e-list-item v-bind="slotItemAttrs(item, index, fieldIdBase)" active-class="e-list-item--active"
+                  :isActive="active(item)" :key="index" :value="getListItemValue(item)">
                   {{ getItemText(item) }}
                 </e-list-item>
               </slot>

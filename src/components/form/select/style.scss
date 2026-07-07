@@ -1,5 +1,6 @@
 .e-select {
   --local-field-line-z-index: 9;
+  --selection-placeholder-opacity: 1;
   --e-chip-height-default: var(--e-field-chip-height);
   font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
 
@@ -8,16 +9,14 @@
   }
 
   &__selections {
-    align-self: center;
+    align-self: flex-start;
     align-items: center;
     color: var(--e-field-select-selection-color, var(--e-contrast-surface-1, rgba(0, 0, 0, 0.87)));
     font-size: var(--e-typography-body-font-size-md, 0.875rem);
     display: flex;
     flex: 1 1 auto;
     flex-wrap: wrap;
-    grid-area: field;
     max-width: 100%;
-    min-height: 100%;
     min-width: 0;
     position: relative;
     width: 100%;
@@ -34,6 +33,14 @@
 
     &-placeholder {
       color: var(--e-field-placeholder-color, var(--input-placeholder));
+      transition: opacity var(--e-field-transition-duration) cubic-bezier(0.25, 0.8, 0.5, 1);
+      opacity: var(--selection-placeholder-opacity);
+    }
+  }
+
+  &.e-field--label-floating:not(.e-field--label-floated) {
+    .e-select__selection-placeholder {
+      --selection-placeholder-opacity: 0;
     }
   }
 
@@ -71,8 +78,11 @@
 
     .e-select__selections {
       gap: 0.25rem;
-      height: 100%;
     }
+  }
+
+  &--chip {
+    --field-slot-content-height: var(--e-chip-height-default);
   }
 
   &--autocomplete {
@@ -80,7 +90,7 @@
 
       &:focus,
       &:focus-visible {
-         flex: 1 1 auto;
+        flex: 1 1 auto;
         max-width: unset;
         min-width: min(50%, 30rem);
         pointer-events: all;

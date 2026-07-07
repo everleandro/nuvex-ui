@@ -20,7 +20,7 @@
                 <ETextfield v-model="jobTitle" label="Job title" detail="Floating label behavior" lg="6"
                     suffix="Engineer" :prepend-icon="iconFactory.history" :prepend-inner-icon="iconFactory.history"
                     :append-icon="iconFactory.history" :append-inner-icon="iconFactory.history"
-                    label-behavior="floating" clearable prefix="Dr." />
+                    label-behavior="floating" clearable prefix="Dr." placeholder="Enter your job title" />
             </EForm>
         </article>
 

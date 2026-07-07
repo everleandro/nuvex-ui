@@ -20,7 +20,9 @@
                         suffix="Assignee" prefix="User" :label="playgroundLabel" :placeholder="playgroundPlaceholder"
                         :color="playgroundColor" retain-color :outlined="playgroundOptions.outlined"
                         :clearable="playgroundOptions.clearable"
-                        :label-behavior="playgroundOptions.floatingLabel ? 'float' : 'default'"
+                        :label-behavior="playgroundOptions.floatingLabel ? 'floating' : 'default'"
+                        :prepend-icon="iconFactory.history" :prepend-inner-icon="iconFactory.history"
+                        :append-icon="iconFactory.history" :append-inner-icon="iconFactory.email"
                         :disabled="playgroundOptions.disabled" :readonly="playgroundOptions.readonly" />
                     <EForm class="select-controls__form">
                         <ESelect v-model="playgroundColor" lg="6" :items="colors" label="Color" clearable />
@@ -137,6 +139,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import iconFactory from "./icons.ts";
 
 const statusItems = ["Draft", "In review", "Published", "Archived"];
 const tagItems = ["UI", "Accessibility", "API", "Performance", "Docs"];
