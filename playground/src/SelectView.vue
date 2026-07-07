@@ -17,8 +17,10 @@
                 elevation="sm">
                 <div class="select-controls">
                     <ESelect v-model="playgroundValue" :items="assignees" item-text="name" item-value="id"
-                        :label="playgroundLabel" :placeholder="playgroundPlaceholder" :color="playgroundColor"
-                        retain-color :outlined="playgroundOptions.outlined" :clearable="playgroundOptions.clearable" :label-behavior="playgroundOptions.floatingLabel? 'float' : 'default'"
+                        suffix="Assignee" prefix="User" :label="playgroundLabel" :placeholder="playgroundPlaceholder"
+                        :color="playgroundColor" retain-color :outlined="playgroundOptions.outlined"
+                        :clearable="playgroundOptions.clearable"
+                        :label-behavior="playgroundOptions.floatingLabel ? 'float' : 'default'"
                         :disabled="playgroundOptions.disabled" :readonly="playgroundOptions.readonly" />
                     <EForm class="select-controls__form">
                         <ESelect v-model="playgroundColor" lg="6" :items="colors" label="Color" clearable />

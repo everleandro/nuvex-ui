@@ -13,11 +13,14 @@
             <p class="textfield-demo__caption">Comparativa entre inline y floating para revisar primera linea.</p>
 
             <EForm>
-                <ETextfield v-model="fullName" label="Full name" detail="Default label behavior" lg="6" clearable />
+                <ETextfield v-model="fullName" label="Full name" detail="Default label behavior" lg="6" clearable
+                    suffix="Engineer" :prepend-icon="iconFactory.history" :prepend-inner-icon="iconFactory.history"
+                    :append-icon="iconFactory.history" :append-inner-icon="iconFactory.history" prefix="Dr." />
 
                 <ETextfield v-model="jobTitle" label="Job title" detail="Floating label behavior" lg="6"
-                    suffix="Engineer" :prepend-icon="iconFactory.history" label-behavior="floating" clearable
-                    prefix="Dr." />
+                    suffix="Engineer" :prepend-icon="iconFactory.history" :prepend-inner-icon="iconFactory.history"
+                    :append-icon="iconFactory.history" :append-inner-icon="iconFactory.history"
+                    label-behavior="floating" clearable prefix="Dr." />
             </EForm>
         </article>
 

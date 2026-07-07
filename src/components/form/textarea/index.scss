@@ -6,9 +6,9 @@
 }
 
 .e-textarea__input {
-    padding-top: var(--field-first-line-start-y);
+    padding-top: var(--field-input-top-y);
     padding-bottom: var(--e-field-slot-padding-base);
-    --e-textarea-mask-first-line-start-y: var(--field-first-line-start-y, var(--field-layout-content-padding-top, 0px));
+    --e-textarea-mask-first-line-start-y: var(--field-input-top-y, var(--field-slot-top-y, 0px));
     --e-textarea-mask-top-start: max(0px, calc(var(--e-textarea-mask-first-line-start-y) - 6px));
     --e-textarea-mask-top-end: calc(var(--e-textarea-mask-first-line-start-y) + var(--e-space-base, 4px));
     --e-textarea-mask-scrollbar-cut: calc(100% - var(--e-textarea-scrollbar-width, 16px));

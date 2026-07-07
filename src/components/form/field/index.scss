@@ -1,17 +1,24 @@
 @use '~/public/styles/_mixins.scss' as *;
 
+@function field-top-from-center($anchor-center-y, $element-height) {
+    @return calc(#{$anchor-center-y} - (#{$element-height} / 2));
+}
+
 
 .e-field {
     --field-layout-active-height: var(--e-field-height);
     --field-layout-control-padding-inline: calc(var(--e-field-slot-padding-base) * 3);
     --e-field-input-line-height: var(--e-typography-body-line-height-md, 1.25rem);
-    --field-reference-line-height: var(--e-typography-label-line-height-md, 1rem);
-    --field-reference-rest-y: calc((var(--field-layout-active-height) - var(--field-reference-line-height)) / 2);
-    --field-first-line-start-y: calc(var(--field-reference-rest-y) + (var(--field-reference-line-height) - var(--e-field-input-line-height)) / 2);
-    --e-field-label-line-height: var(--field-reference-line-height);
-    --field-layout-content-padding-top: var(--e-field-slot-padding-base);
-    --field-layout-label-rest-y: calc((var(--field-layout-active-height) - var(--e-field-label-line-height)) / 2);
-    --field-label-state-y: var(--field-layout-label-rest-y);
+    --e-field-label-line-height: var(--e-typography-label-line-height-md, 1rem);
+    --field-center-y: calc(var(--field-layout-active-height) / 2);
+    --field-input-center-y: var(--field-center-y);
+    --field-outer-affix-size: var(--e-icon-size-default, 24px);
+    --field-inner-affix-size: var(--e-icon-size-default, 24px);
+    --field-label-top-y: #{field-top-from-center(var(--field-center-y), var(--e-field-label-line-height))};
+    --field-input-top-y: #{field-top-from-center(var(--field-input-center-y), var(--e-field-input-line-height))};
+    --field-outer-affix-top-y: #{field-top-from-center(var(--field-center-y), var(--field-outer-affix-size))};
+    --field-inner-affix-top-y: #{field-top-from-center(var(--field-input-center-y), var(--field-inner-affix-size))};
+    --field-label-state-y: var(--field-label-top-y);
     --field-label-state-translate-y: 0;
     --field-label-state-scale: 1;
     --field-state-input-color: var(--e-color-input);
@@ -203,23 +210,26 @@
     &__prefix {
         color: var(--field-state-input-color);
         line-height: var(--e-field-input-line-height);
-        align-self: center;
+        align-self: flex-start;
         cursor: default;
         transition: color var(--e-field-transition-duration) cubic-bezier(0.25, 0.8, 0.5, 1);
         white-space: nowrap;
         padding-right: calc(var(--field-layout-gap) / 2);
-        padding-top: var(--field-layout-content-padding-top);
+        padding-top: var(--field-input-top-y);
     }
 
     &__prepend,
     &__append {
         align-items: flex-start;
+        align-self: flex-start;
         color: currentColor;
         display: inline-flex;
         flex: 0 0 auto;
-        align-self: stretch;
         height: auto;
+        line-height: 1;
         min-width: 0;
+        padding-top: var(--field-outer-affix-top-y);
+        @include prefix(user-select, none);
     }
 
     &__prepend {
@@ -235,10 +245,13 @@
     &__prepend-inner,
     &__append-inner {
         align-items: center;
+        align-self: flex-start;
         color: currentColor;
         display: inline-flex;
         flex: 0 0 auto;
+        gap: var(--e-space-base);
         line-height: 1;
+        padding-top: var(--field-inner-affix-top-y);
         position: relative;
         z-index: 1;
         @include prefix(user-select, none);
@@ -272,7 +285,7 @@
         font-weight: var(--e-typography-label-font-weight-md, 500);
         letter-spacing: var(--e-typography-label-letter-spacing-md, 0.02em);
         line-height: var(--e-field-label-line-height);
-        margin-top: var(--field-layout-label-rest-y);
+        margin-top: var(--field-label-top-y);
         padding-right: var(--field-layout-gap);
         margin-bottom: 0;
         align-self: var(--label-align-self, flex-start);
@@ -286,7 +299,6 @@
             transform var(--e-field-transition-duration) cubic-bezier(0.4, 0, 0.2, 1),
             opacity var(--e-field-transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
         color: var(--e-field-label, var(--e-color-label));
-        white-space: nowrap;
         z-index: 1;
     }
 
@@ -298,15 +310,6 @@
     &__append {
         margin-left: auto;
         padding-left: 0.75rem;
-    }
-
-    &__prepend,
-    &__append {
-        align-self: center;
-        display: inline-flex;
-        line-height: 1;
-        color: currentColor;
-        @include prefix(user-select, none);
     }
 
     &__details {
@@ -330,8 +333,9 @@
     }
 
     &__slot {
-        // padding: var(--field-layout-content-padding-top) var(--field-layout-control-padding-inline) var(--e-field-slot-padding-base) 0;
-        padding: var(--field-layout-content-padding-top) 0 var(--e-field-slot-padding-base) 0;
+        // padding: var(--field-input-top-y) var(--field-layout-control-padding-inline) var(--e-field-slot-padding-base) 0;
+        padding: var(--field-input-top-y) 0 var(--e-field-slot-padding-base) 0;
+        align-self: flex-start;
         background: transparent;
         border: 0;
         box-sizing: border-box;
@@ -421,18 +425,17 @@
 
     &--label-floating {
         --field-layout-active-height: var(--e-field-height-default-with-label-floating);
-        --field-first-line-start-y: calc(var(--e-field-label-float-scale) * var(--e-field-label-line-height) + var(--e-field-label-float-y) + var(--e-field-slot-padding-base));
-        --field-layout-content-padding-top: var(--field-first-line-start-y);
+        --field-input-center-y: calc(
+            (var(--e-field-label-float-scale) * var(--e-field-label-line-height)) +
+            var(--e-field-label-float-y) +
+            var(--e-field-slot-padding-base) +
+            (var(--e-field-input-line-height) / 2)
+        );
         --field-label-state-translate-y: 0;
         --field-label-state-scale: 1;
 
         .e-field__frame {
             min-height: var(--field-layout-active-height);
-        }
-
-        .e-field__suffix,
-        .e-field__prefix {
-            align-self: center;
         }
 
         .e-label--floating {
@@ -453,7 +456,9 @@
         }
 
         .e-field__prefix,
-        .e-field__suffix {
+        .e-field__suffix,
+        .e-field__prepend-inner,
+        .e-field__append-inner {
             opacity: var(--e-field-affix-opacity, 0);
             transition: opacity var(--e-field-transition-duration) cubic-bezier(0.25, 0.8, 0.5, 1);
         }
@@ -462,8 +467,8 @@
 
     &--label-floated {
         --e-field-affix-opacity: 1;
-        --field-label-state-y: var(--e-field-label-float-y);
-        --field-label-state-translate-y: 0;
+        --field-label-state-y: var(--field-label-top-y);
+        --field-label-state-translate-y: calc(var(--e-field-label-float-y) - var(--field-label-top-y));
         --field-label-state-scale: var(--e-field-label-float-scale);
 
         .e-label--floated {

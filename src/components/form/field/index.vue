@@ -46,7 +46,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import EDetails from "@/components/form/details.vue";
 import EIcon from "@/components/icon/index.vue";
 import type { EFieldProps } from "@/types";
