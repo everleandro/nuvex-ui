@@ -39,26 +39,28 @@
           </div>
         </div>
 
-        <template v-else-if="multiple && chip">
-          <div v-for="(itemValue, index) in selectedItems" :key="index" class="e-select__selection"
-            :style="selectionStyle">
+        <template v-else-if="multiple">
+          <template v-if="shouldRenderMultipleSelections">
+            <div v-for="(itemValue, index) in selectedItems" :key="index" class="e-select__selection"
+              :style="selectionStyle">
+              <div class="e-select__selection-content">
+                <slot name="selection" :selection="selectionItem(itemValue)" :attrs="selectionAttrs(itemValue)">
+                  <EChip v-if="chip" v-bind="selectionAttrs(itemValue)" :color="color" closable>
+                    {{ selectedText(itemValue) }}
+                  </EChip>
+                </slot>
+              </div>
+            </div>
+          </template>
+
+          <div v-else class="e-select__selection e-select__selection--text" :style="selectionStyle">
             <div class="e-select__selection-content">
-              <slot name="selection" :selection="selectionItem(itemValue)" :attrs="selectionAttrs(itemValue)">
-                <EChip v-if="chip" v-bind="selectionAttrs(itemValue)" :color="color" closable>
-                  {{ selectedText(itemValue) }}
-                </EChip>
-              </slot>
+              <span class="e-select__selection-text" :title="multipleSelectedText">
+                {{ multipleSelectedText }}
+              </span>
             </div>
           </div>
         </template>
-
-        <div v-else-if="multiple" class="e-select__selection e-select__selection--text" :style="selectionStyle">
-          <div class="e-select__selection-content">
-            <span class="e-select__selection-text" :title="multipleSelectedText">
-              {{ multipleSelectedText }}
-            </span>
-          </div>
-        </div>
 
         <div v-else-if="!empty" class="e-select__selection" :style="selectionStyle">
           <div class="e-select__selection-content">
@@ -313,6 +315,9 @@ const selectClass = computed(() => {
 });
 
 const hasSelectionSlot = computed(() => Boolean(slots.selection));
+const shouldRenderMultipleSelections = computed((): boolean => {
+  return props.multiple && (props.chip || hasSelectionSlot.value);
+});
 
 const selectionStyle = computed((): Record<string, string> => {
   return { textAlign: props.inputAlign };
@@ -742,9 +747,12 @@ const handleMenuKeydown = async (event: KeyboardEvent): Promise<void> => {
 const selectionAttrs = (item?: SelectItemType) => {
   const chipIndex = item ? findSelectedIndex(selectedItems.value, item) : -1;
   const isActiveChip = chipIndex >= 0 ? isSelectedChipIndex(chipIndex) : undefined;
+  const isMultipleSelectionSlot = props.multiple && hasSelectionSlot.value;
 
   return {
-    closable: Boolean(props.chip && (props.chipClosable || props.multiple)),
+    closable: Boolean(
+      (props.chip && (props.chipClosable || props.multiple)) || isMultipleSelectionSlot,
+    ),
     clickable: isActiveChip,
     selected: isActiveChip,
     tabindex: -1,
