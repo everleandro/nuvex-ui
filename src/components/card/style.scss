@@ -1,16 +1,28 @@
 .e-card {
   border-radius: var(--e-border-radius-root, 4px);
-  --card-bg: var(--e-color-surface-base, var(--e-color-surface-1, #ffffff));
-  --card-text: var(--e-contrast-surface-base, var(--e-contrast-surface-1, #000000));
+  --card-local-solid-bg: var(--card-color, var(--e-color-surface-base, var(--e-color-surface-1, #ffffff)));
+  --card-local-text: var(--card-contrast-color, var(--e-contrast-surface-base, var(--e-contrast-surface-1, #000000)));
+  --card-local-accent: var(--card-color, var(--card-local-text, currentColor));
+  --card-local-tonal-opacity: var(--e-interactive-tonal-opacity, 0.08);
   --card-border-color: var(--e-color-border);
   --card-padding: calc(var(--e-space-base, 4px) * 4);
   --card-gap: calc(var(--e-space-base, 4px) * 3);
 
-  background-color: var(--card-bg);
-  color: var(--card-text);
+  background-color: var(--card-local-solid-bg);
+  color: var(--card-local-text);
   display: flex;
   flex-direction: column;
   position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+  }
 
   &--outlined {
     border: thin solid var(--card-border-color);
@@ -20,12 +32,24 @@
     box-shadow: none;
   }
 
+  &--tonal {
+    background-color: transparent;
+    color: var(--card-local-accent);
+    box-shadow: none;
+
+    &::before {
+      opacity: var(--card-local-tonal-opacity);
+    }
+  }
+
   &__main {
     display: flex;
     gap: var(--card-gap);
     flex-direction: column;
     padding: var(--card-padding);
     flex: 1;
+    position: relative;
+    z-index: 1;
   }
 
   &__header {
@@ -69,5 +93,7 @@
   &__footer {
     flex: 1;
     padding: var(--card-padding);
+    position: relative;
+    z-index: 1;
   }
 }

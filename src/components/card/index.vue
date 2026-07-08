@@ -47,6 +47,7 @@ export interface Props extends ElevationProps {
     color?: string
     outlined?: boolean
     depressed?: boolean
+    tonal?: boolean
     title?: string
     subtitle?: string
     description?: string
@@ -62,7 +63,7 @@ export interface Props extends ElevationProps {
 const props = defineProps<Props>()
 const slots = useSlots()
 
-const booleanClassKeys = ['outlined', 'depressed'] as const
+const booleanClassKeys = ['outlined', 'depressed', 'tonal'] as const
 
 const title = computed(() => {
     if (!props.title) {
@@ -130,8 +131,8 @@ const hasFooter = computed(() => !!slots.footer)
 
 const { colorStyles } = useResolvedColor({
     color: computed(() => props.color),
-    colorVar: '--card-bg',
-    contrastVar: '--card-text',
+    colorVar: '--card-color',
+    contrastVar: '--card-contrast-color',
 })
 
 const cardClass = computed(() => {
@@ -139,7 +140,9 @@ const cardClass = computed(() => {
 
     classes.push(...getBooleanClasses(props, booleanClassKeys, 'e-card'))
 
-    props.elevation && classes.push(`e-elevation--${props.elevation}`)
+    if (props.elevation && !props.tonal) {
+        classes.push(`e-elevation--${props.elevation}`)
+    }
 
     return classes
 })
