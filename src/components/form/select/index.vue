@@ -147,6 +147,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   itemText: "text",
   itemValue: "value",
   inputAlign: "start",
+  tonal: true,
 });
 
 const slots = useSlots();

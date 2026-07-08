@@ -74,6 +74,7 @@ const props = withDefaults(defineProps<Props>(), {
     modelModifiers: () => ({}),
     rows: 3,
     spellcheck: false,
+    tonal: true,
 });
 
 const emit = defineEmits<TextInputEmits>();

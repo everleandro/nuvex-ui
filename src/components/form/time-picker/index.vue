@@ -105,6 +105,7 @@ import EMenu from "@/components/menu/index.vue";
 const props = withDefaults(defineProps<TimePickerComponentProps>(), {
     minutesStep: 15,
     hoursStep: 1,
+    tonal: true,
 });
 
 const emit = defineEmits<TimePickerEmits>();

@@ -63,7 +63,11 @@ export const useFieldIntegration = <TValue = unknown>(
     const result: Record<string, unknown> = {};
 
     fieldPropKeys.forEach((key) => {
-      result[key] = props[key as FieldPropKey];
+      const value = props[key as FieldPropKey];
+
+      if (value !== undefined) {
+        result[key] = value;
+      }
     });
 
     return result as EFieldProps<unknown>;

@@ -134,6 +134,20 @@ describe("ETextField", () => {
     expect(wrapper.emitted("update:modelValue")).toEqual([["Alice"]]);
   });
 
+  it("renders the field overlay by default", async () => {
+    const wrapper = mountTextField();
+    await nextTick();
+
+    expect(wrapper.find(".e-field__overlay").exists()).toBe(true);
+  });
+
+  it("omits the field overlay when tonal is false", async () => {
+    const wrapper = mountTextField({ tonal: false });
+    await nextTick();
+
+    expect(wrapper.find(".e-field__overlay").exists()).toBe(false);
+  });
+
   it("emits clear interactions through the semantic clear affordance", async () => {
     const wrapper = mountTextField({ modelValue: "Alice", clearable: true });
     await nextTick();
