@@ -13,7 +13,7 @@
       <p class="checkbox-demo__caption">Validacion del control y label en casos simples.</p>
 
       <EForm>
-        <ECheckbox v-model="termsAccepted" label="I accept terms and conditions" lg="6" />
+        <ECheckbox v-model="termsAccepted" label="I accept terms and conditions" lg="6" tonal/>
         <ECheckbox v-model="newsletter" label="Subscribe to product updates" lg="6" detail="Optional" />
       </EForm>
     </article>
