@@ -31,7 +31,7 @@ import EField from "@/components/form/field/index.vue";
 import { RADIO_GROUP_KEY } from "./constants";
 
 const props = withDefaults(defineProps<RadioGroupProps>(), {
-    showOverlay: false,
+    tonal: false,
 });
 
 const slots = useSlots();

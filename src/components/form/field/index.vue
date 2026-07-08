@@ -26,7 +26,7 @@
                     <slot v-if="hasPrependInnerSlot" name="prepend-inner"></slot>
                 </div>
             </div>
-            <div class="e-field__overlay" aria-hidden="true"></div>
+            <div v-if="props.tonal" class="e-field__overlay" aria-hidden="true"></div>
             <label :id="labelId" :for="id" :class="labelClass" :style="labelStyle">
                 <slot name="label">{{ label }}</slot>
             </label>
@@ -71,7 +71,9 @@ export interface Props extends EFieldProps<unknown> {
     focusWithin?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+    tonal: true,
+});
 const emit = defineEmits<{
     (e: "focus", value: FocusEvent): void;
     (e: "blur", value: Event): void;

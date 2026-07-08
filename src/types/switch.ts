@@ -5,7 +5,6 @@ export type SwitchValue = boolean | string | number;
 export interface SwitchProps extends SelectionFieldBaseProps<SwitchValue> {
   modelValue: SwitchValue;
   loading?: boolean;
-  showOverlay?: boolean;
   trueValue?: SwitchValue;
   falseValue?: SwitchValue;
 }

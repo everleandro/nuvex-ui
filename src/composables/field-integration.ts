@@ -26,6 +26,7 @@ const fieldPropKeys = [
   "retainColor",
   "rules",
   "sm",
+  "tonal",
   "xl",
   "xs",
 ] as const;

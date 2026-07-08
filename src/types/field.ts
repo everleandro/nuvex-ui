@@ -40,6 +40,7 @@ export interface EFieldProps<TValue = unknown> extends ColProps {
   labelMinWidth?: string | number;
   inputAlign?: CSSProperties["textAlign"];
   clearable?: boolean;
+  tonal?: boolean;
 }
 
 export type FieldWrapperProps<TValue = unknown> = Omit<
