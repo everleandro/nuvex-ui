@@ -8,5 +8,5 @@ import { useGridCol } from "@/composables/grid-col"
 import type { ColProps } from "@/types"
 
 const props = defineProps<ColProps>()
-const { gridColClass } = useGridCol(props, 'e-field')
+const { gridColClass } = useGridCol(props)
 </script>
