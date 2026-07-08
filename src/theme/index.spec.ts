@@ -67,6 +67,33 @@ describe("theme", () => {
     expect(theme.currentTheme.value).toBe("dark");
   });
 
+  it("restores current theme from custom storage without browser globals", () => {
+    vi.stubGlobal("window", undefined);
+    vi.stubGlobal("document", undefined);
+
+    const theme = createTheme({
+      storage: {
+        get: () => "dark",
+      },
+    });
+
+    expect(theme.currentTheme.value).toBe("dark");
+  });
+
+  it("persists the selected theme through custom storage", () => {
+    const set = vi.fn();
+    const theme = createTheme({
+      storage: {
+        get: () => "light",
+        set,
+      },
+    });
+
+    theme.setTheme("dark");
+
+    expect(set).toHaveBeenCalledWith("dark");
+  });
+
   it("is safe to create without browser globals", () => {
     vi.stubGlobal("window", undefined);
     vi.stubGlobal("document", undefined);

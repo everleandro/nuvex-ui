@@ -54,6 +54,26 @@ const normalizeThemeName = (value?: unknown): string => {
   return typeof value === "string" ? value.trim() : "";
 };
 
+const resolveCustomStoredTheme = (
+  themes: ThemeRegistry,
+  options: ThemePluginOptions,
+): ThemeName | undefined => {
+  if (options.storage?.enabled === false || typeof options.storage?.get !== "function") {
+    return undefined;
+  }
+
+  try {
+    const storedValue = options.storage.get();
+    const normalizedStored = normalizeThemeName(storedValue || undefined);
+
+    return normalizedStored && themes[normalizedStored]
+      ? normalizedStored
+      : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 const normalizeThemeDefinition = (
   fallbackName: string,
   theme?: ThemeDefinition,
@@ -89,6 +109,11 @@ const resolveStoredTheme = (
   themes: ThemeRegistry,
   options: ThemePluginOptions,
 ): ThemeName | undefined => {
+  const customStoredTheme = resolveCustomStoredTheme(themes, options);
+  if (customStoredTheme) {
+    return customStoredTheme;
+  }
+
   if (!isClientEnvironment()) {
     return undefined;
   }
@@ -285,7 +310,20 @@ export const createTheme = (rawOptions: ThemePluginOptions = {}): ThemeContext =
   };
 
   const persistTheme = (themeName: ThemeName): void => {
-    if (!isClientEnvironment() || options.storage?.enabled === false) {
+    if (options.storage?.enabled === false) {
+      return;
+    }
+
+    if (typeof options.storage?.set === "function") {
+      try {
+        options.storage.set(themeName);
+      } catch {
+        // no-op: custom storage adapters can be unavailable during SSR transitions.
+      }
+      return;
+    }
+
+    if (!isClientEnvironment()) {
       return;
     }
 

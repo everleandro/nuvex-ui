@@ -21,6 +21,8 @@ export interface ThemeAttributeOptions {
 export interface ThemeStorageOptions {
   enabled?: boolean;
   key?: string;
+  get?: () => ThemeName | undefined | null;
+  set?: (themeName: ThemeName) => void;
 }
 
 export interface ThemeSystemOptions {
