@@ -20,6 +20,10 @@ html.dark,
     --e-contrast-#{$color-name}: #{$color-value};
   }
 
+  @each $color-name, $color-value in setting.$semantic-text-tokens-dark {
+    --e-text-#{$color-name}: #{$color-value};
+  }
+
   --e-contrast-surface-canvas: var(--e-contrast-surface-0);
   --e-contrast-surface-base: var(--e-contrast-surface-1);
   --e-contrast-surface-raised: var(--e-contrast-surface-2);
@@ -27,7 +31,7 @@ html.dark,
 
   // App surface
   --e-app-background: #{map.get(setting.$semantic-color-tokens-dark, "surface-0")};
-  --e-app-color: #{map.get(setting.$semantic-contrast-tokens-dark, "surface-0")};
+  --e-app-color: var(--e-text-default);
 
   // Dark-specific elevation overrides tuned for softer contrast.
   --e-elevation-xs:

@@ -115,6 +115,10 @@ const resolvedMaxRows = computed<number | undefined>(() => {
 });
 
 const resolveTextareaElement = (): HTMLTextAreaElement | null => {
+    if (typeof HTMLTextAreaElement === "undefined") {
+        return null;
+    }
+
     return input.value instanceof HTMLTextAreaElement ? input.value : null;
 };
 

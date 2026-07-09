@@ -218,6 +218,26 @@ $directions: (
   }
 }
 
+.text-default {
+  color: var(--e-text-default) !important;
+}
+
+.text-muted {
+  color: var(--e-text-muted) !important;
+}
+
+.text-strong {
+  color: var(--e-text-strong) !important;
+}
+
+.text-heading {
+  color: var(--e-text-heading) !important;
+}
+
+.text-inverse {
+  color: var(--e-text-inverse) !important;
+}
+
 // =============================
 // GAP (flexbox & grid)
 // =============================

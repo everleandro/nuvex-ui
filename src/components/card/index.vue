@@ -24,7 +24,7 @@
                 </span>
             </div>
 
-            <p v-if="description" class="text-body e-card__description">{{ description }}</p>
+            <p v-if="description" class="type-body e-card__description">{{ description }}</p>
 
             <slot> </slot>
         </div>

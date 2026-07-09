@@ -2,6 +2,9 @@
   border-radius: var(--e-border-radius-root, 4px);
   --card-local-solid-bg: var(--card-color, var(--e-color-surface-base, var(--e-color-surface-1, #ffffff)));
   --card-local-text: var(--card-contrast-color, var(--e-contrast-surface-base, var(--e-contrast-surface-1, #000000)));
+  --card-local-title-color: var(--e-card-title-color, var(--card-contrast-color, var(--e-text-heading, var(--card-local-text))));
+  --card-local-subtitle-color: var(--e-card-subtitle-color, var(--card-contrast-color, var(--e-text-muted, var(--card-local-text))));
+  --card-local-description-color: var(--e-card-description-color, var(--card-contrast-color, var(--e-text-default, var(--card-local-text))));
   --card-local-accent: var(--card-color, var(--card-local-text, currentColor));
   --card-local-tonal-opacity: var(--e-interactive-tonal-opacity, 0.08);
   --card-border-color: var(--e-color-border);
@@ -33,6 +36,10 @@
   }
 
   &--tonal {
+    --card-local-title-color: var(--e-card-title-color, var(--card-local-accent, var(--card-local-text)));
+    --card-local-subtitle-color: var(--e-card-subtitle-color, var(--card-local-accent, var(--card-local-text)));
+    --card-local-description-color: var(--e-card-description-color, var(--card-local-accent, var(--card-local-text)));
+
     background-color: transparent;
     color: var(--card-local-accent);
     box-shadow: none;
@@ -82,12 +89,16 @@
     margin: 0;
   }
 
+  &__title {
+    color: var(--card-local-title-color);
+  }
+
   &__subtitle {
-    opacity: 0.8;
+    color: var(--card-local-subtitle-color);
   }
 
   &__description {
-    opacity: 0.9;
+    color: var(--card-local-description-color);
   }
 
   &__footer {

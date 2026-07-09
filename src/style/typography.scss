@@ -88,6 +88,7 @@ h6 {
   );
 }
 
+.type-lead,
 .text-lead {
   font-size: var(--e-typography-title-font-size-lg);
   line-height: var(--e-typography-title-line-height-lg);
@@ -99,6 +100,7 @@ p {
   line-height: var(--e-typography-body-line-height-lg);
 }
 
+.type-heading,
 .heading {
   @include text-role(
     var(--e-typography-display-font-size-md),
@@ -108,10 +110,12 @@ p {
   );
 }
 
+.type-code,
 .code {
   @include code-role;
 }
 
+.type-body,
 .text-body {
   @include text-role(
     var(--e-typography-body-font-size-lg),
@@ -121,6 +125,7 @@ p {
   );
 }
 
+.type-title,
 .title {
   @include text-role(
     var(--e-typography-title-font-size-lg),
@@ -131,6 +136,7 @@ p {
   margin-top: 0;
 }
 
+.type-subtitle,
 .subtitle {
   @include text-role(
     var(--e-typography-label-font-size-lg),
@@ -144,6 +150,7 @@ p {
   white-space: nowrap;
 }
 
+.type-dialog-title,
 .dialog-title {
   @include text-role(
     var(--e-typography-headline-font-size-sm),
@@ -164,6 +171,7 @@ p {
   }
 }
 
+.type-dialog-lead,
 .dialog-lead {
   margin-bottom: 20px;
   margin-top: 0;
@@ -172,67 +180,71 @@ p {
   font-weight: var(--e-typography-body-font-weight-lg);
 }
 
-.text {
-  &-h1 {
-    @include text-role(
-      var(--e-typography-display-font-size-lg),
-      var(--e-typography-display-line-height-lg),
-      var(--e-typography-display-font-weight-lg),
-      var(--e-typography-display-letter-spacing-lg)
-    );
-    text-transform: none;
-  }
+.type-h1,
+.text-h1 {
+  @include text-role(
+    var(--e-typography-display-font-size-lg),
+    var(--e-typography-display-line-height-lg),
+    var(--e-typography-display-font-weight-lg),
+    var(--e-typography-display-letter-spacing-lg)
+  );
+  text-transform: none;
+}
 
-  &-h2 {
-    @include text-role(
-      var(--e-typography-display-font-size-md),
-      var(--e-typography-display-line-height-md),
-      var(--e-typography-display-font-weight-md),
-      var(--e-typography-display-letter-spacing-md)
-    );
-    text-transform: none;
-  }
+.type-h2,
+.text-h2 {
+  @include text-role(
+    var(--e-typography-display-font-size-md),
+    var(--e-typography-display-line-height-md),
+    var(--e-typography-display-font-weight-md),
+    var(--e-typography-display-letter-spacing-md)
+  );
+  text-transform: none;
+}
 
-  &-h3 {
-    @include text-role(
-      var(--e-typography-display-font-size-sm),
-      var(--e-typography-display-line-height-sm),
-      var(--e-typography-display-font-weight-sm),
-      var(--e-typography-display-letter-spacing-sm)
-    );
+.type-h3,
+.text-h3 {
+  @include text-role(
+    var(--e-typography-display-font-size-sm),
+    var(--e-typography-display-line-height-sm),
+    var(--e-typography-display-font-weight-sm),
+    var(--e-typography-display-letter-spacing-sm)
+  );
 
-    text-transform: none;
-  }
+  text-transform: none;
+}
 
-  &-h4 {
-    @include text-role(
-      var(--e-typography-headline-font-size-lg),
-      var(--e-typography-headline-line-height-lg),
-      var(--e-typography-headline-font-weight-lg),
-      var(--e-typography-headline-letter-spacing-lg)
-    );
-    text-transform: none;
-  }
+.type-h4,
+.text-h4 {
+  @include text-role(
+    var(--e-typography-headline-font-size-lg),
+    var(--e-typography-headline-line-height-lg),
+    var(--e-typography-headline-font-weight-lg),
+    var(--e-typography-headline-letter-spacing-lg)
+  );
+  text-transform: none;
+}
 
-  &-h5 {
-    @include text-role(
-      var(--e-typography-headline-font-size-md),
-      var(--e-typography-headline-line-height-md),
-      var(--e-typography-headline-font-weight-md),
-      var(--e-typography-headline-letter-spacing-md)
-    );
-    text-transform: none;
-  }
+.type-h5,
+.text-h5 {
+  @include text-role(
+    var(--e-typography-headline-font-size-md),
+    var(--e-typography-headline-line-height-md),
+    var(--e-typography-headline-font-weight-md),
+    var(--e-typography-headline-letter-spacing-md)
+  );
+  text-transform: none;
+}
 
-  &-h6 {
-    @include text-role(
-      var(--e-typography-headline-font-size-sm),
-      var(--e-typography-headline-line-height-sm),
-      var(--e-typography-headline-font-weight-sm),
-      var(--e-typography-headline-letter-spacing-sm)
-    );
-    text-transform: none;
-  }
+.type-h6,
+.text-h6 {
+  @include text-role(
+    var(--e-typography-headline-font-size-sm),
+    var(--e-typography-headline-line-height-sm),
+    var(--e-typography-headline-font-weight-sm),
+    var(--e-typography-headline-letter-spacing-sm)
+  );
+  text-transform: none;
 }
 
 @include mixins.xs {
