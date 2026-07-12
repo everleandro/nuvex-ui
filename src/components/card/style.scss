@@ -39,6 +39,7 @@
     --card-local-title-color: var(--e-card-title-color, var(--card-local-accent, var(--card-local-text)));
     --card-local-subtitle-color: var(--e-card-subtitle-color, var(--card-local-accent, var(--card-local-text)));
     --card-local-description-color: var(--e-card-description-color, var(--card-local-accent, var(--card-local-text)));
+    --card-border-color: var(--card-local-accent);
 
     background-color: transparent;
     color: var(--card-local-accent);
