@@ -21,10 +21,24 @@ import { ECard } from 'nuvex-ui'
 | `title` | `string` | `undefined` | Titulo opcional para el encabezado del card. |
 | `subtitle` | `string` | `undefined` | Subtitulo opcional para el encabezado del card. |
 | `description` | `string` | `undefined` | Descripcion opcional para el cuerpo del card. |
-| `prependAvatar` | `string` | `undefined` | URL opcional para renderizar un avatar al inicio del encabezado. |
+| `prependVerticalAlign` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Alinea verticalmente la media del lado inicial dentro del cuerpo del card. |
+| `prependAvatar` | `string` | `undefined` | URL opcional para renderizar un avatar al inicio del cuerpo del card. |
 | `prependAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props opcionales que se pasan directo a `EAvatar`. |
-| `prependIcon` | `string \| IconPath \| IconPath[]` | `undefined` | Icono opcional al inicio del encabezado. |
+| `prependIcon` | `string \| IconPath \| IconPath[]` | `undefined` | Icono opcional al inicio del cuerpo del card. |
 | `prependIconProps` | `Partial<Omit<IconProps, 'icon'>>` | `undefined` | Props opcionales que se pasan directo a `EIcon`. |
+| `appendVerticalAlign` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Alinea verticalmente la media del lado final dentro del cuerpo del card. |
+| `appendAvatar` | `string` | `undefined` | URL opcional para renderizar un avatar al final del cuerpo del card. |
+| `appendAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props opcionales que se pasan directo a `EAvatar`. |
+| `appendIcon` | `string \| IconPath \| IconPath[]` | `undefined` | Icono opcional al final del cuerpo del card. |
+| `appendIconProps` | `Partial<Omit<IconProps, 'icon'>>` | `undefined` | Props opcionales que se pasan directo a `EIcon`. |
+| `prependHeaderAvatar` | `string` | `undefined` | URL opcional para renderizar un avatar al inicio del encabezado. |
+| `prependHeaderAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props opcionales que se pasan directo a `EAvatar`. |
+| `prependHeaderIcon` | `string \| IconPath \| IconPath[]` | `undefined` | Icono opcional al inicio del encabezado. |
+| `prependHeaderIconProps` | `Partial<Omit<IconProps, 'icon'>>` | `undefined` | Props opcionales que se pasan directo a `EIcon`. |
+| `appendHeaderAvatar` | `string` | `undefined` | URL opcional para renderizar un avatar al final del encabezado. |
+| `appendHeaderAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props opcionales que se pasan directo a `EAvatar`. |
+| `appendHeaderIcon` | `string \| IconPath \| IconPath[]` | `undefined` | Icono opcional al final del encabezado. |
+| `appendHeaderIconProps` | `Partial<Omit<IconProps, 'icon'>>` | `undefined` | Props opcionales que se pasan directo a `EIcon`. |
 
 ## Slots
 
@@ -46,7 +60,7 @@ import { ECard } from 'nuvex-ui'
 </template>
 ```
 
-### Con encabezado
+### Con media en el cuerpo
 
 ```vue
 <template>
@@ -55,6 +69,25 @@ import { ECard } from 'nuvex-ui'
     subtitle="Subtitulo opcional"
     description="Texto adicional para ampliar el contexto del card."
     :prepend-icon="iconFactory.calendar"
+    :append-icon="iconFactory.heart"
+    prepend-vertical-align="center"
+    append-vertical-align="end"
+  >
+    <p>Contenido principal del card.</p>
+  </ECard>
+</template>
+```
+
+### Con media en el encabezado
+
+```vue
+<template>
+  <ECard
+    title="Titulo del card"
+    subtitle="Subtitulo opcional"
+    description="Texto adicional para ampliar el contexto del card."
+    :prepend-header-icon="iconFactory.calendar"
+    :append-header-icon="iconFactory.heart"
   >
     <p>Contenido principal del card.</p>
   </ECard>
@@ -85,6 +118,21 @@ import { ECard } from 'nuvex-ui'
     subtitle="Product Designer"
     prepend-avatar="https://example.com/avatar.jpg"
     :prepend-avatar-props="{ size: 'small', elevation: 'sm' }"
+  >
+    <p>Contenido principal del card.</p>
+  </ECard>
+</template>
+```
+
+### Con prependHeaderAvatar
+
+```vue
+<template>
+  <ECard
+    title="Jane Doe"
+    subtitle="Product Designer"
+    prepend-header-avatar="https://example.com/avatar.jpg"
+    :prepend-header-avatar-props="{ size: 'small', elevation: 'sm' }"
   >
     <p>Contenido principal del card.</p>
   </ECard>
@@ -128,5 +176,7 @@ import { ECard } from 'nuvex-ui'
 
 - Esperar que `color` solo afecte texto: `ECard` ahora resuelve fondo y contraste desde tokens.
 - Pasar `height` esperando unidades CSS libres: el componente agrega `px`, por lo que espera un valor numerico o string numerico.
-- Asumir que `title`, `subtitle` y `description` siempre renderizan: el header solo aparece cuando al menos una prop del encabezado tiene valor, mientras `description` se renderiza en el cuerpo.
-- Pasar `prependAvatar` y `prependIcon` al mismo tiempo esperando ambos: `prependAvatar` tiene prioridad sobre `prependIcon`.
+- Asumir que `title`, `subtitle` y `description` siempre renderizan: el header solo aparece cuando `title`, `subtitle` o alguna prop `*Header*` tiene valor, mientras `description` se renderiza en el cuerpo.
+- Usar `prepend*` o `append*` esperando media en el encabezado: esas props ahora pertenecen al cuerpo; para el header usa `prependHeader*` y `appendHeader*`.
+- Pasar un valor arbitrario a `prependVerticalAlign` o `appendVerticalAlign`: los valores soportados son `start`, `center`, `end` y `stretch`.
+- Pasar `prependAvatar` y `prependIcon` al mismo tiempo esperando ambos: `prependAvatar` tiene prioridad sobre `prependIcon`. La misma prioridad aplica a `prependHeaderAvatar` sobre `prependHeaderIcon`, y a los pares equivalentes de `append`.

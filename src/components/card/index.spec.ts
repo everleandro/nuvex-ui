@@ -4,6 +4,69 @@ import { mount } from '@vue/test-utils';
 import ECard from './index.vue';
 
 describe('ECard', () => {
+  it('renders body prepend media inside card main instead of the header', () => {
+    const wrapper = mount(ECard, {
+      props: {
+        title: 'Card title',
+        prependIcon: 'mdi-heart',
+      },
+    });
+
+    expect(wrapper.find('.e-card__main > .e-card__prepend').exists()).toBe(true);
+    expect(wrapper.find('.e-card__header > .e-card__prepend').exists()).toBe(false);
+  });
+
+  it('renders header prepend media only from prependHeader props', () => {
+    const wrapper = mount(ECard, {
+      props: {
+        title: 'Card title',
+        prependHeaderIcon: 'mdi-heart',
+      },
+    });
+
+    expect(wrapper.find('.e-card__header > .e-card__prepend').exists()).toBe(true);
+    expect(wrapper.find('.e-card__main > .e-card__prepend').exists()).toBe(false);
+  });
+
+  it('does not create a header when only body media is provided', () => {
+    const wrapper = mount(ECard, {
+      props: {
+        prependIcon: 'mdi-heart',
+        appendIcon: 'mdi-star',
+      },
+    });
+
+    expect(wrapper.find('.e-card__header').exists()).toBe(false);
+    expect(wrapper.find('.e-card__main > .e-card__prepend').exists()).toBe(true);
+    expect(wrapper.find('.e-card__main > .e-card__append').exists()).toBe(true);
+  });
+
+  it('renders header append media only from appendHeader props', () => {
+    const wrapper = mount(ECard, {
+      props: {
+        title: 'Card title',
+        appendHeaderIcon: 'mdi-dots-horizontal',
+      },
+    });
+
+    expect(wrapper.find('.e-card__header > .e-card__append').exists()).toBe(true);
+    expect(wrapper.find('.e-card__main > .e-card__append').exists()).toBe(false);
+  });
+
+  it('applies vertical alignment props to body prepend and append media', () => {
+    const wrapper = mount(ECard, {
+      props: {
+        prependIcon: 'mdi-heart',
+        appendIcon: 'mdi-star',
+        prependVerticalAlign: 'center',
+        appendVerticalAlign: 'end',
+      },
+    });
+
+    expect(wrapper.find('.e-card__main > .e-card__prepend').classes()).toContain('e-card__prepend-center');
+    expect(wrapper.find('.e-card__main > .e-card__append').classes()).toContain('e-card__append-end');
+  });
+
   it('adds tonal class when tonal mode is enabled', () => {
     const wrapper = mount(ECard, {
       props: {

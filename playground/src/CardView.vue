@@ -9,13 +9,38 @@
         </header>
 
         <article class="card-demo">
+            <h3>Body media</h3>
+            <p class="card-demo__caption">`prepend` y `append` ahora viven dentro del contenido principal del card.</p>
+
+            <div class="card-grid">
+                <ECard :prepend-icon="iconFactory.heart" title="Default card" subtitle="Contained surface"
+                    description="Usa el fondo de superficie por defecto." />
+                <ECard :append-icon="iconFactory.calendar" title="Timeline" subtitle="Body append"
+                    description="El append del body se renderiza al final de `card__main`." />
+            </div>
+        </article>
+
+        <article class="card-demo">
+            <h3>Header media</h3>
+            <p class="card-demo__caption">Usa `prepend-header-*` y `append-header-*` cuando la media pertenece al encabezado.</p>
+
+            <div class="card-grid">
+                <ECard :prepend-header-icon="iconFactory.heart" title="Default card" subtitle="Contained surface"
+                    description="Mantiene el icono junto al bloque de title y subtitle." />
+                <ECard :append-header-icon="iconFactory.calendar" title="Meeting note" subtitle="Header append"
+                    description="El append del header conserva el alineado al extremo derecho." />
+            </div>
+        </article>
+
+        <article class="card-demo">
             <h3>Contained</h3>
             <p class="card-demo__caption">Base visual para contrastar el comportamiento normal contra tonal.</p>
 
             <div class="card-grid">
-                <ECard title="Default card" subtitle="Contained surface" description="Usa el fondo de superficie por defecto." />
-                <ECard title="Primary card" subtitle="Contained with color" description="Aplica color como fondo solido del card."
-                    color="primary" />
+                <ECard title="Default card" subtitle="Contained surface"
+                    description="Usa el fondo de superficie por defecto." />
+                <ECard title="Primary card" subtitle="Contained with color"
+                    description="Aplica color como fondo solido del card." color="primary" />
             </div>
         </article>
 
@@ -35,7 +60,8 @@
 
         <article class="card-demo">
             <h3>Tonal + outlined</h3>
-            <p class="card-demo__caption">La combinacion se mantiene soportada para sumar borde sin perder la capa tonal.</p>
+            <p class="card-demo__caption">La combinacion se mantiene soportada para sumar borde sin perder la capa
+                tonal.</p>
 
             <div class="card-grid">
                 <ECard tonal outlined title="Outlined tonal" subtitle="Border plus tonal layer"
@@ -47,6 +73,10 @@
         </article>
     </section>
 </template>
+<script setup lang="ts">
+
+import iconFactory from "./icons.ts";
+</script>
 
 <style scoped>
 .card-page {

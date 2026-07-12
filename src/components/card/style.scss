@@ -50,13 +50,35 @@
   }
 
   &__main {
-    display: flex;
-    gap: var(--card-gap);
-    flex-direction: column;
+    --card-main-columns: minmax(0, 1fr);
+    --card-content-column: 1;
+    --card-append-column: 2;
+
+    display: grid;
+    column-gap: var(--card-gap);
+    row-gap: var(--card-gap);
+    grid-template-columns: var(--card-main-columns);
+    grid-template-rows: auto auto minmax(0, 1fr);
     padding: var(--card-padding);
     flex: 1;
     position: relative;
     z-index: 1;
+  }
+
+  &__main--has-prepend {
+    --card-main-columns: auto minmax(0, 1fr);
+    --card-content-column: 2;
+  }
+
+  &__main--has-append {
+    --card-main-columns: minmax(0, 1fr) auto;
+    --card-append-column: 2;
+  }
+
+  &__main--has-prepend#{&}__main--has-append {
+    --card-main-columns: auto minmax(0, 1fr) auto;
+    --card-content-column: 2;
+    --card-append-column: 3;
   }
 
   &__header {
@@ -65,14 +87,51 @@
     gap: calc(var(--e-space-base, 4px) * 3);
   }
 
-  &__prepend {
+  &__prepend,
+  &__append {
     display: inline-flex;
+  }
+
+  &__main>&__prepend,
+  &__main>&__append {
+    grid-row: 1 / span 3;
+    align-self: flex-start;
+  }
+
+  &__prepend-start,
+  &__append-start {
+    align-self: start;
+  }
+
+  &__prepend-center,
+  &__append-center {
     align-self: center;
   }
 
-  &__append {
-    display: inline-flex;
+  &__prepend-end,
+  &__append-end {
+    align-self: end;
+  }
+
+  &__prepend-stretch,
+  &__append-stretch {
+    align-self: stretch;
+  }
+
+  &__main>&__prepend {
+    grid-column: 1;
+  }
+
+  &__main>&__append {
+    grid-column: var(--card-append-column);
+  }
+
+  &__header>&__prepend,
+  &__header>&__append {
     align-self: center;
+  }
+
+  &__header>&__append {
     margin-inline-start: auto;
   }
 
@@ -81,6 +140,25 @@
     gap: var(--e-space-base, 4px);
     min-width: 0;
     flex: 1;
+  }
+
+  &__header,
+  &__description,
+  &__body {
+    grid-column: var(--card-content-column);
+    min-width: 0;
+  }
+
+  &__header {
+    grid-row: 1;
+  }
+
+  &__description {
+    grid-row: 2;
+  }
+
+  &__body {
+    grid-row: 3;
   }
 
   &__title,
@@ -95,6 +173,7 @@
 
   &__subtitle {
     color: var(--card-local-subtitle-color);
+    opacity: 0.7;
   }
 
   &__description {
@@ -102,7 +181,7 @@
   }
 
   &__footer {
-    flex: 1;
+    width: 100%;
     padding: var(--card-padding);
     position: relative;
     z-index: 1;
