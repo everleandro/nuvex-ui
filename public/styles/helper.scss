@@ -104,7 +104,7 @@
 }
 
 // utilities
-$displays: block, inline-block, flex, inline-flex, none;
+$displays: block, inline-block, flex, inline-flex, grid, inline-grid, none;
 
 $alignments: (
   justify: (start: flex-start, center: center, end: flex-end, between: space-between, around: space-around),
@@ -236,6 +236,18 @@ $directions: (
 
 .text-inverse {
   color: var(--e-text-inverse) !important;
+}
+
+.text-inherit {
+  color: inherit !important;
+}
+
+.no-underline {
+  text-decoration: none !important;
+}
+
+.underline {
+  text-decoration: underline !important;
 }
 
 // =============================
