@@ -1,6 +1,8 @@
+import type { SVGAttributes } from "vue";
+
 import { SizeProps } from "./size";
 
-export type IconPath = { d: string; fill?: string; class?: string };
+export type IconPath = Omit<SVGAttributes, "innerHTML"> & { d: string };
 
 export interface IconProps extends SizeProps {
   color?: string;

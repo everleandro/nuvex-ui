@@ -69,19 +69,46 @@ const paths = computed((): Array<IconPath> => {
 
 const iconElement = ref(null)
 
+const svgPathAttributeAliases: Record<string, string> = {
+    clipPath: 'clip-path',
+    clipRule: 'clip-rule',
+    fillOpacity: 'fill-opacity',
+    fillRule: 'fill-rule',
+    markerEnd: 'marker-end',
+    markerMid: 'marker-mid',
+    markerStart: 'marker-start',
+    strokeDasharray: 'stroke-dasharray',
+    strokeDashoffset: 'stroke-dashoffset',
+    strokeLinecap: 'stroke-linecap',
+    strokeLinejoin: 'stroke-linejoin',
+    strokeMiterlimit: 'stroke-miterlimit',
+    strokeOpacity: 'stroke-opacity',
+    strokeWidth: 'stroke-width',
+    vectorEffect: 'vector-effect',
+}
+
+const normalizeSvgPathAttributeKey = (key: string): string => {
+    return svgPathAttributeAliases[key] || key
+}
+
 const bindPathAttributes = (
     path: IconPath
 ): Object => {
-    const d = typeof path === 'string' ? path : path?.d;
-    const result: Record<string, unknown> = { d }
+    const { fill, style, ...rest } = path
+    const result: Record<string, unknown> = {}
 
-    if (typeof path === 'object' && path?.class) {
-        result.class = path.class
-    }
+    Object.entries(rest).forEach(([key, value]) => {
+        result[normalizeSvgPathAttributeKey(key)] = value
+    })
 
-    if (typeof path === 'object' && path?.fill) {
-        const resolvedFill = getColorCssValue(path.fill) || path.fill
-        result.style = { fill: resolvedFill }
+    if (fill) {
+        const resolvedFill = getColorCssValue(`${fill}`) || fill
+        result.style = {
+            ...(typeof style === 'object' && style !== null && !Array.isArray(style) ? style : {}),
+            fill: resolvedFill,
+        }
+    } else if (style !== undefined) {
+        result.style = style
     }
 
     return result
