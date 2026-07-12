@@ -51,14 +51,21 @@
 
   &__main {
     --card-main-columns: minmax(0, 1fr);
+    --card-main-rows: auto;
     --card-content-column: 1;
     --card-append-column: 2;
+    --card-column-gap: 0px;
+    --card-row-gap: 0px;
+    --card-header-row: 1;
+    --card-description-row: 1;
+    --card-body-row: 1;
+    --card-media-row-span: 1;
 
     display: grid;
-    column-gap: var(--card-gap);
-    row-gap: var(--card-gap);
+    column-gap: var(--card-column-gap);
+    row-gap: var(--card-row-gap);
     grid-template-columns: var(--card-main-columns);
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: var(--card-main-rows);
     padding: var(--card-padding);
     flex: 1;
     position: relative;
@@ -68,17 +75,61 @@
   &__main--has-prepend {
     --card-main-columns: auto minmax(0, 1fr);
     --card-content-column: 2;
+    --card-column-gap: var(--card-gap);
   }
 
   &__main--has-append {
     --card-main-columns: minmax(0, 1fr) auto;
     --card-append-column: 2;
+    --card-column-gap: var(--card-gap);
   }
 
   &__main--has-prepend#{&}__main--has-append {
     --card-main-columns: auto minmax(0, 1fr) auto;
     --card-content-column: 2;
     --card-append-column: 3;
+  }
+
+  &__main--has-body {
+    --card-main-rows: minmax(0, 1fr);
+  }
+
+  &__main--has-header {
+    --card-header-row: 1;
+    --card-description-row: 1;
+    --card-body-row: 1;
+  }
+
+  &__main--has-description {
+    --card-header-row: 2;
+    --card-description-row: 1;
+    --card-body-row: 1;
+  }
+
+  &__main--has-header#{&}__main--has-body,
+  &__main--has-description#{&}__main--has-body {
+    --card-main-rows: auto minmax(0, 1fr);
+    --card-row-gap: var(--card-gap);
+    --card-body-row: 2;
+    --card-media-row-span: 2;
+  }
+
+  &__main--has-header#{&}__main--has-description {
+    --card-main-rows: auto auto;
+    --card-row-gap: var(--card-gap);
+    --card-header-row: 1;
+    --card-description-row: 2;
+    --card-body-row: 2;
+    --card-media-row-span: 2;
+  }
+
+  &__main--has-header#{&}__main--has-description#{&}__main--has-body {
+    --card-main-rows: auto auto minmax(0, 1fr);
+    --card-row-gap: var(--card-gap);
+    --card-header-row: 1;
+    --card-description-row: 2;
+    --card-body-row: 3;
+    --card-media-row-span: 3;
   }
 
   &__header {
@@ -94,7 +145,7 @@
 
   &__main>&__prepend,
   &__main>&__append {
-    grid-row: 1 / span 3;
+    grid-row: 1 / span var(--card-media-row-span);
   }
 
   &__prepend-start,
@@ -149,15 +200,15 @@
   }
 
   &__header {
-    grid-row: 1;
+    grid-row: var(--card-header-row);
   }
 
   &__description {
-    grid-row: 2;
+    grid-row: var(--card-description-row);
   }
 
   &__body {
-    grid-row: 3;
+    grid-row: var(--card-body-row);
   }
 
   &__title,

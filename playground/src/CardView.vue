@@ -21,6 +21,30 @@
         </article>
 
         <article class="card-demo">
+            <h3>Grid track cases</h3>
+            <p class="card-demo__caption">Casos de referencia para validar que no aparezcan gaps fantasma cuando faltan tracks del grid.</p>
+
+            <div class="card-grid">
+                <ECard>
+                    <p>Solo body: no debe haber gap horizontal ni vertical.</p>
+                </ECard>
+
+                <ECard :prepend-icon="iconFactory.heart" title="Prepend only" subtitle="Header + prepend"
+                    description="Debe existir una sola columna extra al inicio." />
+
+                <ECard :append-icon="iconFactory.calendar" description="Description only"
+                    append-vertical-align="end">
+                    <p>Append sin header: valida columna final sin fila extra arriba.</p>
+                </ECard>
+
+                <ECard :prepend-icon="iconFactory.heart" :append-icon="iconFactory.calendar" title="Full layout"
+                    subtitle="Header, description and body" description="Todos los tracks presentes para comparar el caso completo.">
+                    <p>Contenido principal con prepend, append, header y description.</p>
+                </ECard>
+            </div>
+        </article>
+
+        <article class="card-demo">
             <h3>Header media</h3>
             <p class="card-demo__caption">Usa `prepend-header-*` y `append-header-*` cuando la media pertenece al encabezado.</p>
 

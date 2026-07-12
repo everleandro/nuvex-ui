@@ -4,6 +4,58 @@ import { mount } from '@vue/test-utils';
 import ECard from './index.vue';
 
 describe('ECard', () => {
+  it('adds the body grid class when default slot content is present', () => {
+    const wrapper = mount(ECard, {
+      slots: {
+        default: 'Body content',
+      },
+    });
+
+    expect(wrapper.find('.e-card__main').classes()).toContain('e-card__main--has-body');
+  });
+
+  it('does not render the body wrapper when the default slot is absent', () => {
+    const wrapper = mount(ECard);
+
+    expect(wrapper.find('.e-card__body').exists()).toBe(false);
+    expect(wrapper.find('.e-card__main').classes()).not.toContain('e-card__main--has-body');
+  });
+
+  it('adds only the append grid class when body append media is present', () => {
+    const wrapper = mount(ECard, {
+      props: {
+        appendIcon: 'mdi-star',
+      },
+    });
+
+    expect(wrapper.find('.e-card__main').classes()).toContain('e-card__main--has-append');
+    expect(wrapper.find('.e-card__main').classes()).not.toContain('e-card__main--has-prepend');
+  });
+
+  it('adds the prepend and header grid classes when body media and header content are present', () => {
+    const wrapper = mount(ECard, {
+      props: {
+        title: 'Card title',
+        prependIcon: 'mdi-heart',
+      },
+    });
+
+    expect(wrapper.find('.e-card__main').classes()).toContain('e-card__main--has-prepend');
+    expect(wrapper.find('.e-card__main').classes()).toContain('e-card__main--has-header');
+    expect(wrapper.find('.e-card__main').classes()).not.toContain('e-card__main--has-description');
+  });
+
+  it('adds only the description grid class when description is present without a header', () => {
+    const wrapper = mount(ECard, {
+      props: {
+        description: 'Card description',
+      },
+    });
+
+    expect(wrapper.find('.e-card__main').classes()).toContain('e-card__main--has-description');
+    expect(wrapper.find('.e-card__main').classes()).not.toContain('e-card__main--has-header');
+  });
+
   it('defaults body media vertical alignment to center', () => {
     const wrapper = mount(ECard, {
       props: {

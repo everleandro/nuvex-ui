@@ -32,7 +32,7 @@
 
             <p v-if="description" class="type-body e-card__description">{{ description }}</p>
 
-            <div class="e-card__body type-body">
+            <div v-if="hasBody" class="e-card__body type-body">
                 <slot> </slot>
             </div>
 
@@ -211,6 +211,8 @@ const hasHeader = computed(() => {
         || !!appendHeaderAvatar.value
         || !!appendHeaderIcon.value
 })
+const hasDescription = computed(() => !!description.value)
+const hasBody = computed(() => Boolean(slots.default))
 const hasFooter = computed(() => !!slots.footer)
 
 const { colorStyles } = useResolvedColor({
@@ -224,6 +226,9 @@ const mainClass = computed(() => {
         'e-card__main': true,
         'e-card__main--has-prepend': hasMainPrepend.value,
         'e-card__main--has-append': hasMainAppend.value,
+        'e-card__main--has-header': hasHeader.value,
+        'e-card__main--has-description': hasDescription.value,
+        'e-card__main--has-body': hasBody.value,
     }
 })
 
@@ -261,7 +266,7 @@ const cardStyle = computed((): Record<string, string> => {
         result.height = height
     }
 
-    return result;
+    return result
 })
 
 </script>
