@@ -13,7 +13,7 @@
             <p class="card-demo__caption">`prepend` y `append` ahora viven dentro del contenido principal del card.</p>
 
             <div class="card-grid">
-                <ECard :prepend-icon="iconFactory.heart" title="Default card" subtitle="Contained surface"
+                <ECard :prepend-icon="iconFactory.heart" title="Default card" subtitle="Contained surface" prepend-vertical-align="center"
                     description="Usa el fondo de superficie por defecto." />
                 <ECard :append-icon="iconFactory.calendar" title="Timeline" subtitle="Body append"
                     description="El append del body se renderiza al final de `card__main`." />

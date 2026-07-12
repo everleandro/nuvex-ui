@@ -123,7 +123,7 @@ const resolveVerticalAlign = (value?: string): CardVerticalAlign => {
         return value as CardVerticalAlign
     }
 
-    return 'start'
+    return 'center'
 }
 
 const prependAvatar = computed(() => props.prependAvatar)

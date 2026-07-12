@@ -4,6 +4,18 @@ import { mount } from '@vue/test-utils';
 import ECard from './index.vue';
 
 describe('ECard', () => {
+  it('defaults body media vertical alignment to center', () => {
+    const wrapper = mount(ECard, {
+      props: {
+        prependIcon: 'mdi-heart',
+        appendIcon: 'mdi-star',
+      },
+    });
+
+    expect(wrapper.find('.e-card__main > .e-card__prepend').classes()).toContain('e-card__prepend-center');
+    expect(wrapper.find('.e-card__main > .e-card__append').classes()).toContain('e-card__append-center');
+  });
+
   it('renders body prepend media inside card main instead of the header', () => {
     const wrapper = mount(ECard, {
       props: {

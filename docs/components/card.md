@@ -21,12 +21,12 @@ import { ECard } from 'nuvex-ui'
 | `title` | `string` | `undefined` | Titulo opcional para el encabezado del card. |
 | `subtitle` | `string` | `undefined` | Subtitulo opcional para el encabezado del card. |
 | `description` | `string` | `undefined` | Descripcion opcional para el cuerpo del card. |
-| `prependVerticalAlign` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Alinea verticalmente la media del lado inicial dentro del cuerpo del card. |
+| `prependVerticalAlign` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'center'` | Alinea verticalmente la media del lado inicial dentro del cuerpo del card. |
 | `prependAvatar` | `string` | `undefined` | URL opcional para renderizar un avatar al inicio del cuerpo del card. |
 | `prependAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props opcionales que se pasan directo a `EAvatar`. |
 | `prependIcon` | `string \| IconPath \| IconPath[]` | `undefined` | Icono opcional al inicio del cuerpo del card. |
 | `prependIconProps` | `Partial<Omit<IconProps, 'icon'>>` | `undefined` | Props opcionales que se pasan directo a `EIcon`. |
-| `appendVerticalAlign` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Alinea verticalmente la media del lado final dentro del cuerpo del card. |
+| `appendVerticalAlign` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'center'` | Alinea verticalmente la media del lado final dentro del cuerpo del card. |
 | `appendAvatar` | `string` | `undefined` | URL opcional para renderizar un avatar al final del cuerpo del card. |
 | `appendAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props opcionales que se pasan directo a `EAvatar`. |
 | `appendIcon` | `string \| IconPath \| IconPath[]` | `undefined` | Icono opcional al final del cuerpo del card. |
