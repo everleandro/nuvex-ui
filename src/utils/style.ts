@@ -65,6 +65,14 @@ const parsePrimitiveToneToken = (color: string) => {
   };
 };
 
+const getPrimitiveContrastTone = (tone?: number): number => {
+  if (tone === undefined) {
+    return 50;
+  }
+
+  return tone >= 500 ? 50 : 900;
+};
+
 const UNSUPPORTED_COLOR_LITERAL_PATTERN =
   /^(#([\da-f]{3,8})|rgba?\(|hsla?\(|hwb\(|lab\(|lch\(|oklab\(|oklch\(|color\(|var\(|transparent$|currentcolor$|inherit$|initial$|unset$)/i;
 
@@ -84,17 +92,18 @@ const buildPrimitiveResolution = (
   fallbackContrast: string,
 ): ResolvedColorCssVariable => {
   const parsedTone = parsePrimitiveToneToken(color);
-  const contrastTone = parsedTone ? (parsedTone.tone >= 500 ? 50 : 900) : 50;
   const primitiveFamily = parsedTone?.family ?? color;
+  const contrastTone = getPrimitiveContrastTone(parsedTone?.tone);
   const variableName = `--e-palette-${color}`;
-  const contrastVariableName = `--e-palette-${primitiveFamily}-${contrastTone}`;
+  const contrastVariableName = `--e-palette-contrast-${color}`;
+  const primitiveContrastFallback = `var(--e-palette-${primitiveFamily}-${contrastTone}, ${fallbackContrast})`;
 
   return {
     kind: "primitive",
     variableName,
     value: `var(${variableName})`,
     contrastVariableName,
-    contrastValue: `var(${contrastVariableName}, ${fallbackContrast})`,
+    contrastValue: `var(${contrastVariableName}, ${primitiveContrastFallback})`,
   };
 };
 

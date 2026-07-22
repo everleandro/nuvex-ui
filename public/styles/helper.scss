@@ -32,6 +32,14 @@
   @return #fff;
 }
 
+@function e-primitive-contrast-tone($tone) {
+  @if $tone >= 500 {
+    @return 50;
+  }
+
+  @return 900;
+}
+
 @each $key, $value in $elevation {
   .e-elevation--#{$key} {
     box-shadow: var(--e-elevation-#{$key}, #{$value});
@@ -58,29 +66,30 @@
 
 @each $palette-name, $palette-scale in $primitive-color-palettes {
   @if map.has-key($primitive-color-seeds, $palette-name) {
-    $seed-color: map.get($primitive-color-seeds, $palette-name);
-    $seed-contrast: e-auto-contrast($seed-color);
+    $seed-contrast-tone: e-primitive-contrast-tone(500);
+    $seed-contrast-color: map.get($palette-scale, $seed-contrast-tone);
 
     .#{$palette-name} {
       background-color: var(--e-palette-#{$palette-name}) !important;
-      border-color: var(--e-palette-#{$palette-name}) !important;
-      color: var(--e-palette-contrast-#{$palette-name}, #{$seed-contrast}) !important;
+      border-color: var(--e-palette-#{$palette-name}) ;
+      color: var(--e-palette-contrast-#{$palette-name}, var(--e-palette-#{$palette-name}-#{$seed-contrast-tone}, #{$seed-contrast-color}));
 
       &--text {
         color: var(--e-palette-#{$palette-name}) !important;
-        caret-color: var(--e-palette-#{$palette-name}) !important;
+        caret-color: var(--e-palette-#{$palette-name});
         fill: var(--e-palette-#{$palette-name}) !important;
       }
     }
   }
 
   @each $tone-name, $tone-value in $palette-scale {
-    $tone-contrast: e-auto-contrast($tone-value);
+    $tone-contrast-tone: e-primitive-contrast-tone($tone-name);
+    $tone-contrast-color: map.get($palette-scale, $tone-contrast-tone);
 
     .#{$palette-name}-#{$tone-name} {
       background-color: var(--e-palette-#{$palette-name}-#{$tone-name}) !important;
       border-color: var(--e-palette-#{$palette-name}-#{$tone-name}) !important;
-      color: var(--e-palette-contrast-#{$palette-name}-#{$tone-name}, #{$tone-contrast}) !important;
+      color: var(--e-palette-contrast-#{$palette-name}-#{$tone-name}, var(--e-palette-#{$palette-name}-#{$tone-contrast-tone}, #{$tone-contrast-color})) !important;
 
       &--text {
         color: var(--e-palette-#{$palette-name}-#{$tone-name}) !important;
