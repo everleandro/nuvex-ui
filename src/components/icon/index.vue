@@ -1,5 +1,5 @@
 <template>
-    <i v-if="mounted" ref="iconElement" v-cloak aria-hidden="true" :class="iconClass" :style="iconStyle">
+    <i aria-hidden="true" :class="iconClass" :style="iconStyle">
         <span v-if="stateLayer" class="e-icon__state-layer" aria-hidden="true"></span>
         <slot>
             <svg v-if="isPath" xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" role="img" aria-hidden="true"
@@ -16,39 +16,26 @@ export default {
 </script>
 <script lang="ts" setup>
 import type { IconPath, IconProps } from '@/types';
+import {
+    normalizeIconFontClassList,
+    useIconFont,
+} from './config'
 import { useResolvedColor } from '@/composables/color'
 import { getColorCssValue } from '@/utils/style'
-import { ComputedRef, computed, ref, useAttrs, onMounted } from 'vue';
+import { ComputedRef, computed, useAttrs } from 'vue';
 import { getBooleanClasses, useUtils } from "@/composables/utils"
 const { isObject } = useUtils()
-const mounted = ref(false)
 
 const attrs = useAttrs()
+const iconFont = useIconFont()
 
 const props = withDefaults(defineProps<IconProps>(), { viewBox: '0 0 24 24' })
 
 const booleanClassKeys = ['disabled', 'stateLayer'] as const
-const defaultIconClass = 'icon'
-const defaultIconPrefix = 'icon-'
 
-const resolvedRootConfig = computed(() => {
-    if (typeof window === 'undefined') {
-        return {
-            iconClass: defaultIconClass,
-            iconPrefix: defaultIconPrefix,
-        }
-    }
-
-    const rootVar = window.getComputedStyle(document.documentElement)
-
-    return {
-        iconClass: rootVar.getPropertyValue('--e-icon-class').trim() || defaultIconClass,
-        iconPrefix: rootVar.getPropertyValue('--e-icon-prefix').trim() || defaultIconPrefix,
-    }
-})
-
-const resolvedPrefix = computed(() => {
-    return (props.prefix || props.preffix || resolvedRootConfig.value.iconPrefix).trim()
+const resolvedPrefixOverride = computed(() => {
+    const prefix = props.prefix || props.preffix
+    return typeof prefix === 'string' ? prefix.trim() : undefined
 })
 
 const resolvedStringIcon = computed(() => {
@@ -67,7 +54,31 @@ const paths = computed((): Array<IconPath> => {
     } else return props.icon as Array<IconPath>
 })
 
-const iconElement = ref(null)
+const resolvedStringIconClasses = computed((): Array<string> => {
+    if (isPath.value || !resolvedStringIcon.value) {
+        return []
+    }
+
+    const classes: Array<string> = []
+
+    if (iconFont.baseClass) {
+        classes.push(iconFont.baseClass)
+    }
+
+    if (resolvedPrefixOverride.value !== undefined) {
+        classes.push(`${resolvedPrefixOverride.value}${resolvedStringIcon.value}`)
+        return classes
+    }
+
+    if (iconFont.resolveClass) {
+        classes.push(...normalizeIconFontClassList(iconFont.resolveClass(resolvedStringIcon.value)))
+        return classes
+    }
+
+    classes.push(`${iconFont.prefix}${resolvedStringIcon.value}`)
+
+    return classes
+})
 
 const svgPathAttributeAliases: Record<string, string> = {
     clipPath: 'clip-path',
@@ -123,7 +134,9 @@ const stateLayer = computed(() => props.stateLayer)
 
 const iconClass: ComputedRef<Array<string>> = computed((): Array<string> => {
     const defaultClass = attrs.class ? `${attrs.class}` : ''
-    let classes = ['e-icon', resolvedRootConfig.value.iconClass];
+    let classes = ['e-icon'];
+
+    classes.push(...resolvedStringIconClasses.value)
 
     defaultClass && classes.push(defaultClass)
 
@@ -131,16 +144,10 @@ const iconClass: ComputedRef<Array<string>> = computed((): Array<string> => {
         classes.push(`e-icon--size-${props.size}`)
     }
 
-    !isPath.value && resolvedStringIcon.value && classes.push(`${resolvedPrefix.value}${resolvedStringIcon.value}`);
-
     classes.push(...getBooleanClasses(props, booleanClassKeys, 'e-icon'))
 
     return classes
 })
-
-onMounted(() => {
-    mounted.value = true;
-});
 
 </script>
 <style lang="scss" src="./style.scss"></style>

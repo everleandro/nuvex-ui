@@ -1,15 +1,20 @@
 import type { App, Component, Directive } from "vue";
 import * as _components from "./components";
+import {
+  iconFontInjectionKey,
+  normalizeIconFontOptions,
+} from "./components/icon/config";
 import * as _directives from "./directives";
 import type { Locale, LocaleCode } from "./locales";
 import { registerLocales, setDefaultLocaleCode } from "./locales";
 import type { ThemePluginOptions } from "./theme";
 import { installTheme } from "./theme";
-import type { IconPath } from "./types";
+import type { IconFontOptions, IconPath } from "./types";
 import { registerIcons } from "./utils/icons";
 
 export interface NuvexUIInstallOptions {
   icons?: Record<string, IconPath | string | Array<IconPath>>;
+  iconFont?: IconFontOptions;
   locales?: Record<string, Locale>;
   locale?: LocaleCode;
   components?: Record<string, Component>;
@@ -19,6 +24,7 @@ export interface NuvexUIInstallOptions {
 export function install(Vue: App, args: NuvexUIInstallOptions = {}): void {
   registerIcons(args.icons);
   registerLocales(args.locales);
+  Vue.provide(iconFontInjectionKey, normalizeIconFontOptions(args.iconFont));
   installTheme(Vue, args.theme);
 
   if (args.locale) {
