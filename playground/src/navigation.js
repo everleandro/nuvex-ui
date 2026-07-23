@@ -70,6 +70,11 @@ export const navigationGroups = [
         to: "/components/bar",
       },
       {
+        id: "components-icon",
+        title: "Icon",
+        to: "/components/icon",
+      },
+      {
         id: "components-list",
         title: "List",
         to: "/components/list",
