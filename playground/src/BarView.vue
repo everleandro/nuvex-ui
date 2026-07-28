@@ -44,7 +44,7 @@
 
             <div class="bar-stack">
                 <div class="bar-surface">
-                    <EBar dense outlined color="surface-2">
+                    <EBar dense outlined color="surface-raised">
                         <strong class="bar-label">Dense Bar</strong>
                         <ESpacer />
                         <EButton :icon="iconFactory.themeDarkLight" aria-label="Toggle theme" />

@@ -9,8 +9,8 @@
   &__wrapper {
     border-radius: var(--e-border-radius-root, 4px);
     overflow: hidden;
-    background-color: var(--e-color-surface-1, #ffffff);
-    color: var(--e-menu-color, var(--e-contrast-surface-1, #000000));
+    background-color: var(--e-color-surface-base, #ffffff);
+    color: var(--e-menu-color, var(--e-contrast-surface-base, #000000));
     transition-duration: 300ms;
     position: relative;
   }

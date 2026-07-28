@@ -3,7 +3,7 @@
 .e-form {
   --e-form-table-line-color: var(--e-color-border, currentColor);
   --e-form-table-line-opacity: 0.46;
-  --e-form-table-field-bg: var(--e-color-surface-1, white);
+  --e-form-table-field-bg: var(--e-color-surface-base, white);
   --e-form-table-border-radius: var(--e-border-radius-root);
   --e-form-table-line-width: max(1px, var(--e-grid-gap, 1px));
   border-radius: var(--e-form-table-border-radius);

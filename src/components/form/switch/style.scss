@@ -10,7 +10,7 @@
 
   --thumb-offset: calc(var(--track-width) - var(--track-height));
   --switch-color: var(--e-field-color, currentColor);
-  --switch-thumb-background: var(--e-color-surface-3);
+  --switch-thumb-background: var(--e-color-surface-subtle);
 
 
   &__slot {

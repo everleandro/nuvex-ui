@@ -11,28 +11,28 @@ Nuvex UI expone variables Sass y CSS custom properties para personalizar tema en
 
 ## Contrato oficial de surfaces
 
-La libreria usa `surface-0..surface-3` como jerarquia visual comun. Esta jerarquia aplica tanto para `light` como para `dark`.
+La libreria usa `surface-canvas`, `surface-base`, `surface-raised` y `surface-subtle` como jerarquia visual comun. Esta jerarquia aplica tanto para `light` como para `dark`.
 
-- `surface-0`: fondo base de app y viewport.
-- `surface-1`: contenedores y paneles de contenido por defecto.
-- `surface-2`: chrome persistente o capas elevadas frecuentes.
-- `surface-3`: enfasis puntual (estados destacados), no como fondo general.
+- `surface-canvas`: fondo base de app y viewport.
+- `surface-base`: contenedores y paneles de contenido por defecto.
+- `surface-raised`: chrome persistente o capas elevadas frecuentes.
+- `surface-subtle`: enfasis puntual o apoyo neutral, no como fondo general.
 
 ### Mapeo por componente de layout
 
-- `App` (`.e-app`): `surface-0` (via `--e-app-background`).
+- `App` (`.e-app`): `surface-canvas` (via `--e-app-background`).
 - `Main` (`.e-main`) y `Container` (`.e-container`): heredan fondo del contexto, no definen surface propio.
-- `Bar` (`.e-bar`): `surface-2`.
-- `Drawer` (`.e-drawer`): `surface-1` base, `surface-2` en modo floating.
-- `Card`, `Dialog`, `Menu`: `surface-1`.
+- `Bar` (`.e-bar`): `surface-raised`.
+- `Drawer` (`.e-drawer`): `surface-base` base, `surface-raised` en modo floating.
+- `Card`, `Dialog`, `Menu`: `surface-base`.
 
 ### Regla de composicion
 
 Si un layout mezcla varios bloques visibles al mismo tiempo, prioriza esta progresion:
 
-`surface-0` -> `surface-1` -> `surface-2` -> `surface-3`
+`surface-canvas` -> `surface-base` -> `surface-raised` -> `surface-subtle`
 
-Evita saltar directamente de `surface-0` a `surface-3` para fondos estructurales.
+Evita saltar directamente de `surface-canvas` a `surface-subtle` para fondos estructurales.
 
 ## Configuración inicial
 
@@ -126,7 +126,7 @@ app.use(NuvexUI, {
         isDark: false,
         tokens: {
           brand: '#0ea5e9',
-          'surface-1': '#ecfeff',
+          'surface-base': '#ecfeff',
         },
       },
     },

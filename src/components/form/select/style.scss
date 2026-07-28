@@ -12,7 +12,7 @@
   &__selections {
     align-self: flex-start;
     align-items: center;
-    color: var(--e-field-select-selection-color, var(--e-contrast-surface-1, rgba(0, 0, 0, 0.87)));
+    color: var(--e-field-select-selection-color, var(--e-contrast-surface-base, rgba(0, 0, 0, 0.87)));
     font-size: var(--e-typography-body-font-size-md, 0.875rem);
     display: flex;
     flex: 1 1 auto;
@@ -147,7 +147,7 @@
 }
 
 .e-select__menu {
-  background-color: var(--e-color-surface-1, #ffffff);
+  background-color: var(--e-color-surface-base, #ffffff);
   font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
   font-size: var(--e-typography-body-font-size-md, 0.875rem);
   max-height: 304px;

@@ -10,11 +10,11 @@
 }
 
 @mixin date-picker-grid-button-emphasis-fill {
-  background-color: var(--e-date-picker-color, var(--e-contrast-surface-1));
-  color: var(--e-date-picker-contrast-color, var(--e-color-surface-1));
+  background-color: var(--e-date-picker-color, var(--e-contrast-surface-base));
+  color: var(--e-date-picker-contrast-color, var(--e-color-surface-base));
 
   &:hover {
-    color: var(--e-date-picker-contrast-color, var(--e-color-surface-1));
+    color: var(--e-date-picker-contrast-color, var(--e-color-surface-base));
   }
 }
 
@@ -89,7 +89,7 @@
 
   &__body {
     align-items: center;
-    background: var(--e-date-picker-body-bg, var(--e-color-surface-1, #ffffff));
+    background: var(--e-date-picker-body-bg, var(--e-color-surface-base, #ffffff));
     display: flex;
     flex: 1 0 auto;
     flex-direction: column;

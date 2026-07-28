@@ -13,7 +13,7 @@
   --schedule-local-day-chip-size: 40px;
   --schedule-local-day-chip-size-xs: 25px;
   --schedule-local-event-bg: var(--e-schedule-event-bg, #ffffff);
-  --schedule-local-event-color: var(--e-schedule-event-color, var(--e-contrast-surface-1, #000000));
+  --schedule-local-event-color: var(--e-schedule-event-color, var(--e-contrast-surface-base, #000000));
   --schedule-local-space-base: var(--e-space-base);
 
   color: var(--schedule-local-color);

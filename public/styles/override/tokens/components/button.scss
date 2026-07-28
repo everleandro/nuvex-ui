@@ -9,6 +9,7 @@ $btn-border-width: 1px !default;
 $btn-rounded-border-radius: 28px !default;
 $btn-text-transform: none !default;
 $btn-transition-duration: 0.3s !default;
+$btn-surface-bg: var(--e-color-button-surface) !default;
 $interactive-tonal-opacity: 0.06 !default;
 
 $interactive-states: map.merge(

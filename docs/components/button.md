@@ -116,7 +116,7 @@ const saving = ref(false)
 
 ```vue
 <template>
-  <EButton text color="surface-1" use-contrast-color>
+  <EButton text color="surface-base" use-contrast-color>
     Accion secundaria
   </EButton>
 </template>

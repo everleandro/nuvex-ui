@@ -106,7 +106,7 @@ const formStyle = computed<Record<string, string>>(() => {
     const resolvedLineColor = getColorCssValue(resolvedTableLineColor)
     const resolvedCellBackgroundColor = getColorCssValue(resolvedTableCellBackgroundColor)
     const resolvedLegacyContrastCellBackgroundColor = getColorContrastCssValue(legacyTableLineColor, {
-        fallbackContrast: 'var(--e-color-surface-1, white)',
+        fallbackContrast: 'var(--e-color-surface-base, white)',
     })
     const resolvedLineOpacity = props.tableLineOpacity
 
