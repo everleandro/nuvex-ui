@@ -531,7 +531,7 @@
         &::placeholder,
         &::-webkit-input-placeholder,
         &:-ms-input-placeholder {
-            color: color-mix(in srgb, var(--field-state-input-color) 38%, transparent);
+            color: color-mix(in srgb, var(--field-state-input-color) 50%, transparent);
         }
     }
 

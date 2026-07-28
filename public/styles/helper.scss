@@ -9,8 +9,8 @@
     @return map.get($semantic-contrast-tokens-light, $name);
   }
 
-  @if meta.type-of($bg-color) == "color" {
-    @if color.channel($bg-color, "lightness", $space: hsl) > 60% {
+  @if meta.type-of($bg-color)=="color" {
+    @if color.channel($bg-color, "lightness", $space: hsl)>60% {
       @return #000;
     }
 
@@ -21,8 +21,8 @@
 }
 
 @function e-auto-contrast($bg-color) {
-  @if meta.type-of($bg-color) == "color" {
-    @if color.channel($bg-color, "lightness", $space: hsl) > 60% {
+  @if meta.type-of($bg-color)=="color" {
+    @if color.channel($bg-color, "lightness", $space: hsl)>60% {
       @return #000;
     }
 
@@ -33,7 +33,7 @@
 }
 
 @function e-primitive-contrast-tone($tone) {
-  @if $tone >= 500 {
+  @if $tone >=500 {
     @return 50;
   }
 
@@ -52,9 +52,9 @@
   .#{$color} {
     background-color: var(--e-color-#{$color}) !important;
     border-color: var(--e-color-#{$color}) !important;
-    
+
     color: var(--e-contrast-#{$color}, #{$contrast-fallback}) !important;
-    
+
 
     &--text {
       color: var(--e-color-#{$color}) !important;
@@ -71,7 +71,7 @@
 
     .#{$palette-name} {
       background-color: var(--e-palette-#{$palette-name}) !important;
-      border-color: var(--e-palette-#{$palette-name}) ;
+      border-color: var(--e-palette-#{$palette-name});
       color: var(--e-palette-contrast-#{$palette-name}, var(--e-palette-#{$palette-name}-#{$seed-contrast-tone}, #{$seed-contrast-color}));
 
       &--text {
@@ -147,7 +147,7 @@ $directions: (
   @each $d in $displays {
     $selector: ".d-#{$bp}-#{$d}";
 
-    @if $value == 0 {
+    @if $value ==0 {
       $selector: ".d-#{$d}";
     }
 
@@ -164,7 +164,7 @@ $directions: (
     @for $i from 0 through $space-scale {
 
       .#{$type}#{$dir}-#{$i} {
-        @if meta.type-of($dir-val) == "list" {
+        @if meta.type-of($dir-val)=="list" {
           @each $d in $dir-val {
             #{$prop}-#{$d}: $i * $space-base;
           }
@@ -182,7 +182,7 @@ $directions: (
       // negativos (solo margin)
       @if $type ==m {
         .#{$type}#{$dir}-n#{$i} {
-          @if meta.type-of($dir-val) == "list" {
+          @if meta.type-of($dir-val)=="list" {
             @each $d in $dir-val {
               #{$prop}-#{$d}: -$i * $space-base;
             }
@@ -225,10 +225,6 @@ $directions: (
   .text-#{$val} {
     text-align: $val;
   }
-}
-
-.text-default {
-  color: var(--e-text-default) !important;
 }
 
 .text-muted {
@@ -507,22 +503,22 @@ $directions: (
 
 @each $side in (t, r, b, l) {
   .rounded-#{$side} {
-    @if $side == t {
+    @if $side ==t {
       border-top-left-radius: 0.375rem;
       border-top-right-radius: 0.375rem;
     }
 
-    @else if $side == r {
+    @else if $side ==r {
       border-top-right-radius: 0.375rem;
       border-bottom-right-radius: 0.375rem;
     }
 
-    @else if $side == b {
+    @else if $side ==b {
       border-bottom-right-radius: 0.375rem;
       border-bottom-left-radius: 0.375rem;
     }
 
-    @else if $side == l {
+    @else if $side ==l {
       border-bottom-left-radius: 0.375rem;
       border-top-left-radius: 0.375rem;
     }
