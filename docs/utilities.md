@@ -225,21 +225,27 @@ Todas las clases de espaciado se basan en `$space-base` (default: 4px). Genera v
 
 ## Texto
 
+Las utilidades de texto siguen una convención principal:
+
+- `text-{valor}` para propiedades cuyo valor ya es claro en el nombre, por ejemplo `.text-center`, `.text-uppercase`, `.text-truncate` o `.text-whitespace-nowrap`.
+
+Nota de compatibilidad: los aliases heredados como `.truncate`, `.line-clamp-2`, `.underline` y `.no-underline` siguen funcionando, pero el prefijo `text-` es la forma recomendada para documentación y nuevo consumo.
+
 ### Truncamiento
 
 ```vue
 <template>
   <!-- Una línea -->
-  <p class="truncate">
+  <p class="text-truncate">
     Este texto muy largo se trunca en una sola línea con ellipsis...
   </p>
   
   <!-- Múltiples líneas -->
-  <p class="line-clamp-2">
+  <p class="text-line-clamp-2">
     Este texto no excede 2 líneas. Cualquier contenido
     extra se trunca con ellipsis.
   </p>
-  <p class="line-clamp-3">
+  <p class="text-line-clamp-3">
     Hasta 3 líneas de contenido.
     Línea 2.
     Línea 3. Extra se corta.
@@ -247,24 +253,38 @@ Todas las clases de espaciado se basan en `$space-base` (default: 4px). Genera v
 </template>
 ```
 
+### Transformación y decoración
+
+```vue
+<template>
+  <p class="text-uppercase">TODO EN MAYÚSCULAS</p>
+  <p class="text-lowercase">todo en minúsculas</p>
+  <p class="text-capitalize">cada palabra capitalizada</p>
+  <p class="text-none">Sin transformación forzada</p>
+
+  <a class="text-underline">Link subrayado</a>
+  <a class="text-decoration-none">Link sin subrayado</a>
+</template>
+```
+
 ### Whitespace
 
 ```vue
 <template>
-  <p class="whitespace-normal">
+  <p class="text-whitespace-normal">
     Whitespace normal. Múltiples   espacios se colapsan.
   </p>
   
-  <pre class="whitespace-pre">
+  <pre class="text-whitespace-pre">
     Respeta    espacios y
     saltos de línea
   </pre>
   
-  <p class="whitespace-nowrap">
+  <p class="text-whitespace-nowrap">
     No hay saltos de línea, overflow automático
   </p>
   
-  <div class="whitespace-pre-wrap">
+  <div class="text-whitespace-pre-wrap">
     Respeta espacios Y    permite wrapping
   </div>
 </template>
@@ -274,15 +294,15 @@ Todas las clases de espaciado se basan en `$space-base` (default: 4px). Genera v
 
 ```vue
 <template>
-  <p class="break-words">
+  <p class="text-break-words">
     unhyphenatedverylongwordcanwraptothelinefollowing
   </p>
   
-  <p class="break-all">
+  <p class="text-break-all">
     Rompe en cualquier carácter si es necesario.
   </p>
   
-  <p class="break-keep">
+  <p class="text-break-keep">
     No rompe palabras, respeta CJK
   </p>
 </template>
@@ -417,7 +437,7 @@ Cambia display según breakpoint. Breakpoints disponibles: `xs` (0), `sm` (600px
 <template>
   <div class="e-elevation--md rounded-lg p-6 gap-4 flex-col">
     <h3 class="text-lg font-semibold">Título</h3>
-    <p class="line-clamp-3">Descripción...</p>
+    <p class="text-line-clamp-3">Descripción...</p>
   </div>
 </template>
 ```
@@ -487,6 +507,6 @@ Las utility classes se generan una sola vez durante el build. El archivo resulta
 | Flexbox | `.flex-row`, `.gap-4`, `.items-center`, `.justify-between` |
 | Posición | `.absolute`, `.relative`, `.top-0`, `.inset-0` |
 | Overflow | `.overflow-auto`, `.overflow-x-hidden` |
-| Texto | `.truncate`, `.line-clamp-2`, `.whitespace-nowrap` |
+| Texto | `.text-truncate`, `.text-uppercase`, `.text-decoration-none`, `.text-whitespace-nowrap` |
 | Radio | `.rounded`, `.rounded-lg`, `.rounded-full` |
 | Color | `.primary`, `.red-500`, `.blue--text` |

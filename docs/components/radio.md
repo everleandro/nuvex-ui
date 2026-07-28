@@ -201,7 +201,7 @@ const preferences = ref({
 
     <div v-if="reportData" class="flex-col gap-2 p-4 rounded blue-100">
       <strong>Reporte en {{ reportFormat.toUpperCase() }}</strong>
-      <code class="truncate">{{ reportData }}</code>
+      <code class="text-truncate">{{ reportData }}</code>
     </div>
   </div>
 </template>

@@ -121,6 +121,11 @@ $alignments: (
 );
 
 $text-align: left, center, right;
+$text-transforms: uppercase, lowercase, capitalize, none;
+$text-decorations: (
+  underline: underline,
+  "decoration-none": none
+);
 
 // =============================
 // SPACING (margin & padding)
@@ -227,6 +232,12 @@ $directions: (
   }
 }
 
+@each $val in $text-transforms {
+  .text-#{$val} {
+    text-transform: $val;
+  }
+}
+
 .text-muted {
   color: var(--e-text-muted) !important;
 }
@@ -247,11 +258,19 @@ $directions: (
   color: inherit !important;
 }
 
-.no-underline {
+@each $name, $value in $text-decorations {
+  .text-#{$name} {
+    text-decoration: $value !important;
+  }
+}
+
+.no-underline,
+.text-decoration-none {
   text-decoration: none !important;
 }
 
-.underline {
+.underline,
+.text-underline {
   text-decoration: underline !important;
 }
 
@@ -402,62 +421,77 @@ $directions: (
 // TEXT UTILITIES
 // =============================
 
-.truncate {
+.truncate,
+.text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.line-clamp-1 {
+.line-clamp-1,
+.text-line-clamp-1 {
   overflow: hidden;
   display: -webkit-box;
+  line-clamp: 1;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 
-.line-clamp-2 {
+.line-clamp-2,
+.text-line-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
-.line-clamp-3 {
+.line-clamp-3,
+.text-line-clamp-3 {
   overflow: hidden;
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
-.whitespace-normal {
+.whitespace-normal,
+.text-whitespace-normal {
   white-space: normal;
 }
 
-.whitespace-nowrap {
+.whitespace-nowrap,
+.text-whitespace-nowrap {
   white-space: nowrap;
 }
 
-.whitespace-pre {
+.whitespace-pre,
+.text-whitespace-pre {
   white-space: pre;
 }
 
-.whitespace-pre-wrap {
+.whitespace-pre-wrap,
+.text-whitespace-pre-wrap {
   white-space: pre-wrap;
 }
 
-.whitespace-pre-line {
+.whitespace-pre-line,
+.text-whitespace-pre-line {
   white-space: pre-line;
 }
 
-.break-words {
+.break-words,
+.text-break-words {
   word-break: break-word;
 }
 
-.break-all {
+.break-all,
+.text-break-all {
   word-break: break-all;
 }
 
-.break-keep {
+.break-keep,
+.text-break-keep {
   word-break: keep-all;
 }
 

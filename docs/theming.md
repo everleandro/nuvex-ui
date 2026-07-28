@@ -301,14 +301,24 @@ Esto genera clases como `.m-0` a `.m-16`, `.p-0` a `.p-16`:
 ```vue
 <template>
   <!-- Truncamiento -->
-  <p class="truncate">El texto se corta en una línea con ellipsis...</p>
-  <p class="line-clamp-2">El texto no excede 2 líneas</p>
-  <p class="line-clamp-3">El texto no excede 3 líneas</p>
+  <p class="text-truncate">El texto se corta en una línea con ellipsis...</p>
+  <p class="text-line-clamp-2">El texto no excede 2 líneas</p>
+  <p class="text-line-clamp-3">El texto no excede 3 líneas</p>
+
+  <!-- Transformación -->
+  <p class="text-uppercase">Texto utilitario en mayúsculas</p>
+  <p class="text-capitalize">Texto utilitario capitalizado</p>
+  <p class="text-lowercase">Texto utilitario en minúsculas</p>
+  <p class="text-none">Texto sin transformación forzada</p>
+
+  <!-- Decoración -->
+  <a class="text-underline">Link subrayado</a>
+  <a class="text-decoration-none">Link sin subrayado</a>
   
   <!-- Whitespace -->
-  <pre class="whitespace-pre">Respeta    espacios y
+  <pre class="text-whitespace-pre">Respeta    espacios y
 saltos de línea</pre>
-  <p class="break-words">Unhyphenatedlongwordcanwrap</p>
+  <p class="text-break-words">Unhyphenatedlongwordcanwrap</p>
 </template>
 ```
 
