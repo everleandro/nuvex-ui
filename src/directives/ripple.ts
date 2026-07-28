@@ -34,6 +34,8 @@ const createRipple = (
   position?: { x: number; y: number },
   centered = false
 ) => {
+  const __ANIMATION_DURATION__ = "0.5s";
+
   if (binding?.value?.disabled) return;
 
   ensureRippleClasses(el, binding);
@@ -48,10 +50,9 @@ const createRipple = (
   const color = binding?.value?.color || getComputedStyle(el).color;
   const background = color || "rgb(255, 255, 255)";
   const center = centered || !!binding?.value?.center;
-
   circle.style.width = circle.style.height = `${diameter}px`;
   circle.style.backgroundColor = background;
-  circle.style.animationDuration = "0.5s";
+  circle.style.animation = `v-ripple ${__ANIMATION_DURATION__} linear`;
   circle.style.position = "absolute";
   circle.style.borderRadius = "50%";
   circle.style.pointerEvents = "none";
@@ -65,7 +66,7 @@ const createRipple = (
 
   setTimeout(() => {
     if (circle.parentElement) circle.parentElement.removeChild(circle);
-  }, 500);
+  }, parseFloat(__ANIMATION_DURATION__) * 1000);
 };
 
 const createRippleHandler = (
