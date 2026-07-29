@@ -24,6 +24,7 @@ import type {
   EFieldProps,
   FieldConfiguration,
   FieldLabelBehavior,
+  FormTableChild,
   FormInjection,
 } from "@/types";
 
@@ -339,7 +340,7 @@ export const useFieldCore = (props: FieldCoreProps, emit: FieldEmit) => {
     resetValidation();
   };
 
-  const getGridColConfiguration = (): Pick<EFieldContract, "cols" | "xs" | "sm" | "md" | "lg" | "xl"> => ({
+  const getGridColConfiguration = (): Pick<FormTableChild, "cols" | "xs" | "sm" | "md" | "lg" | "xl"> => ({
     cols: props.cols,
     xs: props.xs,
     sm: props.sm,
@@ -362,7 +363,7 @@ export const useFieldCore = (props: FieldCoreProps, emit: FieldEmit) => {
   watch(
     () => [props.cols, props.xs, props.sm, props.md, props.lg, props.xl] as const,
     () => {
-      form?.updateField?.({ uid: instance.uid, ...getGridColConfiguration() });
+      form?.updateTableChild?.({ uid: instance.uid, ...getGridColConfiguration() });
     },
   );
 
@@ -404,6 +405,10 @@ export const useFieldCore = (props: FieldCoreProps, emit: FieldEmit) => {
       reset,
       resetValidation,
       setConfiguration,
+    });
+
+    form?.bindTableChild?.({
+      uid: instance.uid,
       setTableClasses,
       ...getGridColConfiguration(),
     });
@@ -413,6 +418,7 @@ export const useFieldCore = (props: FieldCoreProps, emit: FieldEmit) => {
 
   onUnmounted(() => {
     form?.unbindField?.(instance.uid);
+    form?.unbindTableChild?.(instance.uid);
   });
 
   const slotProps = computed(() => ({

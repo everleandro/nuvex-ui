@@ -48,6 +48,7 @@ export type { ERadioType, RadioProps, RadioGroupProps, RadioGroupEmits } from ".
 
 export type {
   EForm,
+  FormTableChild,
   FormInjection,
   ERadio,
   ERadioGroup,

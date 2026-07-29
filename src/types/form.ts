@@ -1,12 +1,21 @@
 import type { ComputedRef } from "vue";
 
 import type { EField } from "./field";
+import type { ColProps } from "./grid";
 import type { ERadioType } from "./radio";
+
+export interface FormTableChild extends ColProps {
+  uid: number;
+  setTableClasses?: (value: Array<string>) => void;
+}
 
 export interface FormInjection {
   bindField: (component: Partial<EField>) => void;
   unbindField: (uid: number) => void;
   updateField: (component: Partial<EField>) => void;
+  bindTableChild: (component: Partial<FormTableChild>) => void;
+  unbindTableChild: (uid: number) => void;
+  updateTableChild: (component: Partial<FormTableChild>) => void;
 }
 
 export interface EForm {
@@ -16,6 +25,9 @@ export interface EForm {
   reset: () => void;
   resetValidation: () => void;
   updateField: (component: Partial<EField>) => void;
+  bindTableChild: (component: Partial<FormTableChild>) => void;
+  unbindTableChild: (uid: number) => void;
+  updateTableChild: (component: Partial<FormTableChild>) => void;
 }
 
 export interface ERadio {
