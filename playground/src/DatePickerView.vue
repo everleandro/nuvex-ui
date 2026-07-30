@@ -4,13 +4,15 @@
       <p class="date-picker-page__eyebrow">Components</p>
       <h2 class="date-picker-page__title">Date Picker Examples</h2>
       <p class="date-picker-page__lead">
-        Escenarios para validar navegacion, restricciones de fechas, localizacion, slots y cierre en dialog para EDatePicker.
+        Escenarios para validar navegacion, restricciones de fechas, localizacion, slots y cierre en dialog para
+        EDatePicker.
       </p>
     </header>
 
     <article class="date-picker-demo">
       <h3>Interactive controls</h3>
-      <p class="date-picker-demo__caption">Controla la vista activa y activa fines de semana deshabilitados desde un panel lateral.</p>
+      <p class="date-picker-demo__caption">Controla la vista activa y activa fines de semana deshabilitados desde un
+        panel lateral.</p>
 
       <div class="date-picker-demo__split">
         <EDatePicker v-model="usageDate" :view="usageView" :disabled="usageDisabledConfig" color="primary" />
@@ -28,13 +30,7 @@
           </div>
 
           <EForm>
-            <ESelect
-              v-model="usageView"
-              :items="viewOptions"
-              item-text="label"
-              item-value="value"
-              label="View"
-            />
+            <ESelect v-model="usageView" :items="viewOptions" item-text="label" item-value="value" label="View" />
             <ECheckbox v-model="usageWithDisabled" label="Disable weekends" />
           </EForm>
         </ECard>
@@ -47,57 +43,50 @@
 
       <ECard elevation="sm">
         <div class="date-picker-demo__actions">
-          <EButton
-            v-for="option in viewOptions"
-            :key="option.value"
-            color="primary"
-            :tonal="controlledView === option.value"
-            @click="controlledView = option.value"
-          >
+          <EButton v-for="option in viewOptions" :key="option.value" color="primary"
+            :tonal="controlledView === option.value" @click="controlledView = option.value">
             {{ option.label }}
           </EButton>
         </div>
 
         <p class="date-picker-demo__state">Current view: {{ controlledViewLabel }}</p>
 
-        <EDatePicker
-          v-model="controlledDate"
-          :view="controlledView"
-          color="primary"
-          @update:view="controlledView = $event"
-        />
+        <EDatePicker v-model="controlledDate" :view="controlledView" color="primary"
+          @update:view="controlledView = $event" />
       </ECard>
     </article>
 
     <article class="date-picker-demo">
-      <h3>Disabled and highlighted dates</h3>
-      <p class="date-picker-demo__caption">Combina reglas de bloqueo con hitos resaltados y una ventana de congelamiento.</p>
+      <h3>Highlighted dates</h3>
+      <p class="date-picker-demo__caption">Combina reglas de bloqueo con hitos resaltados y una ventana de
+        congelamiento.</p>
 
       <div class="date-picker-demo__split">
-        <EDatePicker
-          v-model="highlightedDate"
-          color="secondary"
-          :disabled="disabledDateRules"
-          :highlighted="highlightedDateRules"
-          elevation="sm"
-        />
+        <EDatePicker v-model="highlightedDate" color="blue" :highlighted="highlightedDateRules" elevation="sm" />
 
-        <ECard elevation="sm">
-          <ul class="date-picker-demo__list">
-            <li>Weekends are disabled.</li>
-            <li>Freeze window: August 20 to August 25.</li>
-            <li>Highlighted dates mark releases and approval windows.</li>
-          </ul>
-        </ECard>
+
+      </div>
+    </article>
+
+    <article class="date-picker-demo">
+      <h3>Disabled dates</h3>
+      <p class="date-picker-demo__caption">Combina reglas de bloqueo con hitos resaltados y una ventana de
+        congelamiento.</p>
+
+      <div class="date-picker-demo__split">
+        <EDatePicker v-model="highlightedDate" color="secondary" :disabled="disabledDateRules" elevation="sm" />
+
       </div>
     </article>
 
     <article class="date-picker-demo">
       <h3>Layout and header options</h3>
-      <p class="date-picker-demo__caption">Casos para landscape completo, only-month horizontal y una version sin bloque superior.</p>
+      <p class="date-picker-demo__caption">Casos para landscape completo, only-month horizontal y una version sin bloque
+        superior.</p>
 
       <div class="date-picker-demo__grid">
-        <ECard title="Landscape date selection" subtitle="Layout horizontal para flujos con mas ancho disponible." elevation="sm">
+        <ECard title="Landscape date selection" subtitle="Layout horizontal para flujos con mas ancho disponible."
+          elevation="sm">
           <EDatePicker v-model="landscapeDate" landscape color="secondary" />
         </ECard>
 
@@ -106,20 +95,16 @@
         </ECard>
 
         <ECard title="Header-only scheduling" subtitle="no-title con inicio de semana en domingo." elevation="sm">
-          <EDatePicker
-            v-model="headerlessDate"
-            no-title
-            :week-start="0"
-            format="month-mmmm year-YYYY"
-            color="primary"
-          />
+          <EDatePicker v-model="headerlessDate" no-title :week-start="0" format="month-mmmm year-YYYY"
+            color="primary" />
         </ECard>
       </div>
     </article>
 
     <article class="date-picker-demo">
       <h3>Localization</h3>
-      <p class="date-picker-demo__caption">Overrides por instancia para mezclar idioma del calendario segun el flujo.</p>
+      <p class="date-picker-demo__caption">Overrides por instancia para mezclar idioma del calendario segun el flujo.
+      </p>
 
       <div class="date-picker-demo__grid">
         <ECard title="Locale override: es" subtitle="El picker ignora el locale global de la app." elevation="sm">
@@ -134,9 +119,11 @@
 
     <article class="date-picker-demo">
       <h3>Slots customization</h3>
-      <p class="date-picker-demo__caption">Ejemplo con title y header custom usando prev, next, changeViewMode y pageDate.</p>
+      <p class="date-picker-demo__caption">Ejemplo con title y header custom usando prev, next, changeViewMode y
+        pageDate.</p>
 
-      <ECard title="Custom title and header" subtitle="Mantiene la logica interna del picker con framing propio." elevation="sm">
+      <ECard title="Custom title and header" subtitle="Mantiene la logica interna del picker con framing propio."
+        elevation="sm">
         <EDatePicker v-model="slotDate" color="primary">
           <template #title>
             <div class="date-picker-slot-title">
@@ -166,7 +153,9 @@
 
     <article class="date-picker-demo">
       <h3>Dialog integration</h3>
-      <p class="date-picker-demo__caption">Usa close-on-change para cerrar el dialog tan pronto exista una seleccion valida.</p>
+      <p class="date-picker-demo__caption">Usa close-on-change para cerrar el dialog tan pronto exista una seleccion
+        valida.
+      </p>
 
       <ECard title="Release planning" subtitle="Seleccion rapida dentro de overlay." elevation="sm">
         <p class="date-picker-demo__state">Saved date: {{ formatDisplayDate(dialogDate) }}</p>
@@ -174,13 +163,7 @@
 
         <EDialog v-model="dialogOpen">
           <ECard class="date-picker-dialog-card">
-            <EDatePicker
-              v-model="dialogDate"
-              color="secondary"
-              close-on-change
-              :disabled="disabledDateRules"
-              :highlighted="highlightedDateRules"
-            />
+            <EDatePicker v-model="dialogDate" color="secondary" close-on-change />
           </ECard>
         </EDialog>
       </ECard>
@@ -193,7 +176,7 @@ import { computed, ref } from "vue";
 import { datePickerViewType } from "../../src";
 
 const createDate = (year, month, day) => {
-  return new Date(year, month - 1, day);
+  return new Date(year, month, day);
 };
 
 const viewOptions = [
@@ -231,8 +214,8 @@ const disabledDateRules = {
   days: [0, 6],
   ranges: [
     {
-      from: createDate(2026, 8, 20),
-      to: createDate(2026, 8, 25),
+      from: createDate(2026, 8, 14),
+      to: createDate(2026, 8, 18),
     },
   ],
 };
@@ -387,6 +370,7 @@ const dialogDate = ref(createDate(2026, 10, 3));
 }
 
 @media (max-width: 960px) {
+
   .date-picker-demo__split,
   .date-picker-demo__grid {
     grid-template-columns: 1fr;

@@ -330,19 +330,21 @@ div[class*="picker-transition-"] {
 
 .picker-fade-transition {
 
-  &-leave-to,
-  &-enter {
+  &-enter-from,
+  &-leave-to {
     opacity: 0 !important;
   }
 
-  &-leave-active,
-  &-enter {
+  &-leave-active {
     position: absolute;
   }
 
-  &-leave-active,
   &-enter-active {
-    transition: var(--date-picker-local-transition, 0.3s cubic-bezier(0.25, 0.8, 0.5, 1)) !important;
+    transition: opacity var(--date-picker-local-transition, 0.3s cubic-bezier(0.25, 0.8, 0.5, 1)) !important;
+  }
+
+  &-leave-active {
+    transition: opacity 0s linear !important;
   }
 }
 

@@ -8,7 +8,7 @@
             {{ currentYear }}
           </div>
           <div class="e-picker__title__btn e-date-picker-title__date e-picker__title__btn--active">
-            <transition :name="store.pickerTransition">
+            <transition :name="pickerTransitionName">
               <div v-html="formattedHeaderDate" :key="formattedHeaderKey"></div>
             </transition>
           </div>
@@ -27,7 +27,7 @@
               :aria-disabled="prevDisabled" @click="prevButtonAction()" />
 
             <div class="e-date-picker-header__value">
-              <transition :name="store.headerContentAnimation">
+              <transition :name="headerContentTransitionName">
                 <div :key="headerValueKey">
                   <EButton type="button" text :aria-label="headerButtonLabel" block @click="changeViewMode()">
                     {{ formattedSubheader() }}
@@ -42,7 +42,7 @@
         </div>
 
         <div :class="gridContainerClass">
-          <transition :name="store.gridContentAnimation" mode="out-in">
+          <transition :name="gridContentTransitionName">
             <div v-if="viewComputed === store.viewTypeOptions.day" :key="keyMonth" class="date-view" role="grid"
               :aria-label="formattedSubheader()" @keydown="handleDayGridKeydown">
               <div class="grid-header" role="row">
@@ -128,7 +128,6 @@ import {
   inject,
   nextTick,
   onBeforeUnmount,
-  onMounted,
   reactive,
   ref,
   watch,
@@ -136,6 +135,8 @@ import {
 
 // State and setup
 const liveAnnouncement = ref("");
+const suppressTransitions = ref(false);
+const pendingModelValueTimestamp = ref<number | null>(null);
 
 // Navigation state
 const nextDisabled = computed(() => {
@@ -174,15 +175,21 @@ const props = withDefaults(defineProps<DatePickerProps>(), {
   weekStart: 1,
 });
 
+const createInitialPickerValue = (): UtilDate => {
+  return new UtilDate(props.modelValue, props.lng);
+};
+
+const initialPickerValue = createInitialPickerValue();
+
 const store = reactive({
-  pageDate: new Date(),
+  pageDate: initialPickerValue.date,
   localView: datePickerViewType.day,
-  selectedDate: new UtilDate(new Date(), props.lng),
+  selectedDate: initialPickerValue,
   headerContentAnimation: "tab-transition",
   gridContentAnimation: "tab-transition",
   viewTypeOptions: datePickerViewType,
   pickerTransition: "picker-transition",
-  valueTimestamp: new Date().getTime(),
+  valueTimestamp: initialPickerValue.date.getTime(),
 });
 
 const keyMonth = computed(() => {
@@ -214,6 +221,22 @@ const viewComputed = computed((): datePickerViewType => {
   return props.view !== undefined ? props.view : store.localView;
 });
 
+const pickerTransitionName = computed((): string => {
+  return suppressTransitions.value ? "" : store.pickerTransition;
+});
+
+const headerContentTransitionName = computed((): string => {
+  return suppressTransitions.value ? "" : store.headerContentAnimation;
+});
+
+const gridContentTransitionName = computed((): string => {
+  return suppressTransitions.value ? "" : store.gridContentAnimation;
+});
+
+const enableTransitions = (): void => {
+  suppressTransitions.value = false;
+};
+
 const changeView = (value: datePickerViewType) => {
   store.localView = value;
   emit("update:view", value);
@@ -226,15 +249,15 @@ const setViewTransition = (targetView: datePickerViewType): void => {
     return;
   }
 
-  const isDrillingDown = targetView < currentView;
+  enableTransitions();
 
-  store.gridContentAnimation = isDrillingDown
-    ? "picker-view-forward-transition"
-    : "picker-view-reverse-transition";
+  store.gridContentAnimation = "picker-fade-transition";
   store.headerContentAnimation = "picker-fade-transition";
 };
 
 const changeValue = (value: UtilDate) => {
+  enableTransitions();
+  pendingModelValueTimestamp.value = value.date.getTime();
   updatePageConfiguration(value);
   if (props.closeOnChange) {
     dialog?.close(true);
@@ -289,7 +312,19 @@ const visiblePrevMonthDays = computed((): Array<Day> => {
 watch(
   () => props.modelValue,
   (value: string | number | Date | undefined) => {
-    updatePageConfiguration(new UtilDate(value));
+    const utilDate = new UtilDate(value);
+    const nextTimestamp = utilDate.date.getTime();
+
+    if (pendingModelValueTimestamp.value === nextTimestamp) {
+      pendingModelValueTimestamp.value = null;
+      enableTransitions();
+      updatePageConfiguration(utilDate);
+      return;
+    }
+
+    pendingModelValueTimestamp.value = null;
+    suppressTransitions.value = true;
+    updatePageConfiguration(utilDate);
   },
 );
 
@@ -364,7 +399,7 @@ const matchesConfiguredRange = (
   configObject: DatesConfiguration,
 ) => {
   return configObject.ranges?.some((range) => {
-    return Boolean(range.from && range.to && date < range.to && date > range.from);
+    return Boolean(range.from && range.to && date <= range.to && date >= range.from);
   }) ?? false;
 };
 
@@ -410,11 +445,6 @@ const isHighlightEnd = (date: Date): boolean => {
     isSameCalendarDate(props.highlighted.to, date)
   );
 };
-
-onMounted(() => {
-  store.pageDate = props.modelValue ? new Date(props.modelValue) : new Date();
-  store.selectedDate = new UtilDate(props.modelValue);
-});
 
 const visibleNextMonthDays = computed((): Array<Day> => {
   const utilDate = new UtilDate(store.pageDate).endOfMonth();
@@ -791,6 +821,7 @@ const selectableGridButtonProps = (
 
 const nextMonth = () => {
   if (!nextMonthDisabled.value) {
+    enableTransitions();
     store.headerContentAnimation = "tab-transition";
     store.gridContentAnimation = "tab-transition";
     changeMonth(+1);
@@ -798,6 +829,7 @@ const nextMonth = () => {
 };
 const previousMonth = () => {
   if (!previousMonthDisabled.value) {
+    enableTransitions();
     store.headerContentAnimation = "tab-reverse-transition";
     store.gridContentAnimation = "tab-reverse-transition";
     changeMonth(-1);
@@ -854,6 +886,7 @@ const nextButtonAction = (): void => {
 };
 const nextYear = (): void => {
   if (!nextYearDisabled.value) {
+    enableTransitions();
     store.headerContentAnimation = "tab-transition";
     store.gridContentAnimation = "tab-transition";
     changeYear(1);
@@ -861,6 +894,7 @@ const nextYear = (): void => {
 };
 const nextYearPage = (): void => {
   if (!nextYearPageDisabled.value) {
+    enableTransitions();
     store.headerContentAnimation = "tab-transition";
     store.gridContentAnimation = "tab-transition";
     changeYear(12);
@@ -888,6 +922,7 @@ const previousYearDisabled = computed(() => {
 
 const previousYear = (): void => {
   if (!previousYearDisabled.value) {
+    enableTransitions();
     store.headerContentAnimation = "tab-reverse-transition";
     store.gridContentAnimation = "tab-reverse-transition";
     changeYear(-1);
@@ -896,6 +931,7 @@ const previousYear = (): void => {
 
 const previousYearPage = (): void => {
   if (!previousYearPageDisabled.value) {
+    enableTransitions();
     store.headerContentAnimation = "tab-reverse-transition";
     store.gridContentAnimation = "tab-reverse-transition";
     changeYear(-12);
@@ -984,11 +1020,13 @@ const selectDate = (day: Day): void => {
     return;
   }
 
+  enableTransitions();
+
   const nextDate = new UtilDate(day.timestamp).date;
 
   const currentDate = computedValue.value.date;
   store.pickerTransition =
-    currentDate > nextDate ? "picker-transition-reverse" : "picker-transition";
+    currentDate < nextDate ? "picker-transition-reverse" : "picker-transition";
   changeValue(new UtilDate(day.timestamp));
 };
 
