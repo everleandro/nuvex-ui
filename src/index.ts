@@ -26,6 +26,7 @@ export type {
 	TextInputValue,
 	TextInputValueEventPayload,
 	UseTextInputProps,
+	EForm,
 	FormInjection,
 	ERadioType,
 	BarProps,

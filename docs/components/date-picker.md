@@ -125,6 +125,18 @@ Notas:
 </template>
 ```
 
+### Layout horizontal completo
+
+```vue
+<template>
+  <EDatePicker
+    v-model="value"
+    landscape
+    color="secondary"
+  />
+</template>
+```
+
 ### Solo mes en layout horizontal
 
 ```vue

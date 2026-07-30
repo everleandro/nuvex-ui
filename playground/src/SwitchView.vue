@@ -12,7 +12,7 @@
       <h3>Basic usage</h3>
       <EForm>
         <ESwitch v-model="notifications" label="Notifications" detail="Default" lg="4" />
-        <ESwitch v-model="marketing" label="Marketing emails" color="success" lg="4" />
+        <ESwitch v-model="marketing" label="Marketing emails" color="success" lg="4" loading/>
         <ESwitch v-model="betaFeatures" label="Beta features" color="info" lg="4" />
       </EForm>
 
@@ -29,6 +29,15 @@
           label="Accept terms and conditions"
           :rules="mustBeTrueRule"
           detail="Required to submit"
+          loading
+          lg="6"
+        />
+        <ESwitch
+          :model-value="true"
+          label="Accept terms and conditions"
+          :rules="mustBeTrueRule"
+          detail="Required to submit"
+          loading
           lg="6"
         />
 

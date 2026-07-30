@@ -12,6 +12,8 @@
   --switch-color: var(--e-field-color, currentColor);
   --switch-thumb-background: var(--e-color-surface-subtle);
 
+  --e-progress-circular-overlay-color: var(--switch-color, var(--e-contrast-surface-canvas));
+
 
   &__slot {
     align-items: center;
@@ -24,6 +26,7 @@
   &--active {
     --switch-thumb-transform: translate(var(--thumb-offset));
     --switch-thumb-background: var(--switch-color);
+    --e-progress-circular-overlay-color: var(--e-color-surface-canvas);
   }
 
   .e-label {

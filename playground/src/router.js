@@ -13,6 +13,8 @@ import CheckboxView from "./CheckboxView.vue";
 import RadioView from "./RadioView.vue";
 import FieldAlignmentMigrationView from "./FieldAlignmentMigrationView.vue";
 import SwitchView from "./SwitchView.vue";
+import TabView from "./TabView.vue";
+import DatePickerView from "./DatePickerView.vue";
 import { navigationGroups } from "./navigation";
 
 const routeComponentById = {
@@ -28,6 +30,8 @@ const routeComponentById = {
   "components-radio": RadioView,
   "components-field-alignment": FieldAlignmentMigrationView,
   "components-switch": SwitchView,
+  "components-tab": TabView,
+  "components-date-picker": DatePickerView,
   "components-expansion-panels": ExpansionPanelsView,
 };
 

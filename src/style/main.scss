@@ -23,12 +23,10 @@
   --interactive-element-local-state-active: var(--e-interactive-state-active, 0.12);
   --interactive-element-local-tonal-opacity: var(--e-interactive-tonal-opacity, 0.08);
 
-  @include button-before(
-    $interactive: true,
+  @include button-before($interactive: true,
     $hover-opacity: var(--interactive-element-local-state-hover),
     $focus-opacity: var(--interactive-element-local-state-focus),
-    $active-opacity: var(--interactive-element-local-state-active)
-  );
+    $active-opacity: var(--interactive-element-local-state-active));
 
   &::before {
     z-index: 0;
@@ -121,7 +119,7 @@
 }
 
 .e-progress-circular__overlay {
-  stroke: currentColor;
+  stroke: var(--e-progress-circular-overlay-color, currentColor);
   z-index: 2;
   transition: all 0.6s ease-in-out;
 }

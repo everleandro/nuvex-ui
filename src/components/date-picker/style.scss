@@ -52,12 +52,16 @@
   overflow: hidden;
   position: relative;
   vertical-align: top;
+  --container-width: var(--e-date-picker-body-width);
+  width: var(--container-width);
 
   // Shell
   &__title {
     background: var(--date-picker-local-color);
     color: var(--date-picker-local-contrast-color);
     padding: var(--e-date-picker-title-padding, 1rem);
+    width: var(--e-date-picker-body-width);
+    margin: 0 auto;
 
     &__btn {
       text-align: left;
@@ -107,6 +111,7 @@
 
   &--landscape {
     flex-direction: row;
+    --container-width: calc(var(--e-date-picker-landscape-title-width, 16.625rem) + var(--e-date-picker-body-width));
 
     .e-picker__title {
       border-top-right-radius: 0;
@@ -334,5 +339,52 @@ div[class*="picker-transition-"] {
   &-leave-active,
   &-enter-active {
     transition: var(--date-picker-local-transition, 0.3s cubic-bezier(0.25, 0.8, 0.5, 1)) !important;
+  }
+}
+
+div[class*="picker-view-forward-transition-"],
+div[class*="picker-view-reverse-transition-"] {
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.picker-view-forward-transition,
+.picker-view-reverse-transition {
+
+  &-enter-active,
+  &-leave-active {
+    transition:
+      opacity var(--date-picker-local-transition, 0.3s cubic-bezier(0.25, 0.8, 0.5, 1)),
+      transform var(--date-picker-local-transition, 0.3s cubic-bezier(0.25, 0.8, 0.5, 1));
+    transform-origin: center top;
+  }
+
+  &-leave-active {
+    position: absolute;
+  }
+}
+
+.picker-view-forward-transition {
+  &-enter-from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(1.02);
+  }
+}
+
+.picker-view-reverse-transition {
+  &-enter-from {
+    opacity: 0;
+    transform: translateY(-0.75rem) scale(1.02);
+  }
+
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
   }
 }
