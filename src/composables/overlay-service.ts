@@ -41,7 +41,7 @@ const isOverlayActive = computed(() => state.stack.length > 0);
 let hasEscapeListener = false;
 const overlayRuntimeById = new Map<string, OverlayRuntime>();
 const overlayFocusRuntimeById = new Map<string, OverlayFocusRuntime>();
-const OVERLAY_BASE_Z_INDEX = 3;
+const OVERLAY_BASE_Z_INDEX = 20;
 const OVERLAY_TRANSITION_MS = 300;
 
 const getFocusableElement = (target?: HTMLElement | null): HTMLElement | null => {
