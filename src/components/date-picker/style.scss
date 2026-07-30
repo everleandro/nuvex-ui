@@ -117,6 +117,10 @@
       border-top-right-radius: 0;
       width: var(--e-date-picker-landscape-title-width, 10.625rem);
     }
+
+    &.e-picker--no-title {
+      --container-width: var(--e-date-picker-body-width);
+    }
   }
 
   // Grid button states

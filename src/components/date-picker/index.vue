@@ -1,6 +1,6 @@
 <template>
   <div :class="pickerClass" :style="pickerStyle">
-    <div v-if="!noTitle && !(onlyYear || onlyMonth)" class="e-picker__title">
+    <div v-if="!noTitle" class="e-picker__title">
       <div class="e-date-picker-title">
         <slot name="title">
           <div class="e-picker__title__btn e-date-picker-title__year"
@@ -82,8 +82,8 @@
               </div>
             </div>
 
-            <div v-else :key="keyYearPage" class="year-view" role="grid"
-              :aria-label="formattedSubheader()" @keydown="handleYearGridKeydown">
+            <div v-else :key="keyYearPage" class="year-view" role="grid" :aria-label="formattedSubheader()"
+              @keydown="handleYearGridKeydown">
               <div class="grid-body">
                 <span v-for="year in years" :key="year.timestamp" role="gridcell" :aria-selected="year.isSelected"
                   :aria-current="year.isCurrent ? 'date' : undefined" class="grid-body__cell__cell">
@@ -170,6 +170,7 @@ const props = withDefaults(defineProps<DatePickerProps>(), {
   disabled: undefined,
   highlighted: undefined,
   view: undefined,
+  noTitle: false,
   weekStart: 1,
 });
 
@@ -438,6 +439,9 @@ const pickerClass = computed(() => {
 
   if (props.landscape) {
     classes.push("e-picker--landscape");
+  }
+  if (props.noTitle) {
+    classes.push("e-picker--no-title");
   }
 
   if (props.elevation) {
