@@ -168,6 +168,21 @@
         </EDialog>
       </ECard>
     </article>
+
+    <article class="date-picker-demo">
+      <h3>Menu fit content</h3>
+      <p class="date-picker-demo__caption">
+        El menu usa el ancho intrinseco del Date Picker aunque el campo activador sea mas ancho.
+      </p>
+
+      <EMenu fit-content origin="bottom right">
+        <template #activator="{ attrs }">
+          <ETextfield :model-value="formatDisplayDate(menuDate)" label="Deadline" input-align="end" input-readonly
+            v-bind="attrs" />
+        </template>
+        <EDatePicker v-model="menuDate" color="primary" close-on-change />
+      </EMenu>
+    </article>
   </section>
 </template>
 
@@ -254,6 +269,7 @@ const slotDate = ref(createDate(2026, 8, 14));
 
 const dialogOpen = ref(false);
 const dialogDate = ref(createDate(2026, 10, 3));
+const menuDate = ref(createDate(2026, 10, 8));
 </script>
 
 <style scoped>

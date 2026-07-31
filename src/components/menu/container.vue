@@ -20,11 +20,13 @@ import { Ref, computed, isRef, nextTick, onMounted, onUnmounted, provide, ref, u
 import { useResolvedColor } from '@/composables/color'
 import type { ElevationProps, MenuTypeTarget } from '@/types'
 import { useMenuStack } from '@/composables/menu-stack'
+import { resolveMenuWidth } from './sizing'
 
 const props = withDefaults(defineProps<ElevationProps & {
     absolute?: boolean
     closeOnContentClick?: boolean
     color?: string
+    fitContent?: boolean
     fullWidth?: boolean
     holdFocus?: boolean
     checkOffset?: boolean
@@ -211,12 +213,16 @@ const updatemenuContentStyle = async (): Promise<void> => {
     const { width, top, left, height } = rect;
     const result: Record<string, string | number> = {}
     const menuHeight = getHeight()
-    const contentWidth = getContentWidth()
+    const contentWidth = getContentWidth(Boolean(props.fitContent))
     const activatorWidth = Math.ceil(width)
     const explicitWidth = typeof props.width === 'number' ? props.width : undefined
-    const menuWidth = props.fullWidth
-        ? activatorWidth
-        : explicitWidth ?? Math.max(activatorWidth, contentWidth)
+    const menuWidth = resolveMenuWidth({
+        activatorWidth,
+        contentWidth,
+        explicitWidth,
+        fitContent: props.fitContent,
+        fullWidth: props.fullWidth,
+    })
     const margin = 12
 
     if (props.fullWidth) {
@@ -432,7 +438,7 @@ const getWidth = () => {
     return wanted_width;
 }
 
-const getContentWidth = (): number => {
+const getContentWidth = (intrinsicOnly = false): number => {
     const el = wrapper.value as HTMLElement
     if (!el) return 0
     if (typeof document === 'undefined') return 0
@@ -484,14 +490,15 @@ const getContentWidth = (): number => {
     const elVisibility = elStyle.visibility
 
     if (elDisplay !== 'none') {
-        return Math.max(measureCurrent(), measureIntrinsic())
+        return intrinsicOnly ? measureIntrinsic() : Math.max(measureCurrent(), measureIntrinsic())
     }
 
     el.style.position = 'absolute'
     el.style.visibility = 'hidden'
     el.style.display = 'block'
 
-    const wantedWidth = Math.max(measureCurrent(), measureIntrinsic())
+    const intrinsicWidth = measureIntrinsic()
+    const wantedWidth = intrinsicOnly ? intrinsicWidth : Math.max(measureCurrent(), intrinsicWidth)
 
     el.style.display = elDisplay
     el.style.position = elPosition

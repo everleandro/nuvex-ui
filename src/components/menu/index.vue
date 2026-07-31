@@ -5,7 +5,7 @@
 
     <Teleport to="body">
         <EMenuContainer v-model="opened" :absolute="props.absolute" :close-on-content-click="props.closeOnContentClick"
-            :full-width="props.fullWidth" :hold-focus="props.holdFocus" :check-offset="props.checkOffset"
+            :fit-content="props.fitContent" :full-width="props.fullWidth" :hold-focus="props.holdFocus" :check-offset="props.checkOffset"
             :transition="props.transition" :origin="props.origin" :max-width="props.maxWidth" :offset-x="props.offsetX"
             :offset-y="props.offsetY" :width="props.width" :elevation="props.elevation" :color="props.color" :target="currentActivator"
             :data-id="dataId" :content-id="contentId" :content-role="props.contentRole" :forwarded-attrs="attrs">
@@ -28,6 +28,7 @@ export interface Props extends ElevationProps {
     closeOnContentClick?: boolean
     color?: string
     contentRole?: string
+    fitContent?: boolean
     fullWidth?: boolean
     activator?: MenuTypeTarget
     holdFocus?: boolean
