@@ -13,18 +13,40 @@ export interface RippleBinding {
   disabled?: boolean;
   keyboard?: boolean;
   interactive?: boolean;
+  ignore?: string;
 }
+
+const isIgnoredTarget = (
+  el: El,
+  event: Event,
+  binding?: Record<"value", RippleBinding>
+) => {
+  const selector = binding?.value?.ignore;
+  const target = event.target;
+
+  if (!selector || !(target instanceof Element) || target === el) return false;
+
+  const ignoredTarget = target.closest(selector);
+  return !!ignoredTarget && ignoredTarget !== el && el.contains(ignoredTarget);
+};
 
 const ensureRippleClasses = (
   el: El,
   binding?: Record<"value", RippleBinding>
 ) => {
-  if (!el.classList.contains("v-ripple-element")) {
+  const rippleEnabled = binding?.value?.disabled !== true;
+  const interactive = rippleEnabled && binding?.value?.interactive !== false;
+
+  if (rippleEnabled && !el.classList.contains("v-ripple-element")) {
     el.classList.add("v-ripple-element");
+  } else if (!rippleEnabled) {
+    el.classList.remove("v-ripple-element");
   }
 
-  if (binding?.value?.interactive !== false && !el.classList.contains("interactive-element")) {
+  if (interactive && !el.classList.contains("interactive-element")) {
     el.classList.add("interactive-element");
+  } else if (!interactive) {
+    el.classList.remove("interactive-element");
   }
 };
 
@@ -74,6 +96,7 @@ const createRippleHandler = (
   binding?: Record<"value", RippleBinding>
 ) => {
   return (e: MouseEvent) => {
+    if (isIgnoredTarget(el, e, binding)) return;
     createRipple(el, binding, { x: e.clientX, y: e.clientY });
   };
 };
@@ -84,6 +107,7 @@ const createRippleKeyboardHandler = (
 ) => {
   return (e: KeyboardEvent) => {
     if (binding?.value?.disabled || e.repeat) return;
+    if (isIgnoredTarget(el, e, binding)) return;
     if (e.key !== " " && e.key !== "Enter") return;
 
     createRipple(el, binding, undefined, true);

@@ -114,11 +114,11 @@ $list-item-affix-gap: map.merge(
 
 $list-item-affix-width: map.merge(
     (
-        x-small: 18px,
-        small: 20px,
-        default: 22px,
-        large: 24px,
-        x-large: 26px,
+        x-small: 24px,
+        small: 30px,
+        default: 36px,
+        large: 42px,
+        x-large: 48px,
     ),
     ()
 ) !default;

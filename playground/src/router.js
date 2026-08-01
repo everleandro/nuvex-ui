@@ -15,6 +15,7 @@ import FieldAlignmentMigrationView from "./FieldAlignmentMigrationView.vue";
 import SwitchView from "./SwitchView.vue";
 import TabView from "./TabView.vue";
 import DatePickerView from "./DatePickerView.vue";
+import ListView from "./ListView.vue";
 import { navigationGroups } from "./navigation";
 
 const routeComponentById = {
@@ -32,6 +33,7 @@ const routeComponentById = {
   "components-switch": SwitchView,
   "components-tab": TabView,
   "components-date-picker": DatePickerView,
+  "components-list": ListView,
   "components-expansion-panels": ExpansionPanelsView,
 };
 
