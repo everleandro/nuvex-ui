@@ -41,7 +41,7 @@ const resolvedIcon = computed(() => props.icon || iconFactory.person)
 
 .e-avatar {
     &__container {
-        --avatar-size: var(--e-avatar-size-default, 65px);
+        --avatar-size: var(--e-avatar-size-default, 46px);
 
         flex: none;
         align-items: center;
@@ -60,23 +60,23 @@ const resolvedIcon = computed(() => props.icon || iconFactory.person)
         @include button-before();
 
         &--size-x-small {
-            --avatar-size: var(--e-avatar-size-x-small, 24px);
+            --avatar-size: var(--e-avatar-size-x-small, 30px);
         }
 
         &--size-small {
-            --avatar-size: var(--e-avatar-size-small, 32px);
+            --avatar-size: var(--e-avatar-size-small, 38px);
         }
 
         &--size-default {
-            --avatar-size: var(--e-avatar-size-default, 65px);
+            --avatar-size: var(--e-avatar-size-default, 46px);
         }
 
         &--size-large {
-            --avatar-size: var(--e-avatar-size-large, 80px);
+            --avatar-size: var(--e-avatar-size-large, 54px);
         }
 
         &--size-x-large {
-            --avatar-size: var(--e-avatar-size-x-large, 96px);
+            --avatar-size: var(--e-avatar-size-x-large, 62px);
         }
 
         .e-icon {

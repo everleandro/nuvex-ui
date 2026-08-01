@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import PlaygroundPage from "./PlaygroundPage.vue";
 import ExpansionPanelsView from "./ExpansionPanelsView.vue";
+import AvatarView from "./AvatarView.vue";
 import ButtonView from "./ButtonView.vue";
 import CardView from "./CardView.vue";
 import BarView from "./BarView.vue";
@@ -19,6 +20,7 @@ import ListView from "./ListView.vue";
 import { navigationGroups } from "./navigation";
 
 const routeComponentById = {
+  "components-avatar": AvatarView,
   "components-button": ButtonView,
   "components-card": CardView,
   "components-bar": BarView,

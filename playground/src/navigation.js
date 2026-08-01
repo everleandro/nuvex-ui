@@ -15,6 +15,11 @@ export const navigationGroups = [
     title: "Components",
     children: [
       {
+        id: "components-avatar",
+        title: "Avatar",
+        to: "/components/avatar",
+      },
+      {
         id: "components-button",
         title: "Button",
         to: "/components/button",

@@ -19,6 +19,7 @@
 
 @use "./foundation/layout" as layout;
 @use "./foundation/typography" as typography;
+@use "./components/avatar" as avatar;
 @use "./components/button" as button;
 @use "./components/chip" as chip;
 @use "./components/drawer" as drawer;
@@ -63,6 +64,7 @@ $theme-base-css-var-groups: (
   "e-typography-code-font-weight": typography.$typography-code-font-weights,
   "e-typography-code-letter-spacing": typography.$typography-code-letter-spacings,
   "e-icon-size": icon.$icon-font-sizes,
+  "e-avatar-size": avatar.$avatar-size,
   "e-interactive-state": button.$interactive-states,
   "e-btn-font-size": button.$btn-font-sizes,
   "e-btn-icon-size": button.$btn-icon-sizes,
