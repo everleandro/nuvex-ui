@@ -158,10 +158,11 @@ const interactiveDescendantSelector = [
 
 const isFromInteractiveDescendant = (evt: Event): boolean => {
     const target = evt.target
-    if (!(target instanceof Element) || target === node.value) return false
+    const itemElement = evt.currentTarget
+    if (!(target instanceof Element) || !(itemElement instanceof Element) || target === itemElement) return false
 
     const interactiveTarget = target.closest(interactiveDescendantSelector)
-    return !!interactiveTarget && interactiveTarget !== node.value && !!node.value?.contains(interactiveTarget)
+    return !!interactiveTarget && interactiveTarget !== itemElement && itemElement.contains(interactiveTarget)
 }
 
 const rippleBinding = computed(() => ({

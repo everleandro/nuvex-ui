@@ -1,9 +1,16 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
-import { defineComponent, ref } from "vue";
+import { defineComponent, h, ref } from "vue";
 
 import EList from "./index.vue";
 import EListItem from "./item.vue";
+
+const RouterLink = defineComponent({
+  inheritAttrs: false,
+  setup(_, { attrs, slots }) {
+    return () => h("a", { ...attrs, href: "#profile" }, slots.default?.());
+  },
+});
 
 const mountList = (
   template: string,
@@ -16,7 +23,9 @@ const mountList = (
     };
   },
   template,
-}));
+}), {
+  global: { components: { RouterLink } },
+});
 
 describe("EListItem interaction", () => {
   it("is interactive by default inside a list", async () => {
@@ -47,6 +56,18 @@ describe("EListItem interaction", () => {
     expect(wrapper.classes()).not.toContain("v-ripple-element");
     expect(wrapper.classes()).not.toContain("interactive-element");
     expect(wrapper.attributes("role")).toBeUndefined();
+  });
+
+  it("handles clicks when a RouterLink component is the item root", async () => {
+    const wrapper = mountList(`
+      <EList>
+        <EListItem title="Profile" to="/profile" />
+      </EList>
+    `);
+    const item = wrapper.get("a.e-list-item");
+
+    await expect(item.trigger("click")).resolves.toBeUndefined();
+    expect(wrapper.getComponent(EListItem).emitted("click:item")).toHaveLength(1);
   });
 
   it("becomes selectable automatically in a listbox", async () => {
