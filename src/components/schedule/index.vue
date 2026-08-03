@@ -92,13 +92,13 @@
                                                     @click="handleEventClick(getEvent(getVisibleEventPoint(hourIndex, colIndex)), $event)">
                                                     <span class="event-name">{{
                                                         getEvent(getVisibleEventPoint(hourIndex, colIndex)).name
-                                                    }}</span>
+                                                        }}</span>
                                                     <span class="event-subtitle">{{
                                                         getEvent(getVisibleEventPoint(hourIndex, colIndex)).subtitle
-                                                    }}</span>
+                                                        }}</span>
                                                     <span class="event-footer">{{
                                                         getEvent(getVisibleEventPoint(hourIndex, colIndex)).footer
-                                                    }}</span>
+                                                        }}</span>
                                                 </button>
                                             </slot>
                                         </div>
@@ -147,7 +147,7 @@ type ScheduleEventElevation = ElevationLevel | 'none';
 
 export interface Props extends ElevationProps {
     lng?: suportedLng; color?: string; stickyTopHeader?: string | number; loading?: boolean; resourceColumns?: string | number;
-    rowHeight?: string | number; step?: number; start?: number; events?: ScheduleEvent[];
+    rowHeight?: string | number; step?: number; start?: number; events?: ScheduleEvent[]; hideToolbar?: boolean;
     end?: number; spaces?: ScheduleSpace[]; selectedSpace?: ScheduleSpace; modelValue: Date; view?: ScheduleView; scale?: CalendarScale;
     eventElevation?: ScheduleEventElevation;
 }
@@ -223,7 +223,7 @@ const isDayScale = computed(() => isCalendarView.value && computedScale.value ==
 const isWeekScale = computed(() => isCalendarView.value && computedScale.value === CalendarScale.Week)
 const showBackToWeekAction = computed(() => isDayScale.value && local.drilledDownFromWeek)
 const showPaginationActions = computed(() => isResourceView.value && headerChunks.value.length > 1)
-const hasToolbarSlot = computed(() => Boolean(slots.toolbar))
+const hasToolbarSlot = computed(() => !props.hideToolbar)
 const localeInstance = computed(() => new Lnguage(props.lng, 1))
 const scheduleToolbarLabels = computed(() => localeInstance.value.currentLng.schedule.toolbar)
 
