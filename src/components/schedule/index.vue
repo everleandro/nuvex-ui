@@ -1,7 +1,9 @@
 <template>
     <div :class="scheduleContainerClass">
         <div v-if="hasToolbarSlot" class="e-schedule__toolbar-slot">
-            <slot name="toolbar" v-bind="toolbarSlotProps" />
+            <slot name="toolbar" v-bind="toolbarSlotProps">
+                <EScheduleToolbar v-bind="toolbarSlotProps" />
+            </slot>
             <EProgressLinear v-show="loading" :color="color" indeterminate height="4" />
         </div>
         <transition name="fade" mode="out-in">
@@ -90,13 +92,13 @@
                                                     @click="handleEventClick(getEvent(getVisibleEventPoint(hourIndex, colIndex)), $event)">
                                                     <span class="event-name">{{
                                                         getEvent(getVisibleEventPoint(hourIndex, colIndex)).name
-                                                        }}</span>
+                                                    }}</span>
                                                     <span class="event-subtitle">{{
                                                         getEvent(getVisibleEventPoint(hourIndex, colIndex)).subtitle
-                                                        }}</span>
+                                                    }}</span>
                                                     <span class="event-footer">{{
                                                         getEvent(getVisibleEventPoint(hourIndex, colIndex)).footer
-                                                        }}</span>
+                                                    }}</span>
                                                 </button>
                                             </slot>
                                         </div>
@@ -137,6 +139,7 @@ import icon from '@/utils/icons';
 
 import EButton from '@/components/button/index.vue'
 import EIcon from '@/components/icon/index.vue'
+import EScheduleToolbar from '@/components/schedule/toolbar.vue'
 import { computed, nextTick, onMounted, reactive, useSlots, watch } from "vue";
 
 

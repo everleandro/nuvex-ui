@@ -20,9 +20,6 @@
             <ESchedule v-model="usageDate" v-model:view="usageView" v-model:scale="usageScale"
                 v-model:selected-space="usageSelectedSpace" class="full-width" :spaces="spaces" :events="usageEvents"
                 :start="8 * hour" :end="18 * hour" :step="hour" :row-height="64" elevation="sm">
-                <template #toolbar="toolbar">
-                    <EScheduleToolbar v-bind="toolbar" />
-                </template>
             </ESchedule>
         </article>
 
