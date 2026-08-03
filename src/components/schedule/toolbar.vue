@@ -1,34 +1,37 @@
 <template>
     <EBar class="e-schedule-toolbar" :color="color">
-        <ESelect :label="labels.view" :items="localizedViewOptions" dense class="e-schedule-toolbar__select-view"
-            :model-value="activeViewOption" @update:model-value="handleViewChange" :menu-color="color"/>
+        <div class="e-schedule-toolbar__controls flex-grow-1 d-flex flex-wrap">
+            <ESelect :label="labels.view" :items="localizedViewOptions" dense class="e-schedule-toolbar__select-view"
+                :model-value="activeViewOption" @update:model-value="handleViewChange" :menu-color="color" />
 
-        <ESelect v-if="spaces.length && view !== ScheduleView.Resource" dense class="e-schedule-toolbar__select-space"
-            :label="labels.space" :items="spaceOptions" :model-value="selectedSpaceId"
-            @update:model-value="handleSpaceChange" :menu-color="color" />
+            <ESelect v-if="spaces.length && view !== ScheduleView.Resource" dense
+                class="e-schedule-toolbar__select-space" :label="labels.space" :items="spaceOptions"
+                :model-value="selectedSpaceId" @update:model-value="handleSpaceChange" :menu-color="color" />
 
-        <div v-if="canPaginateResources" class="e-schedule-toolbar__pager">
-            <EButton size="small" text use-contrast-color :icon="icon.arrowLeft" :aria-label="labels.previousResourcePage"
-                :title="labels.previousResourcePage" @click="goToPreviousResourcePage" />
-            <span class="e-schedule-toolbar__pager-label">
-                {{ labels.resourcePage }} {{ resourcePage + 1 }} / {{ resourcePageCount }}
-            </span>
-            <EButton size="small" text use-contrast-color :icon="icon.arrowRight" :aria-label="labels.nextResourcePage"
-                :title="labels.nextResourcePage" @click="goToNextResourcePage" />
+            <div v-if="canPaginateResources" class="e-schedule-toolbar__pager">
+                <EButton size="small" text use-contrast-color :icon="icon.arrowLeft"
+                    :aria-label="labels.previousResourcePage" :title="labels.previousResourcePage"
+                    @click="goToPreviousResourcePage" />
+                <span class="e-schedule-toolbar__pager-label">
+                    {{ labels.resourcePage }} {{ resourcePage + 1 }} / {{ resourcePageCount }}
+                </span>
+                <EButton size="small" text use-contrast-color :icon="icon.arrowRight"
+                    :aria-label="labels.nextResourcePage" :title="labels.nextResourcePage"
+                    @click="goToNextResourcePage" />
+            </div>
         </div>
-        <ESpacer />
         <EMenu v-model="datePickerOpen" :close-on-content-click="false" content-role="presentation"
             origin="bottom right">
             <template #activator="activator">
-                <EButton outlined  :prepend-icon="icon.calendar"
-                    v-bind="buildActivatorBindings(activator)">
+                <EButton outlined :prepend-icon="icon.calendar" v-bind="buildActivatorBindings(activator)">
                     {{ formattedPeriodLabel }}
                 </EButton>
             </template>
 
             <EDatePicker :model-value="date" :lng="datePickerLanguage" close-on-change
-                @update:model-value="handleDateChange" :color="color"/>
+                @update:model-value="handleDateChange" :color="color" />
         </EMenu>
+
     </EBar>
 </template>
 

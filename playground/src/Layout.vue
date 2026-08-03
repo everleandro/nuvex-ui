@@ -33,7 +33,7 @@
         </EDrawer>
 
         <EMain>
-            <EContainer class="playground-container p-4" max-width="980px">
+            <EContainer class="playground-container p-4" :max-width="pageMaxWidth">
                 <router-view />
             </EContainer>
         </EMain>
@@ -51,6 +51,7 @@ const drawerModel = ref(true);
 const openGroups = ref(findOpenGroupIdsByPath(route.path));
 
 const { currentTheme, toggleTheme } = useTheme();
+const pageMaxWidth = computed(() => route.name === "components-schedule" ? "1400px" : "980px");
 
 const themeToggleLabel = computed(() =>
     currentTheme.value === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro",

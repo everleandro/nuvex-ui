@@ -13,13 +13,13 @@
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: auto;
   width: fit-content;
-  max-width: calc(100vw - 16px);
   z-index: inherit;
   transform-origin: center center;
   user-select: text;
 
   &:not(.e-dialog--fullscreen) {
-    max-height: 90%;
+    max-height: calc(100vh - calc(var(--e-space-base) * 4));
+    max-width: calc(100vw - calc(var(--e-space-base) * 4));
   }
 
   &--fluid {

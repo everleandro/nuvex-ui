@@ -32,6 +32,16 @@
       width: 100%;
     }
 
+    &-content>span {
+      display: block;
+      font: inherit;
+      max-width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     &-placeholder {
       color: var(--e-field-placeholder-color, var(--input-placeholder));
       transition: opacity var(--e-field-transition-duration) cubic-bezier(0.25, 0.8, 0.5, 1);

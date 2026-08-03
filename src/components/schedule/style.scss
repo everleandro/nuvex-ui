@@ -301,6 +301,7 @@
     user-select: none;
     border-radius: var(--schedule-local-radius);
     background-color: var(--schedule-local-event-bg);
+    color: var(--e-schedule-contrast-color);
 
     &-container {
       appearance: none;

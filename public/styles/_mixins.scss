@@ -171,6 +171,24 @@
     }
 }
 
+@mixin from_sm {
+    @media (min-width: #{map.get($grid-breakpoints, 'sm')}) {
+        @content;
+    }
+}
+
+@mixin from_md {
+    @media (min-width: #{map.get($grid-breakpoints, 'md')}) {
+        @content;
+    }
+}
+
+@mixin from_lg {
+    @media (min-width: #{map.get($grid-breakpoints, 'lg')}) {
+        @content;
+    }
+}
+
 @mixin generate-grid-classes {
 
     .e-col {

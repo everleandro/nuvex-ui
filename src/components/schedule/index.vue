@@ -578,6 +578,7 @@ const rowHeightNumber = computed(() => {
 const { colorStyles } = useResolvedColor({
     color: computed(() => props.color),
     colorVar: '--e-schedule-color',
+    contrastVar: "--e-schedule-contrast-color",
 })
 
 const scheduleStyle = computed((): Record<string, string> => ({

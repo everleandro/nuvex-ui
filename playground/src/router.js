@@ -17,6 +17,7 @@ import SwitchView from "./SwitchView.vue";
 import TabView from "./TabView.vue";
 import DatePickerView from "./DatePickerView.vue";
 import ListView from "./ListView.vue";
+import ScheduleView from "./ScheduleView.vue";
 import { navigationGroups } from "./navigation";
 
 const routeComponentById = {
@@ -36,6 +37,7 @@ const routeComponentById = {
   "components-tab": TabView,
   "components-date-picker": DatePickerView,
   "components-list": ListView,
+  "components-schedule": ScheduleView,
   "components-expansion-panels": ExpansionPanelsView,
 };
 
