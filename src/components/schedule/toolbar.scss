@@ -29,9 +29,13 @@
     &__pager {
         align-items: center;
         display: flex;
+        flex: 1 1 100%;
+        max-width: var(--e-field-max-width);
 
         &-label {
             margin-inline: var(--schedule-toolbar-local-gap);
+            flex: 1;
+            text-align: center;
         }
     }
 

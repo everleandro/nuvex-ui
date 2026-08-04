@@ -17,9 +17,12 @@
                     coordinada.</p>
             </header>
 
-            <ESchedule v-model="usageDate" v-model:view="usageView" v-model:scale="usageScale"
-                v-model:selected-space="usageSelectedSpace" class="full-width" :spaces="spaces" :events="usageEvents"
-                :start="8 * hour" :end="18 * hour" :step="hour" :row-height="64" elevation="sm" />
+            <div style="max-height: 400px;">
+                <ESchedule v-model="usageDate" v-model:view="usageView" v-model:scale="usageScale"
+                    v-model:selected-space="usageSelectedSpace" class="full-width" :spaces="spaces"
+                    :events="usageEvents" :start="8 * hour" :end="18 * hour" :step="hour" :row-height="64"
+                    elevation="sm" />
+            </div>
         </article>
 
         <article class="schedule-demo">

@@ -1,15 +1,14 @@
 <template>
-    <div :class="scheduleContainerClass">
-        <div v-if="hasToolbarSlot" class="e-schedule__toolbar-slot">
-            <slot name="toolbar" v-bind="toolbarSlotProps">
-                <EScheduleToolbar v-bind="toolbarSlotProps" />
-            </slot>
-            <EProgressLinear v-show="loading" :color="color" indeterminate height="4" />
-        </div>
-        <transition name="fade" mode="out-in">
-            <div :key="`${computedView}:${computedScale ?? 'none'}`" :class="scheduleClass" :style="scheduleStyle"
-                role="region" aria-label="Schedule" :aria-busy="loading ? 'true' : 'false'">
-                <div class="e-schedule__header-strip">
+    <div :class="scheduleContainerClass" :style="scheduleStyle">
+        <div :class="scheduleClass" role="region" aria-label="Schedule" :aria-busy="loading ? 'true' : 'false'">
+            <div ref="toolBarWrapper" v-if="hasToolbarSlot" class="e-schedule__toolbar-slot">
+                <slot name="toolbar" v-bind="toolbarSlotProps">
+                    <EScheduleToolbar v-bind="toolbarSlotProps" />
+                </slot>
+                <EProgressLinear v-show="loading" :color="color" indeterminate height="4" />
+            </div>
+            <transition name="fade" mode="out-in">
+                <div :key="`${computedView}:${computedScale ?? 'none'}`" class="e-schedule__header-strip">
                     <div class="e-schedule__header-spacer col-hour-info">
                         <div class="e-schedule__header-content e-schedule__header-content--actions">
                             <span v-if="showBackToWeekAction && !hasToolbarSlot" class="action-container">
@@ -36,7 +35,7 @@
                         <EProgressLinear v-show="loading && !hasToolbarSlot" indeterminate height="4" />
                     </div>
                     <div class="e-schedule__header-viewport">
-                        <transition :name="local.globalContentAnimation" mode="out-in">
+                        <transition :name="local.globalContentAnimation">
                             <div :key="`${resourceViewKey}:header`" class="e-schedule__header-track">
                                 <div v-for="data in visibleHeaderLabels" :key="`header-${colKey(data)}`"
                                     class="e-schedule__header-column">
@@ -65,18 +64,20 @@
                         </transition>
                     </div>
                 </div>
-                <div class="e-schedule__content">
-                    <div class="e-schedule__hours-column col-hour-info">
-                        <div v-for="(hour, hourIndex) in hourList" :key="hourIndex"
-                            class="e-schedule__hour e-schedule__cell">
-                            <span>
-                                <span class="hour-label e-vue-input--text">{{ hour }}</span>
-                            </span>
-                        </div>
-                    </div>
+            </transition>
+            <transition name="fade" mode="out-in">
+                <div :key="`${computedView}:${computedScale ?? 'none'}`" class="e-schedule__content">
                     <div class="e-schedule__viewport">
-                        <transition :name="local.globalContentAnimation" mode="out-in">
+                        <transition :name="local.globalContentAnimation">
                             <div :key="resourceViewKey" class="e-schedule__body">
+                                <div class="e-schedule__hours-column col-hour-info">
+                                    <div v-for="(hour, hourIndex) in hourList" :key="hourIndex"
+                                        class="e-schedule__hour e-schedule__cell">
+                                        <span>
+                                            <span class="hour-label e-vue-input--text">{{ hour }}</span>
+                                        </span>
+                                    </div>
+                                </div>
                                 <div v-for="(data, colIndex) in visibleHeaderLabels" :key="colKey(data)"
                                     class="e-schedule__column">
                                     <div v-for="(hour, hourIndex) in hourList" :key="hourIndex"
@@ -120,12 +121,13 @@
                         </transition>
                     </div>
                 </div>
-            </div>
-        </transition>
+            </transition>
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
+import { computed, nextTick, onMounted, reactive, useSlots, watch, ref, onUnmounted } from "vue";
 import { CalendarScale, ScheduleView } from "@/types";
 import type { ElevationLevel, ElevationProps, ScheduleEvent, ScheduleSpace, Point, ScheduleSlotEvent, ScheduleToolbarSlotProps } from "@/types";
 import { ripple } from "@/directives";
@@ -136,11 +138,12 @@ import { getColorContrastCssValue, getColorCssValue, normalizeCssSize } from '@/
 const vRipple = { ...ripple };
 import UtilDate from '@/utils/date';
 import icon from '@/utils/icons';
+const toolBarWrapper = ref<HTMLElement | null>(null);
 
 import EButton from '@/components/button/index.vue'
 import EIcon from '@/components/icon/index.vue'
 import EScheduleToolbar from '@/components/schedule/toolbar.vue'
-import { computed, nextTick, onMounted, reactive, useSlots, watch } from "vue";
+let headerHeight = ref<string>('0px');
 
 
 type ScheduleEventElevation = ElevationLevel | 'none';
@@ -155,7 +158,7 @@ const props = withDefaults(defineProps<Props>(),
     {
         lng: getDefaultLocaleCode(), color: 'primary', rowHeight: '97',
         eventElevation: 'md',
-        step: 60 * 60, start: 0, events: () => [], stickyTopHeader: 0,
+        step: 60 * 60, start: 0, events: () => [],
         end: 60 * 60 * 24, spaces: () => []
     })
 
@@ -177,7 +180,6 @@ const scheduleClass = computed(() => {
     isCalendarView.value && classes.push('e-schedule--calendar')
     isDayScale.value && classes.push('e-schedule--calendar-day')
     isResourceView.value && classes.push('e-schedule--resource')
-    if (props.stickyTopHeader) classes.push('e-schedule--header-sticky')
     if (props.loading) classes.push('e-schedule--loading')
     return classes
 })
@@ -191,6 +193,7 @@ const scheduleContainerClass = computed(() => {
     if (!hasToolbarSlot.value) {
         classes.push('e-schedule-container--without-toolbar')
     }
+    if (typeof props.stickyTopHeader !== 'undefined') classes.push('e-schedule--header-sticky')
 
     return classes
 })
@@ -564,7 +567,10 @@ const returnToWeekView = (): void => {
 }
 
 onMounted(() => {
-    setLocalEvents();
+    setLocalEvents()
+    setHeaderHeight();
+
+    window.addEventListener('resize', handleResize, true);
 })
 
 const t = (): Lnguage => {
@@ -588,8 +594,43 @@ const scheduleStyle = computed((): Record<string, string> => ({
     ...colorStyles.value,
     '--row-height': normalizedRowHeight.value,
     '--header-sticky-top': normalizedStickyTopHeader.value,
+    '--schedule-local-header-height': headerHeight.value,
 }))
+const timerResize = ref<number>(0);
 
+const handleResize = (): void => {
+    timerResize.value && clearTimeout(timerResize.value)
+
+    timerResize.value = window.setTimeout(() => {
+        nextTick(() => {
+            setHeaderHeight();
+        })
+    }, 300);
+}
+
+onUnmounted(() => {
+    destroyComponent()
+})
+
+const destroyComponent = (): void => {
+    window.removeEventListener('resize', handleResize, true);
+}
+
+const setHeaderHeight = (): void => {
+    const el = toolBarWrapper.value;
+    if (!el)
+        headerHeight.value = '0px';
+    else {
+        var el_style = window.getComputedStyle(el);
+
+        // if its not hidden we just return normal height
+        if (el_style.display !== 'none' && el_style.maxHeight !== '0px') {
+            headerHeight.value = `${el.offsetHeight}px`;
+        } else {
+            headerHeight.value = '0px';
+        }
+    }
+}
 const hourList = computed((): Array<string> => {
     const result: Array<string> = [];
     let incompleteList = true;

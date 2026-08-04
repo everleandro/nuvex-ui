@@ -20,15 +20,14 @@
                     @click="goToNextResourcePage" />
             </div>
         </div>
-        <EMenu v-model="datePickerOpen" :close-on-content-click="false" content-role="presentation"
-            origin="bottom right">
+        <EMenu v-model="datePickerOpen" content-role="presentation" origin="top right">
             <template #activator="activator">
                 <EButton outlined :prepend-icon="icon.calendar" v-bind="buildActivatorBindings(activator)">
                     {{ formattedPeriodLabel }}
                 </EButton>
             </template>
 
-            <EDatePicker :model-value="date" :lng="datePickerLanguage" close-on-change
+            <EDatePicker :model-value="date" :lng="datePickerLanguage" close-on-change no-title
                 @update:model-value="handleDateChange" :color="color" />
         </EMenu>
 

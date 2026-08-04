@@ -16,6 +16,7 @@
   --schedule-local-event-color: var(--e-schedule-event-color, var(--e-contrast-surface-base, #000000));
   --schedule-local-space-base: var(--e-space-base);
 
+  height: 100%;
   color: var(--schedule-local-color);
   background: var(--schedule-local-bg);
   font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
@@ -24,6 +25,9 @@
   border-bottom-left-radius: var(--schedule-local-radius);
   border-bottom-right-radius: var(--schedule-local-radius);
   z-index: 0;
+
+  display: flex;
+  flex-direction: column;
 
   // Shell
   &__toolbar-slot {
@@ -56,6 +60,7 @@
   &__content {
     display: flex;
     min-width: 0;
+    overflow: auto;
   }
 
   &__body {
@@ -72,7 +77,6 @@
   &__viewport {
     flex: 1 1 100%;
     min-width: 0;
-    overflow-x: hidden;
     overflow-y: visible;
     position: relative;
   }
@@ -450,6 +454,7 @@
   // Outer container
   &-container {
     --schedule-container-local-radius: var(--e-schedule-border-radius);
+    height: 100%;
     flex: 1;
     border-radius: var(--schedule-container-local-radius);
 
