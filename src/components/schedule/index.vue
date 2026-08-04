@@ -149,7 +149,7 @@ let headerHeight = ref<string>('0px');
 type ScheduleEventElevation = ElevationLevel | 'none';
 
 export interface Props extends ElevationProps {
-    lng?: suportedLng; color?: string; stickyTopHeader?: string | number; loading?: boolean; resourceColumns?: string | number;
+    lng?: suportedLng; color?: string; height?: string | number; stickyTopHeader?: string | number; loading?: boolean; resourceColumns?: string | number;
     rowHeight?: string | number; step?: number; start?: number; events?: ScheduleEvent[]; hideToolbar?: boolean;
     end?: number; spaces?: ScheduleSpace[]; selectedSpace?: ScheduleSpace; modelValue: Date; view?: ScheduleView; scale?: CalendarScale;
     eventElevation?: ScheduleEventElevation;
@@ -578,6 +578,7 @@ const t = (): Lnguage => {
 }
 
 const normalizedRowHeight = computed(() => normalizeCssSize(props.rowHeight) || '97px')
+const normalizedHeight = computed(() => normalizeCssSize(props.height))
 const normalizedStickyTopHeader = computed(() => normalizeCssSize(props.stickyTopHeader) || '0px')
 const rowHeightNumber = computed(() => {
     const parsed = Number.parseFloat(normalizedRowHeight.value)
@@ -592,6 +593,7 @@ const { colorStyles } = useResolvedColor({
 
 const scheduleStyle = computed((): Record<string, string> => ({
     ...colorStyles.value,
+    ...(normalizedHeight.value ? { height: normalizedHeight.value } : {}),
     '--row-height': normalizedRowHeight.value,
     '--header-sticky-top': normalizedStickyTopHeader.value,
     '--schedule-local-header-height': headerHeight.value,

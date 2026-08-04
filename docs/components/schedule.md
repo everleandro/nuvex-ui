@@ -43,6 +43,7 @@ Los props `view` y `scale` siguen aceptando los valores serializados (`"calendar
 | `loading` | `boolean` | `false` | Desactiva interacción y muestra `EProgressLinear` en el header. |
 | `color` | `string` | `'primary'` | Color base del componente y acciones internas. |
 | `lng` | `suportedLng` | `locale global` | Idioma usado para labels del header y del toolbar. Si no se pasa, usa el locale configurado en `app.use(NuvexUI, { locale })`. |
+| `height` | `string \| number` | `undefined` | Altura del viewport del schedule. Los numeros se normalizan a pixeles; cuando se define, la grilla usa scroll interno. |
 | `rowHeight` | `string \| number` | `'97'` | Altura visual por bloque de tiempo. |
 | `stickyTopHeader` | `string \| number` | `0` | Offset superior cuando el header se vuelve sticky. Para verlo en accion debe existir un contenedor scrollable sobre el que el header pueda fijarse. |
 | `step` | `number` | `3600` | Duración de cada celda en segundos. |

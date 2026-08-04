@@ -286,6 +286,18 @@ describe("ESchedule", () => {
     expect(wrapper.get(".e-schedule-container").classes()).toContain("e-elevation--lg");
   });
 
+  it("applies a normalized height to the schedule container", async () => {
+    const wrapper = mountSchedule({ height: 480 });
+    await nextTick();
+
+    const container = wrapper.get(".e-schedule-container");
+    const containerElement = container.element as HTMLElement;
+    expect(containerElement.style.height).toBe("480px");
+
+    await wrapper.setProps({ height: "50vh" });
+    expect(containerElement.style.height).toBe("50vh");
+  });
+
   it("allows returning to week after drilling down into a day", async () => {
     const wrapper = mountSchedule({ scale: "week" });
     await nextTick();
