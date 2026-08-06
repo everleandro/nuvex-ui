@@ -1,5 +1,10 @@
 <template>
   <section class="tab-page">
+    <ERow>
+      <ECol class="primary" sm="auto">s</ECol>
+      <ECol class="primary" sm="auto">s</ECol>
+      <ECol class="primary" sm="1">d</ECol>
+    </ERow>
     <header class="tab-page__header">
       <p class="tab-page__eyebrow">Components</p>
       <h2 class="tab-page__title">Tab Examples</h2>

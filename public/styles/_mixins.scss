@@ -192,14 +192,30 @@
 @mixin generate-grid-classes {
 
     .e-col {
-        grid-column: span var(--e-grid-cols, #{$grid-cols});
+        --e-col-span: #{$grid-cols};
+
+        box-sizing: border-box;
+        min-width: 0;
+
+        $track-size: calc((100% - (var(--e-grid-cols, #{$grid-cols}) - 1) * var(--e-grid-gap, 16px)) / var(--e-grid-cols, #{$grid-cols}));
+        $col-size: calc((#{$track-size} * var(--e-col-span)) + ((var(--e-col-span) - 1) * var(--e-grid-gap, 16px)));
+
+        flex: 0 0 #{$col-size};
+        max-width: #{$col-size};
     }
 
     // ✅ 1. BASE FIRST
     @for $i from 1 through $grid-cols {
         .e-col-#{$i} {
-            grid-column: span #{$i};
+            --e-col-span: #{$i};
         }
+    }
+
+    .e-col-auto {
+        flex: 0 0 auto;
+        width: auto;
+        max-width: none;
+        --e-col-span: initial;
     }
 
     // ✅ 2. RESPONSIVE AFTER (para que tengan más especificidad que la clase base)
@@ -207,12 +223,15 @@
         @include media-up($breakpoint) {
             @for $i from 1 through $grid-cols {
                 .e-col-#{$breakpoint}-#{$i} {
-                    grid-column: span #{$i};
+                    --e-col-span: #{$i};
                 }
             }
 
             .e-col-#{$breakpoint}-auto {
-                grid-column: auto;
+                flex: 0 0 auto;
+                width: auto;
+                max-width: none;
+                --e-col-span: initial;
             }
         }
     }

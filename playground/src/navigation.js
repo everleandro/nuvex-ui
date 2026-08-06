@@ -75,6 +75,16 @@ export const navigationGroups = [
         to: "/components/bar",
       },
       {
+        id: "components-drawer",
+        title: "Drawer",
+        to: "/components/drawer",
+      },
+      {
+        id: "components-grid",
+        title: "Grid",
+        to: "/components/grid",
+      },
+      {
         id: "components-icon",
         title: "Icon",
         to: "/components/icon",

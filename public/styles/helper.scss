@@ -113,7 +113,7 @@
 }
 
 // utilities
-$displays: block, inline-block, flex, inline-flex, grid, inline-grid, none;
+$displays: block, inline-block, flex, inline-flex, grid, inline, inline-grid, none;
 
 $alignments: (
   justify: (start: flex-start, center: center, end: flex-end, between: space-between, around: space-around),

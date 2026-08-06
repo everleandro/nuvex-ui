@@ -5,6 +5,8 @@ import AvatarView from "./AvatarView.vue";
 import ButtonView from "./ButtonView.vue";
 import CardView from "./CardView.vue";
 import BarView from "./BarView.vue";
+import DrawerView from "./DrawerView.vue";
+import GridView from "./GridView.vue";
 import IconView from "./IconView.vue";
 import FormView from "./FormView.vue";
 import SelectView from "./SelectView.vue";
@@ -25,6 +27,8 @@ const routeComponentById = {
   "components-button": ButtonView,
   "components-card": CardView,
   "components-bar": BarView,
+  "components-drawer": DrawerView,
+  "components-grid": GridView,
   "components-icon": IconView,
   "components-form": FormView,
   "components-select": SelectView,

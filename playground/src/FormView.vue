@@ -19,11 +19,11 @@
         <ETextfield v-model="fullName" label="Full name" :rules="nameRules" detail="Write your first and last name"
           clearable />
 
-        <ETextfield v-model="email" label="Work email" :rules="emailRules"
+        <ETextfield v-model="email" cols="6" label="Work email" :rules="emailRules"
           detail="We will only use this for demo notifications" clearable />
 
-        <ESelect v-model="priority" :items="priorities" label="Request priority" detail="Choose the urgency level"
-          clearable />
+        <ESelect v-model="priority" cols="6" :items="priorities" label="Request priority"
+          detail="Choose the urgency level" clearable />
 
         <ERadioGroup v-model="contactChannel" row label="Preferred contact" detail="Select how we should reach out">
           <ERadio model-value="email" label="Email" />
@@ -56,10 +56,11 @@
 
         <ESelect v-model="environment" md="6" :items="environments" label="Environment" />
 
-        <ESelect v-model="assignee" md="6" :items="assignees" chip multiple item-text="name" item-value="id" label="Assignee"
-          clearable />
+        <ESelect v-model="assignee" md="6" :items="assignees" chip multiple item-text="name" item-value="id"
+          label="Assignee" clearable />
 
-        <ETextarea v-model="changeWindow" md="6" label="Change window" rows="3" detail="Rango estimado para la ejecucion" />
+        <ETextarea v-model="changeWindow" md="6" label="Change window" rows="3"
+          detail="Rango estimado para la ejecucion" />
 
         <ECheckbox v-model="requiresApproval" md="6" label="Requires approval" />
 
