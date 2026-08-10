@@ -1,57 +1,24 @@
-# Nuvex UI Vue Components Library
+# Nuvex UI
 
-A comprehensive collection of reusable Vue.js UI components to streamline your development process. It contains frequently used components, adaptable to your needs. You can use each of the proposed components or just use the one you need.
+Nuvex UI is a Vue 3 component framework focused on building consistent, reusable interfaces with a practical theming system, form controls, layout primitives, and scheduling components.
 
-## You can read the full documentation [here](https://nuvex-ui-doc.vercel.app/).
+- Package: `nuvex-ui`
+- Framework: Vue 3
+- Distribution: ESM + UMD + TypeScript declarations
 
-## Local documentation
+## Documentation
 
-You can also browse and maintain local markdown docs in this repository:
+- Live docs: https://nuvex-ui-doc.vercel.app/
+- Local docs index: [docs/index.md](./docs/index.md)
+- Getting started: [docs/getting-started.md](./docs/getting-started.md)
+- Theming: [docs/theming.md](./docs/theming.md)
+- Components: [docs/components/README.md](./docs/components/README.md)
 
-- [Docs index](./docs/index.md)
-- [Getting started](./docs/getting-started.md)
-- [Theming](./docs/theming.md)
-- [Components](./docs/components/README.md)
+## Requirements
 
-## Local playground
-
-Para probar cambios de componentes y tema en runtime:
-
-```bash
-npm run playground:dev
-```
-
-Build y preview del playground:
-
-```bash
-npm run playground:build
-npm run playground:preview
-```
-
-- [Get Started](https://nuvex-ui-doc.vercel.app/)
-- Forms & Inputs
-  - [form](https://nuvex-ui-doc.vercel.app/form)
-  - [Text Fields](https://nuvex-ui-doc.vercel.app/form/text-fields)
-  - [Selects](https://nuvex-ui-doc.vercel.app/form/selects)
-  - [Checkboxes](https://nuvex-ui-doc.vercel.app/form/checkboxes)
-  - [Switches](https://nuvex-ui-doc.vercel.app/form/switches)
-  - [Radio Buttons](https://nuvex-ui-doc.vercel.app/form/radio-buttons)
-- Containment
-  - [Buttons](https://nuvex-ui-doc.vercel.app/containment/buttons)
-  - [schedule](https://nuvex-ui-doc.vercel.app/containment/schedule)
-  - [Icons](https://nuvex-ui-doc.vercel.app/containment/icons)
-  - [Date Pickers](https://nuvex-ui-doc.vercel.app/containment/date-picker)
-  - [Expansion Panel](https://nuvex-ui-doc.vercel.app/containment/expansion-panel)
-  - [Menu](https://nuvex-ui-doc.vercel.app/containment/menu)
-  - [Chips](https://nuvex-ui-doc.vercel.app/containment/chips)
-  - [Dialog](https://nuvex-ui-doc.vercel.app/containment/dialog)
-  - [Tabs](https://nuvex-ui-doc.vercel.app/containment/tabs)
-  - [Lists](https://nuvex-ui-doc.vercel.app/containment/lists)
-- Layout
-  - [Drawer](https://nuvex-ui-doc.vercel.app/layout/drawer)
-  - [Bar](https://nuvex-ui-doc.vercel.app/layout/bar)
-
-# Instalation and basic setup
+- Vue 3
+- Node.js 18+
+- ESM-compatible bundler (Vite recommended)
 
 ## Installation
 
@@ -59,166 +26,189 @@ npm run playground:preview
 npm install nuvex-ui
 ```
 
-```javascript
-import { EButton, EForm, ECheckbox, EDIalog, ESelect,...rest } from "nuvex-ui";
+## Quick Start (Vue)
+
+```ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import { NuvexUI } from 'nuvex-ui'
+import 'nuvex-ui/styles.css'
+
+const app = createApp(App)
+app.use(NuvexUI)
+app.mount('#app')
 ```
 
-# Setup
+Import individual components when needed:
 
-### vue app
-
-```javascript
-// src/main.ts
-
-import { createApp } from "vue";
-import "nuvex-ui/styles.css";
-import App from "./App.vue";
-import { NuvexUI } from "nuvex-ui";
-
-const app = createApp(App);
-// this line auto imports all components and directives
-app.use(NuvexUI);
-app.mount("#app");
+```ts
+import { EButton, ECard } from 'nuvex-ui'
 ```
 
-```javascript
-// vite.config.ts
+## Nuxt 3 Setup
 
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+```ts
+// plugins/nuvex-ui.ts
+import { NuvexUI } from 'nuvex-ui'
 
-export default defineConfig({
-  plugins: [vue()],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        // This is the path to your variables
-        additionalData: `          
-        @import "assets/styles/variables.scss";";
-        `,
-      },
-    },
-  },
-});
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.use(NuvexUI)
+})
 ```
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  css: ['nuvex-ui/styles.css', 'nuvex-ui/framework.scss'],
+})
+```
+
+## Theming
+
+Nuvex UI includes `light` and `dark` themes by default. You can:
+
+- Customize at build-time with Sass variables
+- Register additional themes at runtime
+- Toggle themes using the theme API
+
+Framework styles import:
 
 ```scss
-// src/style.scss
-@import "nuvex-ui/framework.scss";
+@import 'nuvex-ui/framework.scss';
 ```
 
-### nuxt app
-
-```javascript
-// plugins/nuvex-ui.ts
-
-import { NuvexUI } from "nuvex-ui";
-export default defineNuxtPlugin((nuxtApp) => {
-  // this line auto imports all components and directives
-  nuxtApp.vueApp.use(NuvexUI);
-});
-```
-
-```javascript
-// nuxt.config.ts
-
-export default defineNuxtConfig({
-  css: ["nuvex-ui/styles.css", "nuvex-ui/framework.scss"],
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          // This is the path to your variables
-          additionalData: '@import "assets/styles/variables.scss";',
-        },
-      },
-    },
-  },
-});
-```
-
-# Example variable file
+Example custom token file:
 
 ```scss
 // assets/styles/variables.scss
+$border-radius-root: 6px;
+$root-font-size: 16px;
 
-// Globals
-$border-radius-root: 4px;
-$root-font-size: 2rem;
-
-// Colors
-$colors: (
-  "primary": #f19933,
-  "secondary": #2c373c,
-  "white": white,
-  "black": black,
-  "disabled": rgba(0, 0, 0, 0.38),
-  "success": #66bb6a,
-  "red": #f44336,
-  "error": #f44336,
+$semantic-color-tokens-light: (
+  'primary': #42b883,
+  'secondary': #35495e,
+  'error': #e74c3c,
 );
 
-// This is mandatory
-@import "nuvex-ui/setting.scss";
+$semantic-color-tokens-dark: (
+  'primary': #58d78d,
+  'secondary': #8ca0b8,
+  'error': #f58a8a,
+);
+
+@import 'nuvex-ui/setting.scss';
 ```
 
-# Contribute
+Runtime theme config:
 
-We welcome and encourage contributions from the community! If you'd like to contribute to the Vue UI Components library, here's how you can get started:
+```ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import { NuvexUI } from 'nuvex-ui'
 
-## Fork the Repository
+const app = createApp(App)
 
-Fork the repository on GitHub and clone it to your local machine.
+app.use(NuvexUI, {
+  theme: {
+    defaultTheme: 'light',
+    storage: { enabled: true, key: 'my-app-theme' },
+    system: { enabled: true },
+    themes: {
+      ocean: {
+        name: 'ocean',
+        isDark: false,
+        tokens: {
+          brand: '#0ea5e9',
+          'surface-base': '#ecfeff',
+        },
+      },
+    },
+    applyTokensAsCssVars: true,
+  },
+})
+```
+
+## Locale Support
+
+Set a global locale through plugin options:
+
+```ts
+app.use(NuvexUI, {
+  locale: 'es',
+})
+```
+
+Change locale at runtime:
+
+```ts
+import { setDefaultLocaleCode, getDefaultLocaleCode } from 'nuvex-ui'
+
+setDefaultLocaleCode('fr')
+console.log(getDefaultLocaleCode())
+```
+
+## Component Coverage
+
+Current exports include:
+
+- Base UI: `EAvatar`, `EButton`, `ECard`, `EChip`, `EDatePicker`, `EDialog`, `EIcon`, `EList`, `EProgressLinear`, `ESchedule`, `ETab`
+- Forms: `ECheckbox`, `EForm`, `ERadio`, `ERadioGroup`, `ESelect`, `ESwitch`, `ETextfield`, `ETimePicker`
+- Layout and utilities through framework styles and composables
+
+See complete component docs in [docs/components/README.md](./docs/components/README.md).
+
+## Local Development
+
+Run the component playground:
 
 ```bash
-git clone https://github.com/your-username/nuvex-ui-contributions.git
+npm run playground:dev
 ```
 
-## Create a Branch
-
-Create a new branch for your contributions.
+Build and preview playground:
 
 ```bash
-git checkout -b feature-branch
+npm run playground:build
+npm run playground:preview
 ```
 
-## Make Changes
-
-Make your changes to the code using your preferred code editor.
-
-## Commit Changes
-
-Stage and commit your changes.
+Run docs locally:
 
 ```bash
-git add .
-git commit -m "Add feature or fix issue"
+npm run docs:dev
 ```
 
-## Push Changes
-
-Push your changes to your forked repository.
+## Quality and Build
 
 ```bash
-git push origin feature-branch
+npm test
+npm run typecheck
+npm run build
 ```
 
-## Open a Pull Request
+## Local Package Validation
 
-Visit your forked repository on GitHub, and open a pull request to the main repository.
+Before publishing, validate the generated tarball:
 
-## Report Issues
+```bash
+npm run pack:local
+# or
+npm pack --dry-run
+```
 
-If you encounter any issues or have suggestions for improvements, please report them on our [Issues](https://github.com/everleandro/nuvex-ui/issues) page. Before creating a new issue, check if a similar one already exists.
+Then install the generated `.tgz` in a consumer app:
 
-# Thank You!
+```bash
+npm install ../<path-to-repo>/nuvex-ui-<version>.tgz
+```
 
-We appreciate your contributions and feedback. Together, let's make Nuvex UI even better!
+## Contributing
 
-## Package naming convention
+Contributions are welcome.
 
-- Main package: `nuvex-ui`
-- Future scoped packages: `@nuvex-ui/<package>`
-- Suggested next modules:
-  - `@nuvex-ui/icons`
-  - `@nuvex-ui/themes`
+1. Fork this repository.
+2. Create a feature branch.
+3. Add tests/docs when applicable.
+4. Open a pull request.
+
+Issues and suggestions: https://github.com/everleandro/nuvex-ui/issues

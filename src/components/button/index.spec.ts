@@ -4,14 +4,14 @@ import { mount } from "@vue/test-utils";
 import EButton from "./index.vue";
 
 describe("EButton", () => {
-  it("does not apply elevation classes when no explicit elevation is provided", () => {
+  it("applies the default sm elevation when no explicit elevation is provided", () => {
     const wrapper = mount(EButton, {
       slots: {
         default: "Save",
       },
     });
 
-    expect(wrapper.classes().some((className) => className.startsWith("e-elevation--"))).toBe(false);
+    expect(wrapper.classes()).toContain("e-elevation--sm");
   });
 
   it("applies an explicit elevation class when provided", () => {
