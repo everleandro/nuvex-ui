@@ -1,11 +1,13 @@
 <template>
-    <div class="e-app" id="app">
+    <div class="e-app" :id="appId">
         <slot />
     </div>
 </template>
-  
-<script setup lang="ts" >
+
+<script setup lang="ts">
 import { provideLayout } from '@/composables'
+import { useId } from 'vue'
+const appId = useId()
 
 provideLayout()
 </script>
@@ -16,7 +18,6 @@ provideLayout()
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     flex-direction: column;
-    min-height: 100vh;
     max-width: 100%;
     position: relative;
 }
