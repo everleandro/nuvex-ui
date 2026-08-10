@@ -40,6 +40,7 @@ export interface EFieldProps<TValue = unknown> extends ColProps {
   labelMinWidth?: string | number;
   inputAlign?: CSSProperties["textAlign"];
   clearable?: boolean;
+  tonal?: boolean;
 }
 
 export type FieldWrapperProps<TValue = unknown> = Omit<
@@ -65,7 +66,6 @@ export interface UseFieldProps<TValue = unknown> extends FieldBaseProps<TValue> 
 
 export interface EField {
   setConfiguration: (value: FieldConfiguration) => void;
-  setTableClasses?: (value: Array<string>) => void;
   uid: number;
   dirty: boolean;
   hasError: boolean;
@@ -73,12 +73,6 @@ export interface EField {
   validate: () => boolean;
   reset: () => void;
   resetValidation?: () => void;
-  cols?: ColProps["cols"];
-  xs?: ColProps["xs"];
-  sm?: ColProps["sm"];
-  md?: ColProps["md"];
-  lg?: ColProps["lg"];
-  xl?: ColProps["xl"];
 }
 
 export type FieldStateKey =

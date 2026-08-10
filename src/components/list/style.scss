@@ -4,6 +4,7 @@ $list-item-sizes: x-small, small, default, large, x-large;
 $list-item-affix-types: icon, avatar, slot;
 
 @mixin list-item-size-variables($size-name) {
+  --list-item-padding-inline: var(--e-list-item-padding-inline-#{$size-name});
   --list-item-font-size: var(--e-list-item-font-size-#{$size-name});
   --list-item-title-font-size: var(--e-list-item-title-font-size-#{$size-name});
   --list-item-title-line-height: var(--e-list-item-title-line-height-#{$size-name});
@@ -11,6 +12,8 @@ $list-item-affix-types: icon, avatar, slot;
   --list-item-subtitle-line-height: var(--e-list-item-subtitle-line-height-#{$size-name});
   --list-item-content-padding-block: var(--e-list-item-content-padding-block-#{$size-name});
   --list-item-affix-gap: var(--e-list-item-affix-gap-#{$size-name});
+  --list-item-affix-width: var(--e-list-item-affix-width-#{$size-name});
+  --list-item-affix-slot-min-width: var(--e-list-item-affix-slot-min-width-#{$size-name}, var(--e-list-item-affix-width-#{$size-name}));
   --list-item-height: var(--e-list-item-height-#{$size-name});
   --list-item-icon-size: var(--e-list-item-icon-size-#{$size-name});
 }
@@ -34,15 +37,15 @@ $list-item-affix-types: icon, avatar, slot;
 }
 
 .e-list {
-  --root-indent: var(--e-space-base, 4px);
-  --padding-inline: var(--e-list-padding-inline, calc(var(--e-space-base, 4px) * 4));
+  --list-item-border-radius: 0;
   color: var(--e-list-color, inherit);
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
   display: block;
   padding: 8px 0;
   position: static;
   transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  --before-opacity: var(--e-list-item-state-active, 0.12);
-  border-radius: var(--e-border-radius-root, 4px);
+  --before-opacity: var(--e-list-item-state-active, var(--e-interactive-state-active, 0.12));
+  border-radius: var(--e-list-border-radius, var(--e-border-radius-root, 4px));
   overflow: hidden;
 
   &-group {
@@ -53,7 +56,6 @@ $list-item-affix-types: icon, avatar, slot;
     transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
 
     &__content {
-      --group-inline-padding: var(--e-space-base, 4px);
       --list-item-nested-offset: calc((var(--list-group-level, 0) + 1) * var(--group-indent-step));
     }
 
@@ -70,11 +72,22 @@ $list-item-affix-types: icon, avatar, slot;
     border: 1px solid var(--e-color-border);
   }
 
-  &-item {
-    --list-item-affix-size: var(--list-item-height, var(--e-list-item-height-default, 3rem));
-    --list-item-nested-offset: 0px;
+  &--inset {
+    padding-inline: 8px;
+    --list-item-border-radius: var(--e-list-item-border-radius, var(--e-border-radius-root));
+  }
 
-    --list-item-media-size: calc(var(--list-item-affix-size) - (var(--e-space-base, 4px) * 3));
+  &-item {
+    --list-item-local-state-hover: var(--e-list-item-state-hover, var(--e-interactive-state-hover, 0.08));
+    --list-item-local-state-focus: var(--e-list-item-state-focus, var(--e-interactive-state-focus, 0.18));
+    --list-item-local-state-active: var(--e-list-item-state-active, var(--e-interactive-state-active, 0.12));
+    --interactive-element-local-state-hover: var(--list-item-local-state-hover);
+    --interactive-element-local-state-focus: var(--list-item-local-state-focus);
+    --interactive-element-local-state-active: var(--list-item-local-state-active);
+    --padding-inline: var(--list-item-padding-inline, var(--e-list-padding-inline, calc(var(--e-space-base, 4px) * 4)));
+    --list-item-affix-size: var(--list-item-affix-width, calc(var(--list-item-height, var(--e-list-item-height-default, 3rem)) - (var(--e-space-base, 4px) * 2)));
+    border-radius: var(--list-item-border-radius, 4px);
+    --list-item-media-size: var(--list-item-affix-size);
     align-items: center;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -82,11 +95,11 @@ $list-item-affix-types: icon, avatar, slot;
     letter-spacing: normal;
     min-height: var(--list-item-height, 48px);
     outline: none;
-    // padding: 0 16px;
     position: relative;
     text-decoration: none;
     color: var(--e-list-color, currentColor);
-    padding-inline-start: calc(var(--padding-inline) + var(--list-item-nested-offset));
+    font-family: inherit;
+    padding-inline-start: calc(var(--padding-inline) + var(--list-item-nested-offset, 0px));
     padding-inline-end: var(--padding-inline);
 
     &__append,
@@ -111,18 +124,25 @@ $list-item-affix-types: icon, avatar, slot;
         --e-icon-size-large: var(--list-item-icon-size);
         --e-icon-size-x-large: var(--list-item-icon-size);
       }
+
+      &--slot {
+        --list-item-affix-size: auto;
+        aspect-ratio: auto;
+        min-width: var(--list-item-affix-slot-min-width, var(--list-item-affix-width, 22px));
+        width: auto;
+      }
     }
 
     &:hover:before {
-      --before-opacity: var(--e-list-item-state-hover, 0.08);
+      --before-opacity: var(--list-item-local-state-hover);
     }
 
     &:active:before {
-      --before-opacity: var(--e-list-item-state-active, 0.12);
+      --before-opacity: var(--list-item-local-state-active);
     }
 
     &:focus:before {
-      --before-opacity: var(--e-list-item-state-focus, 0.18);
+      --before-opacity: var(--list-item-local-state-focus);
     }
 
     &:focus-visible {
@@ -131,7 +151,8 @@ $list-item-affix-types: icon, avatar, slot;
     }
 
     &--active,
-    &.router-link-active {
+    &.router-link-active,
+    &.router-link-exact-active {
       color: inherit;
     }
 
@@ -139,7 +160,6 @@ $list-item-affix-types: icon, avatar, slot;
     &-title {
       display: block;
       overflow: hidden;
-      text-overflow: ellipsis;
       text-overflow: ellipsis;
       text-transform: none;
     }
@@ -149,27 +169,46 @@ $list-item-affix-types: icon, avatar, slot;
       white-space: nowrap;
       word-break: normal;
       word-wrap: break-word;
+      font-family: inherit;
       font-size: var(--list-item-title-font-size, var(--list-item-font-size));
-      font-weight: var(--list-item-title-font-weight, 400);
+      font-weight: var(--e-typography-title-font-weight-sm, var(--list-item-title-font-weight, 400));
       line-height: var(--list-item-title-line-height, 1.5rem);
     }
 
     &-subtitle {
       word-break: break-all;
+      font-family: inherit;
       font-size: var(--list-item-subtitle-font-size, 0.875rem);
-      font-weight: var(--list-item-subtitle-font-weight, 400);
+      font-weight: var(--e-typography-body-font-weight-sm, var(--list-item-subtitle-font-weight, 400));
       line-height: var(--list-item-subtitle-line-height, 1rem);
       opacity: 0.6;
     }
 
     @include button-before();
 
+    &.interactive-element--active,
+    &--active,
+    &.e-list-item-active,
+    &.router-link-active,
+    &.router-link-exact-active {
+      color: var(--e-list-active-color, var(--e-list-color, currentColor));
+    }
+
+    &.interactive-element--active:before,
+    &.interactive-element--active:hover:before,
+    &.interactive-element--active:focus:before,
     &--active:before,
+    &.e-list-item-active:before,
+    &.e-list-item-active:hover:before,
+    &.e-list-item-active:focus:before,
     &.router-link-active:before,
     &.router-link-active:hover:before,
+    &.router-link-exact-active:before,
+    &.router-link-exact-active:hover:before,
     &--active:hover:before,
-    &:focus:before {
-      opacity: var(--before-opacity);
+    &.router-link-active:focus:before,
+    &.router-link-exact-active:focus:before {
+      opacity: var(--list-item-local-state-active);
     }
 
     &__content {

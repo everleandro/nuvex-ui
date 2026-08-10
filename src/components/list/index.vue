@@ -2,7 +2,7 @@
     <ul
         ref="listNode"
         :class="listCLass"
-        :style="listStyle"
+        :style="mergedListStyle"
         :role="listRole"
         :aria-disabled="props.disabled || undefined"
         :aria-orientation="listOrientation"
@@ -13,7 +13,7 @@
 </template>
   
 <script lang="ts" setup>
-import { computed, inject, nextTick, provide, ref, useAttrs } from 'vue'
+import { computed, getCurrentInstance, inject, nextTick, onBeforeUpdate, provide, ref, useAttrs } from 'vue'
 import { useResolvedColor } from '@/composables/color'
 import { EListInjection, ElevationProps, ListFocusMoveDirection, ListModelProp, SizeProps } from '@/types'
 import { LIST_KEY } from './constants';
@@ -24,16 +24,27 @@ export interface Props extends ElevationProps, SizeProps {
     disabled?: boolean
     outlined?: boolean
     dense?: boolean
+    inset?: boolean
     color?: string
+    activeColor?: string
     group?: ListModelProp,
     modelValue?: ListModelProp
 }
 const props = defineProps<Props>()
 const attrs = useAttrs()
+const instance = getCurrentInstance()
 const parentList = inject<Partial<EListInjection> | undefined>(LIST_KEY, undefined)
 const listNode = ref<HTMLElement | null>(null)
 const focusedItemId = ref<string | null>(null)
 const internalGroup = ref<ListModelProp>([])
+const hasModelValueProp = ref(false)
+
+const syncModelValuePropPresence = (): void => {
+    hasModelValueProp.value = Object.prototype.hasOwnProperty.call(instance?.vnode.props || {}, 'modelValue')
+}
+
+syncModelValuePropPresence()
+onBeforeUpdate(syncModelValuePropPresence)
 
 const emit = defineEmits<{
     (e: 'update:modelValue', value: ListModelProp): void
@@ -61,7 +72,7 @@ const group = computed<ListModelProp>({
     }
 })
 
-const booleanClassKeys = ['disabled', 'dense', 'outlined'] as const
+const booleanClassKeys = ['disabled', 'dense', 'outlined', 'inset'] as const
 
 const explicitRole = computed((): string | undefined => {
     return typeof attrs.role === 'string' ? attrs.role : undefined
@@ -69,7 +80,7 @@ const explicitRole = computed((): string | undefined => {
 
 const isListbox = computed((): boolean => {
     if (explicitRole.value) return explicitRole.value === 'listbox'
-    return props.modelValue !== undefined
+    return hasModelValueProp.value
 })
 
 const isMultiselectable = computed((): boolean => {
@@ -104,6 +115,19 @@ const { resolvedColor, colorStyles: listStyle } = useResolvedColor({
     inheritedColor: computed(() => parentList?.color?.value),
     colorVar: '--e-list-color',
     contrastVar: '--e-list-contrast',
+})
+
+const { resolvedColor: resolvedActiveColor, colorStyles: listActiveColorStyle } = useResolvedColor({
+    color: computed(() => props.activeColor),
+    inheritedColor: computed(() => parentList?.activeColor?.value),
+    colorVar: '--e-list-active-color',
+})
+
+const mergedListStyle = computed((): Record<string, string> => {
+    return {
+        ...listStyle.value,
+        ...listActiveColorStyle.value,
+    }
 })
 
 const changeModelValue = (value: ListValue): void => {
@@ -292,6 +316,7 @@ provide(LIST_KEY, {
     modelValue,
     group,
     color: resolvedColor,
+    activeColor: resolvedActiveColor,
     size: computed(() => props.size),
     disabled: computed(() => !!props.disabled),
     isListbox,

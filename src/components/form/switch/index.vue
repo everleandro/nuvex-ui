@@ -47,6 +47,7 @@ import { computed, ref, useSlots } from "vue";
 
 const props = withDefaults(defineProps<SwitchProps>(), {
     falseValue: false,
+    tonal: false,
     trueValue: true,
 })
 const input = ref<HTMLInputElement | null>(null)

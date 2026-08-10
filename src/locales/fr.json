@@ -1,11 +1,11 @@
 {
     "fr": {
         "start": 1,
-        "months": ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
-        "weekdaysMin": ["Do","Lu","Ma","Mi","Ju","Vi","Sá"],
-        "monthsShort": ["ene.","feb.","mar.","abr.","may.","jun.","jul.","ago.","sep.","oct.","nov.","dic."],
-        "weekdaysShort":[ "dom","lun","mar","mié","jue","vie","sab"],
-        "weekdays": ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"],
+        "months": ["janvier","fevrier","mars","avril","mai","juin","juillet","aout","septembre","octobre","novembre","decembre"],
+        "weekdaysMin": ["di","lu","ma","me","je","ve","sa"],
+        "monthsShort": ["janv.","fevr.","mars","avr.","mai","juin","juil.","aout","sept.","oct.","nov.","dec."],
+        "weekdaysShort": ["dim","lun","mar","mer","jeu","ven","sam"],
+        "weekdays": ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],
         "schedule": {
             "toolbar": {
                 "view": "Vue",

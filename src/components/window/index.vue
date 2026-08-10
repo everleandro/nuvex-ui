@@ -1,7 +1,7 @@
 <template>
     <div class="e-window">
         <div ref="container" class="e-window__container">
-            <transition-group :name="transitionName">
+            <transition-group :name="transitionName" tag="div" class="e-window__track">
                 <slot></slot>
             </transition-group>
         </div>
@@ -11,16 +11,18 @@
 export default { name: 'EWindow' }
 export interface EWindow {
     modelValue: ComputedRef<string | number | undefined>
+    name: ComputedRef<string | undefined>
 }
 </script>
 <script lang="ts" setup>
 import { ComputedRef, computed, provide, ref, watch } from 'vue';
 
-export interface Props { modelValue?: string | number }
+export interface Props {
+    modelValue?: string | number,
+    name?: string
+}
 const transitionName = ref('tab-transition')
-const container = ref()
-// 'tab-reverse-transition' : 'tab-transition'
-const inBrowser = (): boolean => typeof window !== 'undefined'
+const container = ref<HTMLDivElement | null>(null)
 
 const props = defineProps<Props>()
 
@@ -35,20 +37,36 @@ const changeValue = (value: string | number): void => {
 }
 
 const setTransitionName = (value: string | number | undefined) => {
-    if (value) {
-        const el = container.value as HTMLDivElement
-        const active = el.querySelectorAll('.e-window-item.e-window-item--active')[0]
-        const to = el.querySelectorAll(`.e-window-item[data-value='${value}']`)[0]
-        const nodeList = el.querySelectorAll('.e-window-item')
-        const activeIndex = [...nodeList].indexOf(active)
-        const toIndex = [...nodeList].indexOf(to)
-        transitionName.value = toIndex > activeIndex ? 'tab-transition' : 'tab-reverse-transition'
+    if (value !== undefined && value !== null) {
+        const el = container.value
+        if (!el) {
+            return
+        }
+
+        const nodeList = Array.from(el.querySelectorAll<HTMLElement>('.e-window__item, .e-window-item'))
+        const active = nodeList.find((node) => node.classList.contains('e-window__item--active') || node.classList.contains('e-window-item--active'))
+        const to = nodeList.find((node) => node.dataset.value === String(value))
+
+        if (!to) {
+            return
+        }
+
+        const activeIndex = active ? nodeList.indexOf(active) : -1
+        const toIndex = nodeList.indexOf(to)
+
+        if (activeIndex < 0 || toIndex < 0) {
+            transitionName.value = 'tab-transition'
+            return
+        }
+
+        transitionName.value = toIndex >= activeIndex ? 'tab-transition' : 'tab-reverse-transition'
     }
 }
 
 provide("EWindow", {
     changeValue,
-    modelValue: computed(() => props.modelValue)
+    modelValue: computed(() => props.modelValue),
+    name: computed(() => props.name)
 });
 </script>
 <style lang="scss" src="./style.scss"></style>

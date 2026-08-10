@@ -2,6 +2,8 @@
 
 .e-checkbox-field {
     --e-icon-color: var(--e-field-color);
+    --field-slot-content-height: var(--control-size);
+    --field-slot-bottom-y: var(--field-slot-bottom-rest-y);
 
     .e-field__frame {
         flex-direction: row-reverse;

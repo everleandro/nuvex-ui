@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { EChip } from 'drocket'
+import { EChip } from 'nuvex-ui'
 ```
 
 ## Props

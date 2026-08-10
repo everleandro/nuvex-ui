@@ -1,6 +1,6 @@
 @use "../foundation/globals" as globals;
 
-$date-picker-radius: globals.$border-radius-root !default;
+$date-picker-radius: var(--e-border-radius-root, #{globals.$border-radius-root}) !default;
 $date-picker-body-width: 18.125rem !default;
 $date-picker-landscape-title-width: 10.625rem !default;
 $date-picker-title-padding: 1rem !default;

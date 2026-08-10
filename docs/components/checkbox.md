@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { ECheckbox } from 'drocket'
+import { ECheckbox } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida
@@ -59,11 +59,11 @@ Tambien expone `input` via `ref` si necesitas acceso al `HTMLInputElement` nativ
 
 ## Ejemplos
 
-### Basico
+### Básico
 
 ```vue
 <template>
-  <ECheckbox v-model="accepted" label="Acepto terminos" />
+  <ECheckbox v-model="accepted" label="Acepto términos" />
 </template>
 
 <script setup lang="ts">
@@ -78,17 +78,18 @@ const accepted = ref(false)
 ```vue
 <template>
   <ECheckbox
-    v-model="releaseChecklist"
-    label="Checklist de release"
+    v-model="releaseStatus"
+    label="Release checklist"
     true-value="ready"
     false-value="hold"
+    detail="Marca cuando el código esté listo"
   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const releaseChecklist = ref<'ready' | 'hold'>('hold')
+const releaseStatus = ref<'ready' | 'hold'>('hold')
 </script>
 ```
 
@@ -96,12 +97,18 @@ const releaseChecklist = ref<'ready' | 'hold'>('hold')
 
 ```vue
 <template>
-  <EForm field-color="teal-900" label-behavior="floating">
+  <EForm v-model="formValid" label-behavior="floating">
     <ECheckbox
       v-model="termsAccepted"
-      label="Acepto terminos"
+      label="Acepto términos de servicio"
       detail="Necesario para continuar"
-      :rules="[(value) => value === true || 'Debes aceptar los terminos']"
+      :rules="[(value) => value === true || 'Debes aceptar los términos']"
+    />
+    
+    <ECheckbox
+      v-model="marketingOptIn"
+      label="Recibir promociones"
+      detail="Recibirás emails con ofertas especiales"
     />
   </EForm>
 </template>
@@ -109,7 +116,84 @@ const releaseChecklist = ref<'ready' | 'hold'>('hold')
 <script setup lang="ts">
 import { ref } from 'vue'
 
+const formValid = ref<boolean | undefined>()
 const termsAccepted = ref(false)
+const marketingOptIn = ref(false)
+</script>
+```
+
+### Lista de selección múltiple
+
+```vue
+<template>
+  <fieldset>
+    <legend>Selecciona permisos</legend>
+    <div class="flex-col gap-2">
+      <ECheckbox
+        v-for="permission in permissions"
+        :key="permission.id"
+        :model-value="selectedPermissions.includes(permission.id)"
+        :label="permission.label"
+        @update:model-value="togglePermission(permission.id)"
+      />
+    </div>
+  </fieldset>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+interface Permission {
+  id: string
+  label: string
+}
+
+const permissions: Permission[] = [
+  { id: 'read', label: 'Lectura' },
+  { id: 'write', label: 'Escritura' },
+  { id: 'delete', label: 'Eliminar' },
+  { id: 'admin', label: 'Administrador' }
+]
+
+const selectedPermissions = ref<string[]>(['read'])
+
+const togglePermission = (id: string) => {
+  const idx = selectedPermissions.value.indexOf(id)
+  if (idx > -1) {
+    selectedPermissions.value.splice(idx, 1)
+  } else {
+    selectedPermissions.value.push(id)
+  }
+}
+</script>
+```
+
+### Con validación y estados
+
+```vue
+<template>
+  <ECheckbox
+    v-model="confirmDelete"
+    label="Confirmar eliminación permanente"
+    detail="No se puede deshacer"
+    color="error"
+    :disabled="isDeleting"
+    :rules="[(v) => v === true || 'Debe confirmar']"
+    @update:model-value="handleConfirmation"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const confirmDelete = ref(false)
+const isDeleting = ref(false)
+
+const handleConfirmation = (value: boolean) => {
+  if (value) {
+    console.log('Eliminación confirmada')
+  }
+}
 </script>
 ```
 

@@ -1,56 +1,163 @@
 @use '~/public/styles/_mixins.scss' as mixins;
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+}
+
+@mixin text-role($size, $line-height, $weight, $letter-spacing, $family: var(--e-typography-family-base, var(--e-root-font-family, inherit))) {
+  font-family: $family;
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: $weight;
+  letter-spacing: $letter-spacing;
+}
+
+@mixin code-role {
+  @include text-role(
+    var(--e-typography-code-font-size-sm),
+    var(--e-typography-code-line-height-sm),
+    var(--e-typography-code-font-weight-sm),
+    var(--e-typography-code-letter-spacing-sm),
+    var(--e-typography-family-mono, var(--e-root-font-family-mono, monospace))
+  );
+}
+
 h1 {
+  @include text-role(
+    var(--e-typography-headline-font-size-lg),
+    var(--e-typography-headline-line-height-lg),
+    var(--e-typography-headline-font-weight-lg),
+    var(--e-typography-headline-letter-spacing-lg)
+  );
+
   +p {
-    font-size: 1.25rem;
-    font-weight: 300;
+    font-size: var(--e-typography-title-font-size-lg);
+    line-height: var(--e-typography-title-line-height-lg);
+    font-weight: var(--e-typography-body-font-weight-lg);
   }
+}
+
+h2 {
+  @include text-role(
+    var(--e-typography-headline-font-size-md),
+    var(--e-typography-headline-line-height-md),
+    var(--e-typography-headline-font-weight-md),
+    var(--e-typography-headline-letter-spacing-md)
+  );
+}
+
+h3 {
+  @include text-role(
+    var(--e-typography-headline-font-size-sm),
+    var(--e-typography-headline-line-height-sm),
+    var(--e-typography-headline-font-weight-sm),
+    var(--e-typography-headline-letter-spacing-sm)
+  );
+}
+
+h4 {
+  @include text-role(
+    var(--e-typography-title-font-size-lg),
+    var(--e-typography-title-line-height-lg),
+    var(--e-typography-title-font-weight-lg),
+    var(--e-typography-title-letter-spacing-lg)
+  );
+}
+
+h5 {
+  @include text-role(
+    var(--e-typography-title-font-size-md),
+    var(--e-typography-title-line-height-md),
+    var(--e-typography-title-font-weight-md),
+    var(--e-typography-title-letter-spacing-md)
+  );
+}
+
+h6 {
+  @include text-role(
+    var(--e-typography-title-font-size-sm),
+    var(--e-typography-title-line-height-sm),
+    var(--e-typography-title-font-weight-sm),
+    var(--e-typography-title-letter-spacing-sm)
+  );
+}
+
+.type-lead,
+.text-lead {
+  font-size: var(--e-typography-title-font-size-lg);
+  line-height: var(--e-typography-title-line-height-lg);
+  font-weight: var(--e-typography-body-font-weight-lg);
 }
 
 p {
   margin-bottom: 1rem;
-  line-height: 1.8;
+  line-height: var(--e-typography-body-line-height-lg);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-}
-
+.type-heading,
 .heading {
-  font-size: 56px;
+  @include text-role(
+    var(--e-typography-display-font-size-md),
+    var(--e-typography-display-line-height-md),
+    var(--e-typography-display-font-weight-md),
+    var(--e-typography-display-letter-spacing-md)
+  );
 }
 
+.type-code,
 .code {
-  font-size: 17px;
-  letter-spacing: -1px;
+  @include code-role;
 }
 
+.type-body,
 .text-body {
-  font-size: 1.125rem;
+  @include text-role(
+    var(--e-typography-body-font-size-lg),
+    var(--e-typography-body-line-height-lg),
+    var(--e-typography-body-font-weight-lg),
+    var(--e-typography-body-letter-spacing-lg)
+  );
 }
 
+.type-title,
 .title {
-  font-size: 1.37rem;
+  @include text-role(
+    var(--e-typography-title-font-size-lg),
+    var(--e-typography-title-line-height-lg),
+    var(--e-typography-title-font-weight-lg),
+    var(--e-typography-title-letter-spacing-lg)
+  );
   margin-top: 0;
-  font-weight: 300;
-  line-height: 1;
 }
 
+.type-subtitle,
 .subtitle {
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
+  @include text-role(
+    var(--e-typography-label-font-size-lg),
+    var(--e-typography-label-line-height-lg),
+    var(--e-typography-label-font-weight-lg),
+    var(--e-typography-label-letter-spacing-lg)
+  );
   overflow: hidden;
   height: 1.5em;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.type-dialog-title,
 .dialog-title {
-  font-size: 20px;
-  line-height: 26px;
-  font-weight: 500;
+  @include text-role(
+    var(--e-typography-headline-font-size-sm),
+    var(--e-typography-headline-line-height-sm),
+    var(--e-typography-headline-font-weight-sm),
+    var(--e-typography-headline-letter-spacing-sm)
+  );
   margin-top: 24px;
   margin-bottom: 0;
   text-transform: capitalize;
@@ -58,56 +165,114 @@ p {
   +p {
     margin-bottom: 20px;
     margin-top: 0;
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: 300;
+    font-size: var(--e-typography-body-font-size-lg);
+    line-height: var(--e-typography-body-line-height-lg);
+    font-weight: var(--e-typography-body-font-weight-lg);
   }
 }
 
-.text {
-  &-h3 {
-    font-size: 3rem !important;
-    font-weight: 400;
-    line-height: 3.125rem;
-    letter-spacing: normal !important;
+.type-dialog-lead,
+.dialog-lead {
+  margin-bottom: 20px;
+  margin-top: 0;
+  font-size: var(--e-typography-body-font-size-lg);
+  line-height: var(--e-typography-body-line-height-lg);
+  font-weight: var(--e-typography-body-font-weight-lg);
+}
 
-    text-transform: none !important;
-  }
+.type-h1,
+.text-h1 {
+  @include text-role(
+    var(--e-typography-display-font-size-lg),
+    var(--e-typography-display-line-height-lg),
+    var(--e-typography-display-font-weight-lg),
+    var(--e-typography-display-letter-spacing-lg)
+  );
+  text-transform: none;
+}
 
-  &-h4 {
-    font-size: 2.125rem !important;
-    font-weight: 400;
-    line-height: 2.5rem;
-    text-transform: none !important;
-  }
+.type-h2,
+.text-h2 {
+  @include text-role(
+    var(--e-typography-display-font-size-md),
+    var(--e-typography-display-line-height-md),
+    var(--e-typography-display-font-weight-md),
+    var(--e-typography-display-letter-spacing-md)
+  );
+  text-transform: none;
+}
+
+.type-h3,
+.text-h3 {
+  @include text-role(
+    var(--e-typography-display-font-size-sm),
+    var(--e-typography-display-line-height-sm),
+    var(--e-typography-display-font-weight-sm),
+    var(--e-typography-display-letter-spacing-sm)
+  );
+
+  text-transform: none;
+}
+
+.type-h4,
+.text-h4 {
+  @include text-role(
+    var(--e-typography-headline-font-size-lg),
+    var(--e-typography-headline-line-height-lg),
+    var(--e-typography-headline-font-weight-lg),
+    var(--e-typography-headline-letter-spacing-lg)
+  );
+  text-transform: none;
+}
+
+.type-h5,
+.text-h5 {
+  @include text-role(
+    var(--e-typography-headline-font-size-md),
+    var(--e-typography-headline-line-height-md),
+    var(--e-typography-headline-font-weight-md),
+    var(--e-typography-headline-letter-spacing-md)
+  );
+  text-transform: none;
+}
+
+.type-h6,
+.text-h6 {
+  @include text-role(
+    var(--e-typography-headline-font-size-sm),
+    var(--e-typography-headline-line-height-sm),
+    var(--e-typography-headline-font-weight-sm),
+    var(--e-typography-headline-letter-spacing-sm)
+  );
+  text-transform: none;
 }
 
 @include mixins.xs {
   h1 {
-    font-size: 1.4rem;
+    font-size: var(--e-typography-headline-font-size-sm);
   }
 
   .title {
-    font-size: 1rem;
+    font-size: var(--e-typography-title-font-size-md);
   }
 }
 
 @include mixins.sm {
   h1 {
-    font-size: 1.6rem;
+    font-size: var(--e-typography-headline-font-size-md);
   }
 
   .title {
-    font-size: 1.1rem;
+    font-size: var(--e-typography-title-font-size-lg);
   }
 }
 
 @include mixins.md {
   h1 {
-    font-size: 1.8rem;
+    font-size: var(--e-typography-headline-font-size-lg);
   }
 
   .title {
-    font-size: 1.3rem;
+    font-size: var(--e-typography-title-font-size-lg);
   }
 }

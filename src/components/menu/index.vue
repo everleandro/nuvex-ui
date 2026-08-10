@@ -1,11 +1,11 @@
 <template>
-    <slot name="activator" :onClick="handleActivatorClick" :onKeydown="handleActivatorKeydown"
+    <slot name="activator" :attrs="activatorAttrs" :onClick="handleActivatorClick" :onKeydown="handleActivatorKeydown"
         :ref="setActivatorReference" :aria-haspopup="resolvedAriaHaspopup" :aria-expanded="String(opened)" :aria-controls="resolvedAriaControls"
         :aria-disabled="String(Boolean(props.disableMenu))" :openMenu="openMenu" :closeMenu="closeMenu" />
 
     <Teleport to="body">
         <EMenuContainer v-model="opened" :absolute="props.absolute" :close-on-content-click="props.closeOnContentClick"
-            :full-width="props.fullWidth" :hold-focus="props.holdFocus" :check-offset="props.checkOffset"
+            :fit-content="props.fitContent" :full-width="props.fullWidth" :hold-focus="props.holdFocus" :check-offset="props.checkOffset"
             :transition="props.transition" :origin="props.origin" :max-width="props.maxWidth" :offset-x="props.offsetX"
             :offset-y="props.offsetY" :width="props.width" :elevation="props.elevation" :color="props.color" :target="currentActivator"
             :data-id="dataId" :content-id="contentId" :content-role="props.contentRole" :forwarded-attrs="attrs">
@@ -28,6 +28,7 @@ export interface Props extends ElevationProps {
     closeOnContentClick?: boolean
     color?: string
     contentRole?: string
+    fitContent?: boolean
     fullWidth?: boolean
     activator?: MenuTypeTarget
     holdFocus?: boolean
@@ -45,7 +46,7 @@ export interface Props extends ElevationProps {
 
 import EMenuContainer from './container.vue'
 
-import { computed, nextTick, onMounted, onUnmounted, ref, useAttrs, useId, watch } from 'vue'
+import { computed, isRef, nextTick, onMounted, onUnmounted, ref, useAttrs, useId, watch } from 'vue'
 
 const id = `e-menu-${useId()}`
 const contentId = `${id}-content`
@@ -95,11 +96,15 @@ const setActivatorReference = (value: unknown) => {
     syncActivatorBehavior()
 }
 
+const isHTMLElementValue = (value: unknown): value is HTMLElement => {
+    return typeof HTMLElement !== 'undefined' && value instanceof HTMLElement
+}
+
 const resolveActivatorElement = (value: unknown): HTMLElement | null => {
-    if (value instanceof HTMLElement) return value
+    if (isHTMLElementValue(value)) return value
     if (value && typeof value === 'object' && '$el' in (value as Record<string, unknown>)) {
         const element = (value as { $el?: unknown }).$el
-        return element instanceof HTMLElement ? element : null
+        return isHTMLElementValue(element) ? element : null
     }
     return null
 }
@@ -156,19 +161,56 @@ const syncActivatorBehavior = async (): Promise<void> => {
     }
 }
 
+const unwrapActivatorTarget = (target: unknown): unknown => {
+    if (isRef(target)) {
+        return target.value
+    }
+    return target
+}
+
 const resolveCurrentActivator = (): HTMLElement | null => {
-    if (typeof props.activator === 'string') {
-        return (document.querySelector(props.activator) || null) as HTMLElement | null
+    const rawActivator = unwrapActivatorTarget(props.activator)
+
+    if (typeof rawActivator === 'string') {
+        const selector = rawActivator.trim()
+        if (!selector) {
+            return MenuReference.value
+        }
+
+        if (typeof document === 'undefined') {
+            return null
+        }
+
+        try {
+            return (document.querySelector(selector) || null) as HTMLElement | null
+        } catch {
+            return null
+        }
     }
 
-    if (props.activator instanceof HTMLElement) {
-        return props.activator
+    if (isHTMLElementValue(rawActivator)) {
+        return rawActivator
+    }
+
+    const activatorAsElement = resolveActivatorElement(rawActivator)
+    if (activatorAsElement) {
+        return activatorAsElement
     }
 
     return MenuReference.value
 }
 
 const currentActivator = computed(() => resolveCurrentActivator())
+
+const activatorAttrs = computed(() => ({
+    ref: setActivatorReference,
+    onClick: handleActivatorClick,
+    onKeydown: handleActivatorKeydown,
+    'aria-haspopup': resolvedAriaHaspopup.value,
+    'aria-expanded': String(opened.value),
+    'aria-controls': resolvedAriaControls.value,
+    'aria-disabled': String(Boolean(props.disableMenu)),
+}))
 
 const dataId = computed(() => {
     const child = currentActivator.value?.closest('.e-menu-container__wrapper')?.getAttribute('data-id')

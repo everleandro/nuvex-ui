@@ -2,9 +2,11 @@
 @forward "./foundation/palettes";
 @forward "./foundation/semantic";
 @forward "./foundation/layout";
+@forward "./foundation/typography";
 @forward "./components/icon";
 @forward "./components/avatar";
 @forward "./components/bar";
+@forward "./components/drawer";
 @forward "./components/button";
 @forward "./components/chip";
 @forward "./components/date-picker";
@@ -16,10 +18,15 @@
 @forward "./components/switch";
 
 @use "./foundation/layout" as layout;
+@use "./foundation/typography" as typography;
+@use "./components/avatar" as avatar;
 @use "./components/button" as button;
 @use "./components/chip" as chip;
+@use "./components/drawer" as drawer;
 @use "./components/icon" as icon;
 @use "./components/list" as list;
+
+$tab-text-transform: var(--e-btn-text-transform, #{button.$btn-text-transform}) !default;
 
 // Tokens simples autoexportables a CSS vars.
 // Regla:
@@ -31,9 +38,36 @@
 $theme-base-css-var-groups: (
   "e-grid-breakpoint": layout.$grid-breakpoints,
   "e-grid-gap": layout.$grid-gaps,
+  "e-typography-family": typography.$typography-family,
+  "e-typography-display-font-size": typography.$typography-display-font-sizes,
+  "e-typography-display-line-height": typography.$typography-display-line-heights,
+  "e-typography-display-font-weight": typography.$typography-display-font-weights,
+  "e-typography-display-letter-spacing": typography.$typography-display-letter-spacings,
+  "e-typography-headline-font-size": typography.$typography-headline-font-sizes,
+  "e-typography-headline-line-height": typography.$typography-headline-line-heights,
+  "e-typography-headline-font-weight": typography.$typography-headline-font-weights,
+  "e-typography-headline-letter-spacing": typography.$typography-headline-letter-spacings,
+  "e-typography-title-font-size": typography.$typography-title-font-sizes,
+  "e-typography-title-line-height": typography.$typography-title-line-heights,
+  "e-typography-title-font-weight": typography.$typography-title-font-weights,
+  "e-typography-title-letter-spacing": typography.$typography-title-letter-spacings,
+  "e-typography-body-font-size": typography.$typography-body-font-sizes,
+  "e-typography-body-line-height": typography.$typography-body-line-heights,
+  "e-typography-body-font-weight": typography.$typography-body-font-weights,
+  "e-typography-body-letter-spacing": typography.$typography-body-letter-spacings,
+  "e-typography-label-font-size": typography.$typography-label-font-sizes,
+  "e-typography-label-line-height": typography.$typography-label-line-heights,
+  "e-typography-label-font-weight": typography.$typography-label-font-weights,
+  "e-typography-label-letter-spacing": typography.$typography-label-letter-spacings,
+  "e-typography-code-font-size": typography.$typography-code-font-sizes,
+  "e-typography-code-line-height": typography.$typography-code-line-heights,
+  "e-typography-code-font-weight": typography.$typography-code-font-weights,
+  "e-typography-code-letter-spacing": typography.$typography-code-letter-spacings,
   "e-icon-size": icon.$icon-font-sizes,
-  "e-btn-state": button.$btn-states,
+  "e-avatar-size": avatar.$avatar-size,
+  "e-interactive-state": button.$interactive-states,
   "e-btn-font-size": button.$btn-font-sizes,
+  "e-btn-icon-size": button.$btn-icon-sizes,
   "e-btn-height": button.$btn-height,
   "e-fab-font-size": button.$fab-font-sizes,
   "e-fab-height": button.$fab-height,
@@ -43,8 +77,11 @@ $theme-base-css-var-groups: (
   "e-list-item-title-line-height": list.$list-item-title-line-heights,
   "e-list-item-subtitle-font-size": list.$list-item-subtitle-font-sizes,
   "e-list-item-subtitle-line-height": list.$list-item-subtitle-line-heights,
+  "e-list-item-padding-inline": list.$list-item-padding-inline,
   "e-list-item-content-padding-block": list.$list-item-content-padding-block,
   "e-list-item-affix-gap": list.$list-item-affix-gap,
+  "e-list-item-affix-width": list.$list-item-affix-width,
+  "e-list-item-affix-slot-min-width": list.$list-item-affix-slot-min-width,
   "e-list-item-height": list.$list-item-height,
   "e-list-item-icon-size": list.$list-item-icon-size,
   "e-list-item-dense": list.$list-item-dense,

@@ -1,27 +1,36 @@
 @use '~/public/styles/_mixins.scss' as mixins;
 
 .e-row {
-	display: grid;
-	grid-template-columns: repeat(var(--e-grid-cols, 12), 1fr);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
 
 	@include mixins.grid-gap-responsive;
+	--local-grid-gap: var(--e-grid-gap, 16px);
 
-	gap: var(--e-grid-gap, 16px);
+	gap: var(--local-grid-gap, 16px);
 
 	&--dense {
-		grid-auto-flow: dense;
+		--local-grid-gap: calc(var(--e-grid-gap, 16px) * 0.75);
 	}
 
 	&--auto {
-		grid-auto-rows: auto;
+		>.e-col:not([class*="e-col-"]) {
+			flex: 0 0 auto;
+			width: auto;
+			max-width: none;
+		}
 	}
 
 	&--equal {
-		grid-auto-rows: 1fr;
+		>.e-col {
+			flex: 1 1 0;
+			max-width: none;
+		}
 	}
 
 	&--no-gutters {
-		--e-grid-gap: 0;
+		--local-grid-gap: 0;
 	}
 }
 

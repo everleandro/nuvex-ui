@@ -20,8 +20,8 @@
                     :readonly="hourInputReadonly" :disabled="isDisabled" maxlength="2" type="text" inputmode="numeric"
                     pattern="[0-9]*" placeholder="00" autocomplete="off" aria-label="Hours" :aria-invalid="hasError"
                     :aria-describedby="detailsId" :aria-disabled="isDisabled" :aria-readonly="hourInputReadonly"
-                   @focus="handleFocus"
-                    @blur="handleBlur"/>
+                    @focus="(event) => handleInputFocus(event, handleFocus)"
+                    @blur="(event) => handleInputBlur(event, handleBlur)"/>
 
                 <div class="e-time-picker__separator">
                     <slot name="separator"><span>:</span></slot>
@@ -33,8 +33,8 @@
                     inputmode="numeric" pattern="[0-9]*" placeholder="00" autocomplete="off" aria-label="Minutes"
                     :aria-invalid="hasError" :aria-describedby="detailsId" :aria-disabled="isDisabled"
                     :aria-readonly="minutesInputReadonly"
-                    @focus="handleFocus"
-                    @blur="handleBlur"/>
+                    @focus="(event) => handleInputFocus(event, handleFocus)"
+                    @blur="(event) => handleInputBlur(event, handleBlur)"/>
             </div>
 
             <EMenu :activator="frameEl" v-model="opened" full-width check-offset :disable-menu="props.disabled"
@@ -105,6 +105,7 @@ import EMenu from "@/components/menu/index.vue";
 const props = withDefaults(defineProps<TimePickerComponentProps>(), {
     minutesStep: 15,
     hoursStep: 1,
+    tonal: true,
 });
 
 const emit = defineEmits<TimePickerEmits>();
@@ -211,6 +212,22 @@ const scheduleInputFocus = (timeKey: "hours" | "minutes"): void => {
     nextTick(() => {
         focusInput(timeKey);
     });
+};
+
+const handleInputFocus = (
+    event: FocusEvent,
+    handleFieldFocus: (event?: FocusEvent) => void,
+): void => {
+    handleFieldFocus(event);
+    emit("focus", event);
+};
+
+const handleInputBlur = (
+    event: FocusEvent,
+    handleFieldBlur: (event?: Event) => void,
+): void => {
+    handleFieldBlur(event);
+    emit("blur", event);
 };
 
 

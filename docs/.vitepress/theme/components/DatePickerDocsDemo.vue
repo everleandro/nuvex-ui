@@ -10,28 +10,26 @@
     </ECard>
 
     <ECard>
-      <ECardContainer>
-        <h3>Dentro de Dialog</h3>
-        <p>
-          Fecha guardada:
-          <strong>{{ dialogText }}</strong>
-        </p>
-        <EButton color="secondary" @click="dateDialog = true">
-          Abrir Date Picker
-        </EButton>
+      <h3>Dentro de Dialog</h3>
+      <p>
+        Fecha guardada:
+        <strong>{{ dialogText }}</strong>
+      </p>
+      <EButton color="secondary" @click="dateDialog = true">
+        Abrir Date Picker
+      </EButton>
 
-        <EDialog v-model="dateDialog">
-          <ECard>
-            <EDatePicker
-              v-model="dialogDate"
-              color="secondary"
-              close-on-change
-              :highlighted="highlightedDates"
-              :disabled="disabledDates"
-            />
-          </ECard>
-        </EDialog>
-      </ECardContainer>
+      <EDialog v-model="dateDialog">
+        <ECard>
+          <EDatePicker
+            v-model="dialogDate"
+            color="secondary"
+            close-on-change
+            :highlighted="highlightedDates"
+            :disabled="disabledDates"
+          />
+        </ECard>
+      </EDialog>
     </ECard>
   </div>
 </template>
@@ -40,7 +38,6 @@
 import { computed, ref } from "vue";
 import EButton from "@/components/button/index.vue";
 import ECard from "@/components/card/index.vue";
-import ECardContainer from "@/components/card/container.vue";
 import EDatePicker from "@/components/date-picker/index.vue";
 import EDialog from "@/components/dialog/index.vue";
 

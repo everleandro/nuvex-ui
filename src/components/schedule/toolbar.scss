@@ -1,8 +1,13 @@
+@use '~/public/styles/_mixins.scss' as mixins;
+
 .e-schedule-toolbar {
     // Theme contract
     --schedule-toolbar-local-gap: var(--e-schedule-toolbar-gap);
     --schedule-toolbar-local-radius: var(--e-schedule-border-radius);
-    --schedule-toolbar-local-select-view-max-width: 12rem;
+    --schedule-toolbar-local-select-view-max-width: 20rem;
+    --e-field-label: var(--e-bar-color);
+    --bar-content-direction: column-reverse;
+    --bar-content-alignment: unset;
 
     height: auto;
     margin-bottom: 0;
@@ -12,22 +17,32 @@
     // Layout
     .e-bar__content {
         gap: var(--schedule-toolbar-local-gap);
+        flex-direction: var(--bar-content-direction);
+        align-items: var(--bar-content-alignment);
     }
 
-    // Controls
-    &__select-view {
-        --e-field-max-width: var(--schedule-toolbar-local-select-view-max-width);
+
+    &__controls {
+        gap: var(--schedule-toolbar-local-gap);
     }
 
     &__pager {
         align-items: center;
         display: flex;
+        flex: 1 1 100%;
+        max-width: var(--e-field-max-width);
 
         &-label {
             margin-inline: var(--schedule-toolbar-local-gap);
+            flex: 1;
+            text-align: center;
         }
     }
-    .e-field{
-        flex: 1;
+
+    @include mixins.from_md {
+        --bar-content-direction: row;
+        --bar-content-alignment: center;
+        --e-field-max-width: var(--schedule-toolbar-local-select-view-max-width);
     }
+
 }

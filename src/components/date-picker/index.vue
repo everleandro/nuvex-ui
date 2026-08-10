@@ -1,6 +1,6 @@
 <template>
   <div :class="pickerClass" :style="pickerStyle">
-    <div v-if="!noTitle && !(onlyYear || onlyMonth)" class="e-picker__title">
+    <div v-if="!noTitle" class="e-picker__title">
       <div class="e-date-picker-title">
         <slot name="title">
           <div class="e-picker__title__btn e-date-picker-title__year"
@@ -8,7 +8,7 @@
             {{ currentYear }}
           </div>
           <div class="e-picker__title__btn e-date-picker-title__date e-picker__title__btn--active">
-            <transition :name="store.pickerTransition">
+            <transition :name="pickerTransitionName">
               <div v-html="formattedHeaderDate" :key="formattedHeaderKey"></div>
             </transition>
           </div>
@@ -27,7 +27,7 @@
               :aria-disabled="prevDisabled" @click="prevButtonAction()" />
 
             <div class="e-date-picker-header__value">
-              <transition :name="store.globalContentAnimation">
+              <transition :name="headerContentTransitionName">
                 <div :key="headerValueKey">
                   <EButton type="button" text :aria-label="headerButtonLabel" block @click="changeViewMode()">
                     {{ formattedSubheader() }}
@@ -41,62 +41,64 @@
           </slot>
         </div>
 
-        <transition-group :name="store.globalContentAnimation" tag="div" :class="gridContainerClass">
-          <div v-show="viewComputed === store.viewTypeOptions.day" :key="keyMonth" class="date-view" role="grid"
-            :aria-label="formattedSubheader()" @keydown="handleDayGridKeydown">
-            <div class="grid-header" role="row">
-              <span v-for="weekDay in daysOfWeek" :key="weekDay" role="columnheader" :aria-label="weekDay"
-                class="grid-header__cell">
-                {{ weekDay }}
-              </span>
+        <div :class="gridContainerClass">
+          <transition :name="gridContentTransitionName">
+            <div v-if="viewComputed === store.viewTypeOptions.day" :key="keyMonth" class="date-view" role="grid"
+              :aria-label="formattedSubheader()" @keydown="handleDayGridKeydown">
+              <div class="grid-header" role="row">
+                <span v-for="weekDay in daysOfWeek" :key="weekDay" role="columnheader" :aria-label="weekDay"
+                  class="grid-header__cell">
+                  {{ weekDay }}
+                </span>
+              </div>
+              <div class="grid-body">
+                <span v-for="day in [
+                  ...visiblePrevMonthDays,
+                  ...days,
+                  ...visibleNextMonthDays,
+                ]" :key="day.timestamp" role="gridcell" :aria-selected="day.isSelected"
+                  :aria-current="day.isToday ? 'date' : undefined" class="grid-body__cell__cell">
+                  <DatePickerGridButton v-bind="dayGridButtonProps(day)" :button-class="dayClasses(day)"
+                    @click="selectDate(day)">
+                    {{ day.date }}
+                  </DatePickerGridButton>
+                </span>
+              </div>
             </div>
-            <div class="grid-body">
-              <span v-for="day in [
-                ...visiblePrevMonthDays,
-                ...days,
-                ...visibleNextMonthDays,
-              ]" :key="day.timestamp" role="gridcell" :aria-selected="day.isSelected"
-                :aria-current="day.isToday ? 'date' : undefined" class="grid-body__cell__cell">
-                <DatePickerGridButton v-bind="dayGridButtonProps(day)" :button-class="dayClasses(day)"
-                  @click="selectDate(day)">
-                  {{ day.date }}
-                </DatePickerGridButton>
-              </span>
-            </div>
-          </div>
 
-          <div v-show="viewComputed === store.viewTypeOptions.month" :key="keyYear" class="month-view" role="grid"
-            :aria-label="formattedSubheader()" @keydown="handleMonthGridKeydown">
-            <div class="grid-body">
-              <span v-for="month in months" :key="month.timestamp" role="gridcell" :aria-selected="month.isSelected"
-                :aria-current="month.isCurrent ? 'date' : undefined" class="grid-body__cell__cell">
-                <DatePickerGridButton v-bind="selectableGridButtonProps(
-                  month.isSelected,
-                  month.isDisabled,
-                  month.isCurrent,
-                )" :button-class="monthClasses(month)" @click="selectMonth(month)">
-                  {{ month.month }}
-                </DatePickerGridButton>
-              </span>
+            <div v-else-if="viewComputed === store.viewTypeOptions.month" :key="keyYear" class="month-view" role="grid"
+              :aria-label="formattedSubheader()" @keydown="handleMonthGridKeydown">
+              <div class="grid-body">
+                <span v-for="month in months" :key="month.timestamp" role="gridcell" :aria-selected="month.isSelected"
+                  :aria-current="month.isCurrent ? 'date' : undefined" class="grid-body__cell__cell">
+                  <DatePickerGridButton v-bind="selectableGridButtonProps(
+                    month.isSelected,
+                    month.isDisabled,
+                    month.isCurrent,
+                  )" :button-class="monthClasses(month)" @click="selectMonth(month)">
+                    {{ month.month }}
+                  </DatePickerGridButton>
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div v-show="viewComputed === store.viewTypeOptions.year" :key="keyYearPage" class="year-view" role="grid"
-            :aria-label="formattedSubheader()" @keydown="handleYearGridKeydown">
-            <div class="grid-body">
-              <span v-for="year in years" :key="year.timestamp" role="gridcell" :aria-selected="year.isSelected"
-                :aria-current="year.isCurrent ? 'date' : undefined" class="grid-body__cell__cell">
-                <DatePickerGridButton v-bind="selectableGridButtonProps(
-                  year.isSelected,
-                  year.isDisabled,
-                  year.isCurrent,
-                )" :button-class="yearClasses(year)" @click="selectYear(year)">
-                  {{ year.year }}
-                </DatePickerGridButton>
-              </span>
+            <div v-else :key="keyYearPage" class="year-view" role="grid" :aria-label="formattedSubheader()"
+              @keydown="handleYearGridKeydown">
+              <div class="grid-body">
+                <span v-for="year in years" :key="year.timestamp" role="gridcell" :aria-selected="year.isSelected"
+                  :aria-current="year.isCurrent ? 'date' : undefined" class="grid-body__cell__cell">
+                  <DatePickerGridButton v-bind="selectableGridButtonProps(
+                    year.isSelected,
+                    year.isDisabled,
+                    year.isCurrent,
+                  )" :button-class="yearClasses(year)" @click="selectYear(year)">
+                    {{ year.year }}
+                  </DatePickerGridButton>
+                </span>
+              </div>
             </div>
-          </div>
-        </transition-group>
+          </transition>
+        </div>
       </div>
     </div>
   </div>
@@ -104,7 +106,7 @@
 <script lang="ts" setup>
 import EButton from "@/components/button/index.vue";
 import { useResolvedColor } from "@/composables/color";
-import { Lng as Lnguage } from "@/locales/index";
+import { getDefaultLocaleCode, Lng as Lnguage } from "@/locales/index";
 import type { ContainerMenuInterface, DialogInterface } from "@/types";
 import {
   datePickerViewType,
@@ -126,7 +128,6 @@ import {
   inject,
   nextTick,
   onBeforeUnmount,
-  onMounted,
   reactive,
   ref,
   watch,
@@ -134,6 +135,8 @@ import {
 
 // State and setup
 const liveAnnouncement = ref("");
+const suppressTransitions = ref(false);
+const pendingModelValueTimestamp = ref<number | null>(null);
 
 // Navigation state
 const nextDisabled = computed(() => {
@@ -164,21 +167,29 @@ const menuContainer = inject<ContainerMenuInterface | undefined>(
 
 const props = withDefaults(defineProps<DatePickerProps>(), {
   gridButtonElevation: undefined,
-  lng: "en",
+  lng: getDefaultLocaleCode(),
   disabled: undefined,
   highlighted: undefined,
   view: undefined,
+  noTitle: false,
   weekStart: 1,
 });
 
+const createInitialPickerValue = (): UtilDate => {
+  return new UtilDate(props.modelValue, props.lng);
+};
+
+const initialPickerValue = createInitialPickerValue();
+
 const store = reactive({
-  pageDate: new Date(),
+  pageDate: initialPickerValue.date,
   localView: datePickerViewType.day,
-  selectedDate: new UtilDate(new Date(), props.lng),
-  globalContentAnimation: "tab-transition",
+  selectedDate: initialPickerValue,
+  headerContentAnimation: "tab-transition",
+  gridContentAnimation: "tab-transition",
   viewTypeOptions: datePickerViewType,
   pickerTransition: "picker-transition",
-  valueTimestamp: new Date().getTime(),
+  valueTimestamp: initialPickerValue.date.getTime(),
 });
 
 const keyMonth = computed(() => {
@@ -210,11 +221,43 @@ const viewComputed = computed((): datePickerViewType => {
   return props.view !== undefined ? props.view : store.localView;
 });
 
+const pickerTransitionName = computed((): string => {
+  return suppressTransitions.value ? "" : store.pickerTransition;
+});
+
+const headerContentTransitionName = computed((): string => {
+  return suppressTransitions.value ? "" : store.headerContentAnimation;
+});
+
+const gridContentTransitionName = computed((): string => {
+  return suppressTransitions.value ? "" : store.gridContentAnimation;
+});
+
+const enableTransitions = (): void => {
+  suppressTransitions.value = false;
+};
+
 const changeView = (value: datePickerViewType) => {
   store.localView = value;
   emit("update:view", value);
 };
+
+const setViewTransition = (targetView: datePickerViewType): void => {
+  const currentView = viewComputed.value;
+
+  if (currentView === targetView) {
+    return;
+  }
+
+  enableTransitions();
+
+  store.gridContentAnimation = "picker-fade-transition";
+  store.headerContentAnimation = "picker-fade-transition";
+};
+
 const changeValue = (value: UtilDate) => {
+  enableTransitions();
+  pendingModelValueTimestamp.value = value.date.getTime();
   updatePageConfiguration(value);
   if (props.closeOnChange) {
     dialog?.close(true);
@@ -269,7 +312,19 @@ const visiblePrevMonthDays = computed((): Array<Day> => {
 watch(
   () => props.modelValue,
   (value: string | number | Date | undefined) => {
-    updatePageConfiguration(new UtilDate(value));
+    const utilDate = new UtilDate(value);
+    const nextTimestamp = utilDate.date.getTime();
+
+    if (pendingModelValueTimestamp.value === nextTimestamp) {
+      pendingModelValueTimestamp.value = null;
+      enableTransitions();
+      updatePageConfiguration(utilDate);
+      return;
+    }
+
+    pendingModelValueTimestamp.value = null;
+    suppressTransitions.value = true;
+    updatePageConfiguration(utilDate);
   },
 );
 
@@ -344,7 +399,7 @@ const matchesConfiguredRange = (
   configObject: DatesConfiguration,
 ) => {
   return configObject.ranges?.some((range) => {
-    return Boolean(range.from && range.to && date < range.to && date > range.from);
+    return Boolean(range.from && range.to && date <= range.to && date >= range.from);
   }) ?? false;
 };
 
@@ -391,11 +446,6 @@ const isHighlightEnd = (date: Date): boolean => {
   );
 };
 
-onMounted(() => {
-  store.pageDate = props.modelValue ? new Date(props.modelValue) : new Date();
-  store.selectedDate = new UtilDate(props.modelValue);
-});
-
 const visibleNextMonthDays = computed((): Array<Day> => {
   const utilDate = new UtilDate(store.pageDate).endOfMonth();
   const daysInMonth = utilDate.daysInMonth;
@@ -419,6 +469,9 @@ const pickerClass = computed(() => {
 
   if (props.landscape) {
     classes.push("e-picker--landscape");
+  }
+  if (props.noTitle) {
+    classes.push("e-picker--no-title");
   }
 
   if (props.elevation) {
@@ -546,9 +599,8 @@ const isDisabledMonth = (date: Date): boolean => {
 
 const changeViewMode = (viewMode?: datePickerViewType): void => {
   if (!props.onlyYear) {
-    store.globalContentAnimation = "picker-fade-transition";
-
     if (viewMode !== undefined) {
+      setViewTransition(viewMode);
       changeView(viewMode);
       return;
     }
@@ -559,6 +611,7 @@ const changeViewMode = (viewMode?: datePickerViewType): void => {
       result = store.viewTypeOptions.year;
     }
 
+    setViewTransition(result);
     changeView(result);
   }
 };
@@ -689,37 +742,48 @@ const yearClasses = (year: Year): Record<string, boolean> => {
     year.isCurrent,
   );
 };
+const gridButtonElevation = computed((): typeof props.gridButtonElevation | "none" => {
+  return props.gridButtonElevation ?? "none";
+});
+const gridButtonHasElevation = computed((): boolean => {
+  return !!props.gridButtonElevation;
+});
 
 const dayGridButtonProps = (
   day: Day,
 ): {
   disabled: boolean;
   elevation?: typeof props.gridButtonElevation | "none";
+  text?: boolean;
 } => {
   if (day.isSelected) {
     return {
       disabled: day.isDisabled,
-      elevation: props.gridButtonElevation ?? "none",
+      elevation: gridButtonElevation.value,
+      text: false
     };
   }
 
   if (day.isToday) {
     return {
       disabled: day.isDisabled,
-      elevation: undefined,
+      elevation: gridButtonElevation.value,
+      text: false
     };
   }
 
   if (day.isHighlighted) {
     return {
       disabled: day.isDisabled,
-      elevation: undefined,
+      elevation: gridButtonElevation.value,
+      text: !gridButtonHasElevation.value
     };
   }
 
   return {
     disabled: day.isDisabled,
-    elevation: undefined,
+    elevation: gridButtonElevation.value,
+    text: !gridButtonHasElevation.value,
   };
 };
 
@@ -729,37 +793,45 @@ const selectableGridButtonProps = (
   isCurrent: boolean,
 ): {
   disabled: boolean;
-  elevation?: typeof props.gridButtonElevation;
+  elevation?: typeof props.gridButtonElevation | "none";
+  text?: boolean;
 } => {
   if (isSelected) {
     return {
       disabled: isDisabled,
-      elevation: props.gridButtonElevation,
+      elevation: gridButtonElevation.value,
+      text: false
     };
   }
 
   if (isCurrent) {
     return {
       disabled: isDisabled,
-      elevation: undefined,
+      elevation: gridButtonElevation.value,
+      text: !gridButtonHasElevation.value
     };
   }
 
   return {
     disabled: isDisabled,
-    elevation: undefined,
+    elevation: gridButtonElevation.value,
+    text: !gridButtonHasElevation.value,
   };
 };
 
 const nextMonth = () => {
   if (!nextMonthDisabled.value) {
-    store.globalContentAnimation = "tab-transition";
+    enableTransitions();
+    store.headerContentAnimation = "tab-transition";
+    store.gridContentAnimation = "tab-transition";
     changeMonth(+1);
   }
 };
 const previousMonth = () => {
   if (!previousMonthDisabled.value) {
-    store.globalContentAnimation = "tab-reverse-transition";
+    enableTransitions();
+    store.headerContentAnimation = "tab-reverse-transition";
+    store.gridContentAnimation = "tab-reverse-transition";
     changeMonth(-1);
   }
 };
@@ -814,13 +886,17 @@ const nextButtonAction = (): void => {
 };
 const nextYear = (): void => {
   if (!nextYearDisabled.value) {
-    store.globalContentAnimation = "tab-transition";
+    enableTransitions();
+    store.headerContentAnimation = "tab-transition";
+    store.gridContentAnimation = "tab-transition";
     changeYear(1);
   }
 };
 const nextYearPage = (): void => {
   if (!nextYearPageDisabled.value) {
-    store.globalContentAnimation = "tab-transition";
+    enableTransitions();
+    store.headerContentAnimation = "tab-transition";
+    store.gridContentAnimation = "tab-transition";
     changeYear(12);
   }
 };
@@ -846,14 +922,18 @@ const previousYearDisabled = computed(() => {
 
 const previousYear = (): void => {
   if (!previousYearDisabled.value) {
-    store.globalContentAnimation = "tab-reverse-transition";
+    enableTransitions();
+    store.headerContentAnimation = "tab-reverse-transition";
+    store.gridContentAnimation = "tab-reverse-transition";
     changeYear(-1);
   }
 };
 
 const previousYearPage = (): void => {
   if (!previousYearPageDisabled.value) {
-    store.globalContentAnimation = "tab-reverse-transition";
+    enableTransitions();
+    store.headerContentAnimation = "tab-reverse-transition";
+    store.gridContentAnimation = "tab-reverse-transition";
     changeYear(-12);
   }
 };
@@ -940,11 +1020,13 @@ const selectDate = (day: Day): void => {
     return;
   }
 
+  enableTransitions();
+
   const nextDate = new UtilDate(day.timestamp).date;
 
   const currentDate = computedValue.value.date;
   store.pickerTransition =
-    currentDate > nextDate ? "picker-transition-reverse" : "picker-transition";
+    currentDate < nextDate ? "picker-transition-reverse" : "picker-transition";
   changeValue(new UtilDate(day.timestamp));
 };
 
@@ -953,7 +1035,7 @@ const selectMonth = (month: Month): void => {
     if (props.onlyMonth) {
       changeValue(new UtilDate(month.timestamp));
     } else {
-      store.globalContentAnimation = "picker-fade-transition";
+      setViewTransition(store.viewTypeOptions.day);
       store.pageDate = new Date(month.timestamp);
       changeView(store.viewTypeOptions.day);
     }
@@ -965,7 +1047,7 @@ const selectYear = (year: Year): void => {
     if (props.onlyYear) {
       changeValue(new UtilDate(year.timestamp));
     } else {
-      store.globalContentAnimation = "picker-fade-transition";
+      setViewTransition(store.viewTypeOptions.month);
       store.pageDate = new Date(year.timestamp);
       changeView(store.viewTypeOptions.month);
     }

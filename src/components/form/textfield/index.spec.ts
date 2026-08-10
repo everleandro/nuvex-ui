@@ -105,6 +105,26 @@ describe("ETextField", () => {
     expect(input.attributes("aria-describedby")).toBe(details.attributes("id"));
   });
 
+  it("emits focus and blur events from the input", async () => {
+    const wrapper = mountTextField();
+    await nextTick();
+
+    const input = wrapper.get(".e-text-field__input");
+
+    await input.trigger("focus");
+    await input.trigger("blur");
+
+    const focusEvents = wrapper.emitted("focus");
+    const blurEvents = wrapper.emitted("blur");
+
+    expect(focusEvents).toBeTruthy();
+    expect(blurEvents).toBeTruthy();
+    expect(focusEvents).toHaveLength(1);
+    expect(blurEvents).toHaveLength(1);
+    expect(focusEvents?.[0]?.[0]).toBeInstanceOf(FocusEvent);
+    expect(blurEvents?.[0]?.[0]).toBeInstanceOf(FocusEvent);
+  });
+
   it("emits model updates through native input events", async () => {
     const wrapper = mountTextField();
     await nextTick();
@@ -112,6 +132,20 @@ describe("ETextField", () => {
     await wrapper.get(".e-text-field__input").setValue("Alice");
 
     expect(wrapper.emitted("update:modelValue")).toEqual([["Alice"]]);
+  });
+
+  it("renders the field overlay by default", async () => {
+    const wrapper = mountTextField();
+    await nextTick();
+
+    expect(wrapper.find(".e-field__overlay").exists()).toBe(true);
+  });
+
+  it("omits the field overlay when tonal is false", async () => {
+    const wrapper = mountTextField({ tonal: false });
+    await nextTick();
+
+    expect(wrapper.find(".e-field__overlay").exists()).toBe(false);
   });
 
   it("emits clear interactions through the semantic clear affordance", async () => {

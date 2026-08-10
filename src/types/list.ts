@@ -19,6 +19,7 @@ export interface EListInjection {
   modelValue: ComputedRef<ListModelProp>;
   group: ComputedRef<ListModelProp>;
   color: ComputedRef<string | undefined>;
+  activeColor: ComputedRef<string | undefined>;
   size: ComputedRef<Size | undefined>;
   disabled: ComputedRef<boolean>;
   isListbox: ComputedRef<boolean>;

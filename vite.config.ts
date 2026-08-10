@@ -23,8 +23,8 @@ export default defineConfig({
     target: "esnext",
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
-      name: "Drocket",
-      fileName: (format: string) => `drocket.${format}.js`,
+      name: "NuvexUI",
+      fileName: (format: string) => `nuvex-ui.${format}.js`,
     },
 
     rollupOptions: {

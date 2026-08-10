@@ -1,0 +1,13 @@
+@use "../foundation/globals" as globals;
+
+$drawer-bg: var(--e-color-surface-base) !default;
+$drawer-color: var(--e-contrast-surface-base) !default;
+$drawer-border-color: var(--e-color-border) !default;
+$drawer-border-width: 1px !default;
+
+$drawer-transition-duration: 0.2s !default;
+$drawer-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !default;
+
+$drawer-floating-bg: var(--e-color-surface-raised) !default;
+$drawer-floating-margin: 12px !default;
+$drawer-floating-radius: var(--e-border-radius-root, #{globals.$border-radius-root}) !default;

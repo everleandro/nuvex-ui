@@ -1,7 +1,6 @@
 export { default as EButton } from "./button/index.vue";
 export { default as EIcon } from "./icon/index.vue";
 export { default as ECard } from "./card/index.vue";
-export { default as ECardContainer } from "./card/container.vue";
 export { default as EDatePicker } from "./date-picker/index.vue";
 export { default as EDialog } from "./dialog/index.vue";
 export { default as EMenu } from "./menu/index.vue";
@@ -18,6 +17,7 @@ export { default as ESelect } from "./form/select/index.vue";
 export { default as EDetails } from "./form/details.vue";
 export { default as ESwitch } from "./form/switch/index.vue";
 export { default as ETextfield } from "./form/textfield/index.vue";
+export { default as ETextarea } from "./form/textarea/index.vue";
 export { default as EFormColumn } from "./form/column.vue";
 export { default as EForm } from "./form/form.vue";
 export { default as ECol } from "./grid/col.vue";

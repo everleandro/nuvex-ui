@@ -1,390 +1,155 @@
 <template>
-    <section class="card-playground">
-        <div class="card-playground__hero">
-            <p class="eyebrow">Playground</p>
-            <h1>Card Playground</h1>
-            <p class="hero-copy">
-                Esta vista separa las pruebas de <strong>ECard</strong> para validar la
-                migracion de color, contraste, borde outlined y composicion sin seguir
-                creciendo la vista principal del playground.
+    <section class="card-page">
+        <header class="card-page__header">
+            <p class="card-page__eyebrow">Components</p>
+            <h2 class="card-page__title">Card Examples</h2>
+            <p class="card-page__lead">
+                Vista de referencia para revisar cards contenidas, tonales y la combinacion tonal con outlined.
             </p>
-        </div>
+        </header>
 
-        <section class="block card-section">
-            <div class="section-head">
-                <div>
-                    <p class="section-kicker">Color</p>
-                    <h2>Superficie + contraste</h2>
-                    <p>
-                        Estos ejemplos prueban el nuevo manejo de color por variables CSS,
-                        alineado con el comportamiento de <strong>EButton</strong>.
-                    </p>
-                </div>
-            </div>
+        <article class="card-demo">
+            <h3>Body media</h3>
+            <p class="card-demo__caption">`prepend` y `append` ahora viven dentro del contenido principal del card.</p>
 
             <div class="card-grid">
-                <ECard v-for="sample in colorSamples" :key="sample.name" :color="sample.color"
-                    :outlined="sample.outlined" :depressed="sample.depressed" elevation="sm">
-                    <ECardContainer>
-                        <div class="play-card__meta">
-                            <span>{{ sample.label }}</span>
-                            <strong>{{ sample.name }}</strong>
-                        </div>
-
-                        <h3>{{ sample.title }}</h3>
-                        <p>{{ sample.copy }}</p>
-
-                        <div class="play-card__actions">
-                            <EButton :color="sample.actionColor" :outlined="sample.actionOutlined">
-                                Primary action
-                            </EButton>
-                            <EButton text :color="sample.actionColor">Secondary</EButton>
-                        </div>
-                    </ECardContainer>
-                </ECard>
+                <ECard :prepend-icon="iconFactory.heart" title="Default card" subtitle="Contained surface" prepend-vertical-align="center"
+                    description="Usa el fondo de superficie por defecto." />
+                <ECard :append-icon="iconFactory.calendar" title="Timeline" subtitle="Body append"
+                    description="El append del body se renderiza al final de `card__main`." />
             </div>
-        </section>
+        </article>
 
-        <section class="block card-section">
-            <div class="section-head">
-                <div>
-                    <p class="section-kicker">Outlined</p>
-                    <h2>Bordes y variantes</h2>
-                    <p>
-                        Este bloque ayuda a revisar si el borde toma correctamente el color
-                        del card y si el contraste del contenido se mantiene estable.
-                    </p>
-                </div>
-            </div>
+        <article class="card-demo">
+            <h3>Grid track cases</h3>
+            <p class="card-demo__caption">Casos de referencia para validar que no aparezcan gaps fantasma cuando faltan tracks del grid.</p>
 
-            <ERow dense>
-                <ECol v-for="variant in outlineSamples" :key="variant.title" :cols="12" :md="6" :lg="4">
-                    <ECard class="play-card play-card--outline" :color="variant.color" outlined>
-                        <ECardContainer>
-                            <div class="play-card__inline-head">
-                                <EAvatar size="small" :color="variant.color" />
-                                <div>
-                                    <strong>{{ variant.title }}</strong>
-                                    <p>{{ variant.caption }}</p>
-                                </div>
-                            </div>
-
-                            <p>{{ variant.copy }}</p>
-                        </ECardContainer>
-
-                        <template #footer>
-                            <div class="play-card__footer">
-                                <span>{{ variant.token }}</span>
-                                <EButton text :prepend-icon="iconFactory.arrowRight">Inspect</EButton>
-                            </div>
-                        </template>
-                    </ECard>
-                </ECol>
-            </ERow>
-        </section>
-
-        <section class="block card-section">
-            <div class="section-head">
-                <div>
-                    <p class="section-kicker">Composition</p>
-                    <h2>Alturas, contenido y footer</h2>
-                    <p>
-                        Pruebas de layout para revisar como responde la tarjeta al contenido,
-                        altura fija y uso de acciones al pie.
-                    </p>
-                </div>
-            </div>
-
-            <div class="composition-grid">
-                <ECard class="play-card play-card--editor" color="secondary" height="280" elevation="md">
-                    <ECardContainer>
-                        <div class="play-card__inline-head">
-                            <EAvatar size="small" color="secondary" />
-                            <div>
-                                <strong>Editor draft</strong>
-                                <p>Height fija para probar contenido vertical.</p>
-                            </div>
-                        </div>
-
-                        <div class="editor-preview">
-                            <div class="editor-preview__line editor-preview__line--strong"></div>
-                            <div class="editor-preview__line"></div>
-                            <div class="editor-preview__line editor-preview__line--short"></div>
-                            <div class="editor-preview__panel">
-                                <EButton text :prepend-icon="iconFactory.arrowLeft">Back</EButton>
-                                <EButton color="secondary">Publish</EButton>
-                            </div>
-                        </div>
-                    </ECardContainer>
+            <div class="card-grid">
+                <ECard>
+                    <p>Solo body: no debe haber gap horizontal ni vertical.</p>
                 </ECard>
 
-                <ECard class="play-card play-card--metrics" outlined elevation="sm">
-                    <ECardContainer>
-                        <div class="play-card__inline-head">
-                            <strong>Metrics snapshot</strong>
-                            <span class="status-dot"></span>
-                        </div>
+                <ECard :prepend-icon="iconFactory.heart" title="Prepend only" subtitle="Header + prepend"
+                    description="Debe existir una sola columna extra al inicio." />
 
-                        <div class="metrics-grid">
-                            <div v-for="metric in metrics" :key="metric.label" class="metric-box">
-                                <span>{{ metric.label }}</span>
-                                <strong>{{ metric.value }}</strong>
-                            </div>
-                        </div>
-                    </ECardContainer>
+                <ECard :append-icon="iconFactory.calendar" description="Description only"
+                    append-vertical-align="end">
+                    <p>Append sin header: valida columna final sin fila extra arriba.</p>
+                </ECard>
 
-                    <template #footer>
-                        <div class="play-card__footer">
-                            <span>Footer slot</span>
-                            <EButton text :append-icon="iconFactory.arrowRight">Details</EButton>
-                        </div>
-                    </template>
+                <ECard :prepend-icon="iconFactory.heart" :append-icon="iconFactory.calendar" title="Full layout"
+                    subtitle="Header, description and body" description="Todos los tracks presentes para comparar el caso completo.">
+                    <p>Contenido principal con prepend, append, header y description.</p>
                 </ECard>
             </div>
-        </section>
+        </article>
+
+        <article class="card-demo">
+            <h3>Header media</h3>
+            <p class="card-demo__caption">Usa `prepend-header-*` y `append-header-*` cuando la media pertenece al encabezado.</p>
+
+            <div class="card-grid">
+                <ECard :prepend-header-icon="iconFactory.heart" title="Default card" subtitle="Contained surface"
+                    description="Mantiene el icono junto al bloque de title y subtitle." />
+                <ECard :append-header-icon="iconFactory.calendar" title="Meeting note" subtitle="Header append"
+                    description="El append del header conserva el alineado al extremo derecho." />
+            </div>
+        </article>
+
+        <article class="card-demo">
+            <h3>Contained</h3>
+            <p class="card-demo__caption">Base visual para contrastar el comportamiento normal contra tonal.</p>
+
+            <div class="card-grid">
+                <ECard title="Default card" subtitle="Contained surface"
+                    description="Usa el fondo de superficie por defecto." />
+                <ECard title="Primary card" subtitle="Contained with color"
+                    description="Aplica color como fondo solido del card." color="primary" />
+            </div>
+        </article>
+
+        <article class="card-demo">
+            <h3>Tonal</h3>
+            <p class="card-demo__caption">El color pasa a tinta y la superficie se resuelve como capa tonal.</p>
+
+            <div class="card-grid">
+                <ECard tonal title="Default tonal" subtitle="Neutral tonal surface"
+                    description="Mantiene el color base de superficie y lo proyecta como capa tonal." />
+                <ECard tonal color="primary" title="Primary tonal" subtitle="Tonal with semantic color"
+                    description="Replica la inversion visual del button tonal con color." />
+                <ECard tonal color="teal-700" title="Teal tonal" subtitle="Primitive palette token"
+                    description="Valida el comportamiento tonal con tokens de paleta." />
+            </div>
+        </article>
+
+        <article class="card-demo">
+            <h3>Tonal + outlined</h3>
+            <p class="card-demo__caption">La combinacion se mantiene soportada para sumar borde sin perder la capa
+                tonal.</p>
+
+            <div class="card-grid">
+                <ECard tonal outlined title="Outlined tonal" subtitle="Border plus tonal layer"
+                    description="El borde se mantiene y la card sigue plana, sin elevacion." />
+                <ECard tonal outlined color="secondary" title="Secondary outlined tonal"
+                    subtitle="Semantic color plus outline"
+                    description="Caso de referencia para la combinacion que decidiste conservar." />
+            </div>
+        </article>
     </section>
 </template>
-
 <script setup lang="ts">
-import EAvatar from "../../src/components/avatar.vue";
-import EButton from "../../src/components/button/index.vue";
-import ECard from "../../src/components/card/index.vue";
-import ECardContainer from "../../src/components/card/container.vue";
-import ECol from "../../src/components/grid/col.vue";
-import ERow from "../../src/components/grid/row.vue";
-import iconFactory from "../../src/utils/icons";
 
-const colorSamples = [
-    {
-        name: "Default surface",
-        label: "surface",
-        title: "Card without explicit color",
-        copy: "Usa los tokens de surface base para comparar el resto de variantes.",
-        color: undefined,
-        outlined: false,
-        depressed: false,
-        actionColor: "primary",
-        actionOutlined: false,
-    },
-    {
-        name: "Primary",
-        label: "semantic",
-        title: "Primary background + computed contrast",
-        copy: "Sirve para validar que el contraste de texto y acciones se resuelva desde variables.",
-        color: "primary",
-        outlined: false,
-        depressed: false,
-        actionColor: "primary",
-        actionOutlined: true,
-    },
-    {
-        name: "Teal 300",
-        label: "primitive",
-        title: "Primitive palette token",
-        copy: "Ayuda a confirmar que un color primitivo tambien actualiza fondo y contraste del card.",
-        color: "teal-300",
-        outlined: false,
-        depressed: true,
-        actionColor: "teal-300",
-        actionOutlined: true,
-    },
-];
-
-const outlineSamples = [
-    {
-        title: "Primary outlined",
-        caption: "Semantic token",
-        copy: "El borde debe seguir el color resuelto del card, no un color de texto heredado por clase.",
-        color: "primary",
-        token: "color=primary",
-    },
-    {
-        title: "Warning outlined",
-        caption: "Semantic token",
-        copy: "Caso util para verificar contraste y legibilidad sobre tonos calidos.",
-        color: "warning",
-        token: "color=warning",
-    },
-    {
-        title: "Blue 700 outlined",
-        caption: "Primitive token",
-        copy: "Sirve para revisar el borde con tonos oscuros de la paleta primitiva.",
-        color: "blue-700",
-        token: "color=blue-700",
-    },
-];
-
-const metrics = [
-    { label: "Open issues", value: "14" },
-    { label: "PRs", value: "5" },
-    { label: "Coverage", value: "82%" },
-    { label: "Tokens", value: "128" },
-];
+import iconFactory from "./icons.ts";
 </script>
 
 <style scoped>
-.card-playground {
+.card-page {
     display: grid;
-    gap: 24px;
+    gap: 20px;
 }
 
-.card-playground__hero {
+.card-page__header {
     display: grid;
-    gap: 8px;
-    max-width: 760px;
+    gap: 6px;
 }
 
-.eyebrow,
-.section-kicker {
-    color: #5b6b8a;
+.card-page__eyebrow {
+    margin: 0;
     font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    margin: 0;
     text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.72;
 }
 
-.card-playground__hero h1,
-.section-head h2,
-.play-card h3,
-.play-card strong {
-    color: var(--e-primary-color, #172033);
+.card-page__title {
     margin: 0;
 }
 
-.hero-copy,
-.section-head p,
-.play-card p,
-.play-card span {
-    color: var(--e-secondary-color, #596579);
-    line-height: 1.6;
+.card-page__lead {
+    margin: 0;
+    opacity: 0.84;
+}
+
+.card-demo {
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.card-demo h3 {
     margin: 0;
 }
 
-.card-section {
-    display: grid;
-    gap: 20px;
+.card-demo__caption {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.8;
 }
 
-.section-head {
-    display: grid;
-    gap: 8px;
-    max-width: 720px;
-}
-
-.card-grid,
-.composition-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-.play-card {
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-.play-card :deep(.e-card__container) {
+.card-grid {
     display: grid;
     gap: 16px;
-    padding: 24px;
-}
-
-.play-card__meta,
-.play-card__actions,
-.play-card__inline-head,
-.play-card__footer {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.play-card__meta {
-    justify-content: space-between;
-}
-
-.play-card__actions,
-.play-card__footer {
-    flex-wrap: wrap;
-}
-
-.play-card__inline-head {
-    align-items: flex-start;
-}
-
-.play-card__inline-head > div {
-    display: grid;
-    gap: 4px;
-}
-
-.play-card__footer {
-    justify-content: space-between;
-    padding: 16px 24px 24px;
-}
-
-.play-card--outline :deep(.e-card__container) {
-    min-height: 190px;
-}
-
-.editor-preview {
-    display: grid;
-    gap: 12px;
-    margin-top: auto;
-}
-
-.editor-preview__line {
-    height: 10px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.38);
-}
-
-.editor-preview__line--strong {
-    width: 72%;
-    height: 14px;
-}
-
-.editor-preview__line--short {
-    width: 48%;
-}
-
-.editor-preview__panel {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.18);
-}
-
-.metrics-grid {
-    display: grid;
-    gap: 12px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.metric-box {
-    display: grid;
-    gap: 4px;
-    padding: 16px;
-    border-radius: 16px;
-    background: rgba(15, 23, 42, 0.04);
-}
-
-.status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #10b981;
-    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.16);
-}
-
-@media (max-width: 720px) {
-    .play-card__meta,
-    .play-card__footer,
-    .editor-preview__panel {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 </style>

@@ -12,7 +12,43 @@ export interface RippleBinding {
   center?: boolean;
   disabled?: boolean;
   keyboard?: boolean;
+  interactive?: boolean;
+  ignore?: string;
 }
+
+const isIgnoredTarget = (
+  el: El,
+  event: Event,
+  binding?: Record<"value", RippleBinding>
+) => {
+  const selector = binding?.value?.ignore;
+  const target = event.target;
+
+  if (!selector || !(target instanceof Element) || target === el) return false;
+
+  const ignoredTarget = target.closest(selector);
+  return !!ignoredTarget && ignoredTarget !== el && el.contains(ignoredTarget);
+};
+
+const ensureRippleClasses = (
+  el: El,
+  binding?: Record<"value", RippleBinding>
+) => {
+  const rippleEnabled = binding?.value?.disabled !== true;
+  const interactive = rippleEnabled && binding?.value?.interactive !== false;
+
+  if (rippleEnabled && !el.classList.contains("v-ripple-element")) {
+    el.classList.add("v-ripple-element");
+  } else if (!rippleEnabled) {
+    el.classList.remove("v-ripple-element");
+  }
+
+  if (interactive && !el.classList.contains("interactive-element")) {
+    el.classList.add("interactive-element");
+  } else if (!interactive) {
+    el.classList.remove("interactive-element");
+  }
+};
 
 const createRipple = (
   el: El,
@@ -20,11 +56,11 @@ const createRipple = (
   position?: { x: number; y: number },
   centered = false
 ) => {
+  const __ANIMATION_DURATION__ = "0.5s";
+
   if (binding?.value?.disabled) return;
 
-  if (!el.classList.contains("v-ripple-element")) {
-    el.classList.add("v-ripple-element");
-  }
+  ensureRippleClasses(el, binding);
 
   const circle = document.createElement("span");
   el.appendChild(circle);
@@ -36,10 +72,9 @@ const createRipple = (
   const color = binding?.value?.color || getComputedStyle(el).color;
   const background = color || "rgb(255, 255, 255)";
   const center = centered || !!binding?.value?.center;
-
   circle.style.width = circle.style.height = `${diameter}px`;
   circle.style.backgroundColor = background;
-  circle.style.animationDuration = "0.5s";
+  circle.style.animation = `v-ripple ${__ANIMATION_DURATION__} linear`;
   circle.style.position = "absolute";
   circle.style.borderRadius = "50%";
   circle.style.pointerEvents = "none";
@@ -53,7 +88,7 @@ const createRipple = (
 
   setTimeout(() => {
     if (circle.parentElement) circle.parentElement.removeChild(circle);
-  }, 500);
+  }, parseFloat(__ANIMATION_DURATION__) * 1000);
 };
 
 const createRippleHandler = (
@@ -61,6 +96,7 @@ const createRippleHandler = (
   binding?: Record<"value", RippleBinding>
 ) => {
   return (e: MouseEvent) => {
+    if (isIgnoredTarget(el, e, binding)) return;
     createRipple(el, binding, { x: e.clientX, y: e.clientY });
   };
 };
@@ -71,6 +107,7 @@ const createRippleKeyboardHandler = (
 ) => {
   return (e: KeyboardEvent) => {
     if (binding?.value?.disabled || e.repeat) return;
+    if (isIgnoredTarget(el, e, binding)) return;
     if (e.key !== " " && e.key !== "Enter") return;
 
     createRipple(el, binding, undefined, true);
@@ -107,14 +144,13 @@ const addRippleListeners = (el: El, binding?: Record<"value", RippleBinding>) =>
 
 export const ripple = {
   mounted(el: El, binding?: Record<"value", RippleBinding>) {
-    if (!el.classList.contains("v-ripple-element")) {
-      el.classList.add("v-ripple-element");
-    }
+    ensureRippleClasses(el, binding);
 
     addRippleListeners(el, binding);
   },
 
   updated(el: El, binding?: Record<"value", RippleBinding>) {
+    ensureRippleClasses(el, binding);
     removeRippleListeners(el);
     addRippleListeners(el, binding);
   },

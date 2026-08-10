@@ -1,6 +1,6 @@
 <template>
-    <component ref="node" v-ripple="{ disabled: !clickeableType() }" :is="tagResult" :active-class="activeClass"
-        v-bind="liBindingOptions" :class="listItemCLass" :style="listItemStyle" @click="handleItemClick" @focus="handleItemFocus"
+    <component ref="node" v-ripple="rippleBinding" :is="tagResult" :active-class="activeClass"
+        v-bind="liBindingOptions" :class="listItemCLass" :style="mergedListItemStyle" @click="handleItemClick" @focus="handleItemFocus"
         @keydown="handleItemKeydown" @keyup="handleItemKeyup">
         <div v-if="hasPrepend" :class="prependClass">
             <slot name="prepend">
@@ -34,6 +34,7 @@ import { LIST_GROUP_KEY, LIST_KEY } from './constants';
 const vRipple = { ...ripple }
 
 export interface Props extends SizeProps {
+    clickable?: boolean
     disabled?: boolean
     ripple?: boolean
     prependIcon?: string | IconPath | Array<IconPath>
@@ -46,10 +47,13 @@ export interface Props extends SizeProps {
     subtitle?: string
     tag?: string
     color?: string
+    activeColor?: string
     value?: string | number | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {
+    clickable: undefined,
+    ripple: true,
     isActive: undefined,
     activeClass: 'e-list-item--active',
 })
@@ -124,8 +128,51 @@ const isNativeListItem = computed((): boolean => tagResult.value === 'li')
 
 const isListboxItem = computed((): boolean => !!parentList?.isListbox?.value)
 
+const hasInteractiveIntent = computed((): boolean => {
+    if (isGroupActivator.value) return true
+    if (props.clickable !== undefined) return props.clickable
+
+    return isLinkItem.value || typeof parentList !== 'undefined'
+})
+
+const resolvedClickable = computed((): boolean => {
+    return hasInteractiveIntent.value && !isDisabled.value
+})
+
+const isSelectable = computed((): boolean => {
+    return resolvedClickable.value && isListboxItem.value && !isLinkItem.value && !isGroupActivator.value
+})
+
+const interactiveDescendantSelector = [
+    'button',
+    'a',
+    'input',
+    'select',
+    'textarea',
+    'summary',
+    '[role="button"]',
+    '[role="link"]',
+    '[contenteditable="true"]',
+    '[data-list-item-action]',
+].join(',')
+
+const isFromInteractiveDescendant = (evt: Event): boolean => {
+    const target = evt.target
+    const itemElement = evt.currentTarget
+    if (!(target instanceof Element) || !(itemElement instanceof Element) || target === itemElement) return false
+
+    const interactiveTarget = target.closest(interactiveDescendantSelector)
+    return !!interactiveTarget && interactiveTarget !== itemElement && itemElement.contains(interactiveTarget)
+}
+
+const rippleBinding = computed(() => ({
+    disabled: !props.ripple || !resolvedClickable.value,
+    interactive: resolvedClickable.value,
+    ignore: interactiveDescendantSelector,
+}))
+
 const currentTabIndex = computed((): number | undefined => {
-    if (!clickeableType()) return undefined
+    if (!hasInteractiveIntent.value) return undefined
     if (isDisabled.value) return -1
 
     const focusedId = parentList?.focusedItemId?.value
@@ -155,13 +202,13 @@ const active = computed((): boolean => {
 })
 
 const emit = defineEmits<{
-    (e: 'click:item', value: MouseEvent): void
+    (e: 'click:item', value: MouseEvent | KeyboardEvent): void
 }>()
 
 const liBindingOptions = computed((): Record<string, any> => {
     const options: Record<string, any> = {}
     options.id = itemId.value
-    options['data-e-list-item'] = clickeableType() ? 'true' : undefined
+    options['data-e-list-item'] = hasInteractiveIntent.value ? 'true' : undefined
     options['data-list-group-parent-path'] = parentGroupPath.value
 
     if (props.title) {
@@ -176,7 +223,7 @@ const liBindingOptions = computed((): Record<string, any> => {
         options['aria-disabled'] = true
     }
 
-    if (clickeableType()) {
+    if (hasInteractiveIntent.value) {
         if (typeof currentTabIndex.value !== 'undefined') {
             options['tabindex'] = currentTabIndex.value
         }
@@ -197,6 +244,7 @@ const availableRootClasses = {
     clickeable: "e-list-item--clickeable",
     root: "e-list-item",
     ripple: "v-ripple-element",
+    interactiveActive: "interactive-element--active",
     active: "e-list-item--active",
 };
 
@@ -239,11 +287,24 @@ const appendTypeClass = computed((): string | undefined => {
     return undefined
 })
 
-const { colorStyles: listItemStyle } = useResolvedColor({
+const { colorStyles: listItemColorStyle } = useResolvedColor({
     color: computed(() => props.color),
     inheritedColor: computed(() => parentList?.color?.value),
     colorVar: '--e-list-color',
     contrastVar: '--e-list-contrast',
+})
+
+const { colorStyles: listItemActiveColorStyle } = useResolvedColor({
+    color: computed(() => props.activeColor),
+    inheritedColor: computed(() => parentList?.activeColor?.value),
+    colorVar: '--e-list-active-color',
+})
+
+const mergedListItemStyle = computed((): Record<string, string> => {
+    return {
+        ...listItemColorStyle.value,
+        ...listItemActiveColorStyle.value,
+    }
 })
 
 const listItemCLass = computed((): Array<unknown> => {
@@ -253,10 +314,11 @@ const listItemCLass = computed((): Array<unknown> => {
     isDisabled.value && classes.push(availableRootClasses.disabled)
     prependTypeClass.value && classes.push(prependTypeClass.value)
     appendTypeClass.value && classes.push(appendTypeClass.value)
-    if (clickeableType()) {
+    if (resolvedClickable.value) {
         classes.push([availableRootClasses.clickeable, availableRootClasses.ripple].join(' '))
     }
     if (active.value) {
+        classes.push(availableRootClasses.interactiveActive)
         classes.push(props.activeClass || '')
     }
 
@@ -296,37 +358,38 @@ const appendClass = computed((): Array<string> => {
 const tagResult = computed((): string => {
     if (props.tag)
         return props.tag
-    return attrs.to ? "router-link" : "li"
+    return attrs.to && props.clickable !== false ? "router-link" : "li"
 });
 const isActivator = computed((): boolean => {
     return !!attrs['data-activator-node']
 })
 
-const handleItemClick = (evt: MouseEvent): void => {
+const handleItemClick = (evt: MouseEvent | KeyboardEvent): void => {
+    if (!resolvedClickable.value || isFromInteractiveDescendant(evt)) return
+
     emit('click:item', evt)
-    if (isDisabled.value) return
     parentList?.setFocusedItem?.(itemId.value)
     if (isGroupActivator.value) {
         parentList?.changeGroupValue?.(groupPath.value)
         return
     }
-    if (typeof parentList !== 'undefined' && !isActivator.value)
+    if (isSelectable.value && !isActivator.value)
         parentList?.changeModelValue?.(itemValue.value)
 }
 
 const handleItemFocus = (): void => {
-    if (!clickeableType()) return
+    if (!resolvedClickable.value) return
     parentList?.setFocusedItem?.(itemId.value)
 }
 
 const triggerKeyboardSelection = (evt: KeyboardEvent): void => {
     if (isLinkItem.value || evt.repeat) return
 
-    handleItemClick(evt as unknown as MouseEvent)
+    handleItemClick(evt)
 }
 
 const handleItemKeydown = (evt: KeyboardEvent): void => {
-    if (!clickeableType() || isDisabled.value) return
+    if (!resolvedClickable.value || isFromInteractiveDescendant(evt)) return
 
     if (evt.key === 'ArrowDown') {
         evt.preventDefault()
@@ -384,19 +447,15 @@ const handleItemKeydown = (evt: KeyboardEvent): void => {
 }
 
 const handleItemKeyup = (evt: KeyboardEvent): void => {
-    if (!clickeableType() || isDisabled.value || isLinkItem.value) return
+    if (!resolvedClickable.value || isLinkItem.value || isFromInteractiveDescendant(evt)) return
     if (evt.key !== ' ' && evt.key !== 'Enter') return
 
     evt.preventDefault()
     triggerKeyboardSelection(evt)
 }
 
-const clickeableType = (): boolean => {
-    return !isDisabled.value && (!!attrs.to || typeof parentList !== 'undefined' || isActivator.value);
-}
-
 onMounted(() => {
-    if (!clickeableType()) return
+    if (!hasInteractiveIntent.value) return
     parentList?.syncFocusableItem?.(itemId.value)
 })
 

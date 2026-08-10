@@ -1,17 +1,20 @@
 {
-  "name": "drocket",
+  "name": "nuvex-ui",
   "type": "module",
-  "version": "1.0.26",
+  "version": "1.0.0",
   "files": [
     "dist"
   ],
   "private": false,
-  "module": "./dist/drocket.es.js",
+  "module": "./dist/nuvex-ui.es.js",
+  "types": "./dist/types/index.d.ts",
+  "main": "./dist/nuvex-ui.umd.js",
+  "style": "./dist/index.css",
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/drocket.es.js",
-      "require": "./dist/drocket.umd.js"
+      "import": "./dist/nuvex-ui.es.js",
+      "require": "./dist/nuvex-ui.umd.js"
     },
     "./framework.scss": {
       "import": "./dist/styles/main.scss",
@@ -28,13 +31,15 @@
     "./mixin.scss": {
       "import": "./dist/styles/_mixins.scss",
       "require": "./dist/styles/_mixins.scss"
+    },
+    "./package.json": {
+      "import": "./package.json",
+      "require": "./package.json"
     }
   },
-  "types": "./dist/types/index.d.ts",
-  "main": "./dist/drocket.umd.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/everleandro/drocket.git"
+    "url": "git+https://github.com/everleandro/nuvex-ui.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -59,18 +64,18 @@
   ],
   "scripts": {
     "dev": "vite",
-    "dev:all": "concurrently -n playground,site,docs -c blue,green,yellow \"npm:playground:dev\" \"npm:site:dev\" \"npm:docs:dev\"",
+    "dev:all": "concurrently -n playground,docs -c blue,yellow \"npm:playground:dev\" \"npm:docs:dev\"",
     "playground:dev": "vite --config playground/vite.config.ts",
     "playground:build": "vite build --config playground/vite.config.ts",
     "playground:preview": "vite preview --config playground/vite.config.ts",
-    "site:dev": "vite --config site/vite.config.ts",
-    "site:build": "vite build --config site/vite.config.ts",
-    "site:preview": "vite preview --config site/vite.config.ts",
-    "build": "vite build && vue-tsc --emitDeclarationOnly && move ./dist/src ./dist/types",
-    "build-linux": "vite build && vue-tsc --emitDeclarationOnly && mv ./dist/src ./dist/types",
+    "build": "vite build && vue-tsc --emitDeclarationOnly && node ./scripts/prepare-dist.mjs",
+    "build:types": "vue-tsc --emitDeclarationOnly && node ./scripts/prepare-dist.mjs",
+    "pack:local": "npm run build && npm pack",
+    "prepublishOnly": "npm run test && npm run build",
     "preserve": "vite build",
     "serve": "vite preview --port 5050",
     "typecheck": "vue-tsc --noEmit",
+    "lint:surface:targets": "node ./scripts/check-surface-semantic-targets.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -78,7 +83,7 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
   },
-  "peerDependency": {
+  "peerDependencies": {
     "vue": "^3.3.11"
   },
   "devDependencies": {

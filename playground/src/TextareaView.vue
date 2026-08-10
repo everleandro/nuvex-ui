@@ -1,452 +1,353 @@
 <template>
-  <section class="textarea-playground">
-    <div class="textarea-playground__hero">
-      <p class="eyebrow">Playground</p>
-      <h1>Textarea Playground</h1>
-      <p class="hero-copy">
-        Esta vista deja aislada la nueva linea basada en <strong>Field</strong>
-        para iterar label, details, contador, herencia de color y comportamiento
-        del shell sin mezclarla con los textfields legacy.
+  <section class="textarea-page">
+    <header class="textarea-page__header">
+      <p class="textarea-page__eyebrow">Components</p>
+      <h2 class="textarea-page__title">Textarea Examples</h2>
+      <p class="textarea-page__lead">
+        Coleccion de ejemplos para validar captura de texto largo con reglas, contador y estados.
       </p>
-    </div>
+    </header>
 
-    <div class="textarea-layout">
-      <div class="textarea-stack">
-        <ECard class="textarea-card" elevation="md">
-          <div class="textarea-card__header">
-            <div>
-              <p class="section-kicker">Textarea</p>
-              <h2>Casos base para ETextarea</h2>
-            </div>
-            <p class="textarea-card__copy">
-              El bloque principal mantiene validacion, contador y details para
-              el caso base del componente sobre <strong>EForm</strong>.
-            </p>
-          </div>
+    <article class="textarea-demo">
+      <h3>Basic</h3>
+      <p class="textarea-demo__caption">Caso basico con helper detail y etiqueta flotante.</p>
 
-          <EForm
-            ref="formRef"
-            v-model="formValid"
-            class="textarea-demo-form"
-            dense
-            @submit="handleSubmit"
-          >
-            <ETextarea
-              v-model="form.summary"
-              :cols="12"
-              :md="6"
-              color="cyan-800"
-              label="color-cyan-800"
-              placeholder="Describe alcance, objetivos y restricciones principales"
-              detail="Caso base del nuevo textarea usando el shell Field."
-              :rules="summaryRules"
-            />
+      <ETextarea
+        v-model="bio"
+        label="Short bio"
+        detail="Tell us about your role and experience"
+        placeholder="I am a frontend engineer focused on design systems..."
+        label-behavior="floating"
+      />
+    </article>
+    <article class="textarea-demo">
+      <h3>rows-1</h3>
+      <p class="textarea-demo__caption">Caso basico con rows 1</p>
 
-            <ETextarea
-              v-model="form.retrospective"
-              :cols="12"
-              :md="6"
-              counter
-              color="primary"
-              :limit="240"
-              label="color-primary"
-              label-behavior="floating"
-              outlined
-              placeholder="Que funciono bien, que falta ajustar y que deberiamos iterar"
-              detail="Caso floating con contador y details enriquecido desde textarea."
-              :rules="retrospectiveRules"
-            />
-          </EForm>
+      <ETextarea
+        v-model="bio"
+        label="Short bio"
+        rows="1"
+        detail="Tell us about your role and experience"
+        :append-inner-icon="iconFactory.history"
+        placeholder="I am a frontend engineer focused on design systems..."
+      />
+    </article>
 
-          <div class="textarea-actions">
-            <EButton color="primary" @click="handleValidate">Validar</EButton>
-            <EButton color="secondary" outlined @click="handleSubmit"
-              >Simular submit</EButton
-            >
-            <EButton text @click="handleReset">Restablecer</EButton>
-          </div>
+    <article class="textarea-demo">
+      <h3>Counter and limit</h3>
+      <p class="textarea-demo__caption">Control de longitud para mensajes cortos.</p>
 
-          <p :class="['feedback', `feedback--${submitState.kind}`]">
-            {{ submitState.message }}
-          </p>
-        </ECard>
+      <ETextarea
+        v-model="summary"
+        label="Release summary"
+        :limit="140"
+        counter
+        clearable
+        detail="Max 140 characters"
+      />
+    </article>
 
-        <ECard class="textarea-card" elevation="md">
-          <div class="textarea-card__header">
-            <div>
-              <p class="section-kicker">Label behavior</p>
-              <h2>Inline y floating lado a lado</h2>
-            </div>
-            <p class="textarea-card__copy">
-              Compara el label estatico frente al label flotante usando el mismo
-              tipo de contenido y placeholders equivalentes.
-            </p>
-          </div>
+    <article class="textarea-demo">
+      <h3>Prefix, suffix and rows</h3>
+      <p class="textarea-demo__caption">Personalizacion visual para notas de costo.</p>
 
-          <div class="textarea-demo-grid">
-            <EForm
-              class="textarea-demo-form"
-              field-color="teal-900"
-              label-behavior="inline"
-              dense
-            >
-              <ETextarea
-                v-model="form.inlineLabel"
-                :cols="12"
-                color="secondary"
-                label="color-secondary"
-                placeholder="El placeholder siempre esta visible cuando el label no flota"
-                detail="Ideal para formularios donde el label debe ocupar un lugar fijo."
-              />
-            </EForm>
+      <ETextarea
+        v-model="estimateNotes"
+        label="Estimate notes"
+        prefix="$"
+        suffix="USD"
+        :rows="5"
+        detail="Use prefix and suffix as visual helpers"
+      />
+    </article>
 
-            <EForm
-              class="textarea-demo-form"
-              field-color="cyan-800"
-              label-behavior="floating"
-              dense
-            >
-              <ETextarea
-                v-model="form.floatingLabel"
-                :cols="12"
-                counter
-                color="warning"
-                :limit="180"
-                label="Label floating color-warning"
-                placeholder="El placeholder aparece cuando el label ya se desplazo"
-                detail="Sirve para inputs mas compactos sin perder contexto del campo."
-              />
-            </EForm>
-          </div>
-        </ECard>
+    <article class="textarea-demo">
+      <h3>Prepend and append</h3>
+      <p class="textarea-demo__caption">Casos para validar contenido externo en slots prepend/append.</p>
 
-        <ECard class="textarea-card" elevation="md">
-          <div class="textarea-card__header">
-            <div>
-              <p class="section-kicker">Color tokens</p>
-              <h2>Galeria de colores y overrides</h2>
-            </div>
-            <p class="textarea-card__copy">
-              Estos ejemplos muestran herencia por formulario y un override
-              puntual en el textarea para comprobar el contraste visual del
-              shell.
-            </p>
-          </div>
+      <div class="textarea-demo__stack">
+        <ETextarea
+          v-model="logMessage"
+          label="System log"
+          :rows="3"
+          detail="Textarea with prepend and append text slots"
+        >
+          <template #prepend>
+            <span class="textarea-demo__affix">LOG</span>
+          </template>
+          <template #append>
+            <span class="textarea-demo__affix">UTC</span>
+          </template>
+        </ETextarea>
 
-          <div class="textarea-color-grid">
-            <EForm class="textarea-demo-form" label-behavior="floating" dense>
-              <ETextarea
-                v-model="form.brandVoice"
-                :cols="12"
-                color="primary"
-                label="Primary tone"
-                placeholder="Tono general de la comunicacion"
-                detail="Hereda primary desde EForm para todo el field."
-              />
-            </EForm>
-
-            <EForm
-              class="textarea-demo-form"
-              field-color="secondary"
-              label-behavior="floating"
-              dense
-            >
-              <ETextarea
-                v-model="form.releaseNotes"
-                :cols="12"
-                outlined
-                color="warning"
-                label="warning outlined"
-                placeholder="Notas breves del release"
-                detail="Outlined ayuda a comparar como cambian borde y focus por color."
-              />
-            </EForm>
-
-            <EForm
-              class="textarea-demo-form"
-              field-color="warning"
-              label-behavior="floating"
-              dense
-            >
-              <ETextarea
-                v-model="form.escalationPlan"
-                :cols="12"
-                color="error"
-                label="Override a error"
-                placeholder="Plan de escalamiento ante bloqueos"
-                detail="El form usa warning, pero este textarea fuerza color error."
-              />
-            </EForm>
-          </div>
-        </ECard>
+        <ETextarea
+          v-model="urlNotes"
+          label="Service endpoint notes"
+          :rows="3"
+          detail="Combined with prefix/suffix to compare alignment"
+          prefix="https://"
+          suffix=".internal"
+        >
+          <template #prepend>
+            <span class="textarea-demo__affix">API</span>
+          </template>
+          <template #append>
+            <span class="textarea-demo__affix">v2</span>
+          </template>
+        </ETextarea>
       </div>
+    </article>
 
-      <div class="textarea-sidebar">
-        <ECard class="textarea-card" elevation="sm">
-          <p class="section-kicker">Resumen</p>
-          <h2>Estado visible</h2>
+    <article class="textarea-demo">
+      <h3>Prepend-inner and append-inner icons</h3>
+      <p class="textarea-demo__caption">Validacion de iconos internos alineados con primera linea.</p>
 
-          <div class="textarea-summary">
-            <div>
-              <span>Resumen</span>
-              <strong>{{ form.summary || "Sin definir" }}</strong>
-            </div>
-            <div>
-              <span>Retrospectiva</span>
-              <strong>{{ form.retrospective.length }} / 240</strong>
-            </div>
-            <div>
-              <span>Inline</span>
-              <strong>{{ form.inlineLabel || "Sin texto" }}</strong>
-            </div>
-            <div>
-              <span>Floating</span>
-              <strong>{{ form.floatingLabel || "Sin texto" }}</strong>
-            </div>
-          </div>
-        </ECard>
+      <div class="textarea-demo__stack">
+        <ETextarea
+          v-model="innerIconNotes"
+          label="Deployment notes"
+          :rows="3"
+          detail="Using prepend-inner and append-inner icon slots"
+          clearable
+        >
+          <template #prepend-inner>
+            <EIcon :icon="iconFactory.pencil" class="textarea-demo__inner-icon" />
+          </template>
+          <template #append-inner>
+            <EIcon :icon="iconFactory.contentCopy" class="textarea-demo__inner-icon" />
+          </template>
+        </ETextarea>
 
-        <ECard class="textarea-card" elevation="sm">
-          <p class="section-kicker">Payload</p>
-          <h2>Textarea state</h2>
-          <pre class="payload-preview">{{ textareaPreview }}</pre>
-        </ECard>
+        <ETextarea
+          v-model="innerIconAutoGrow"
+          label="Runbook update"
+          auto-grow
+          :rows="2"
+          :max-rows="6"
+          detail="Inner icons with auto-grow"
+        >
+          <template #prepend-inner>
+            <EIcon :icon="iconFactory.form" class="textarea-demo__inner-icon" />
+          </template>
+          <template #append-inner>
+            <EIcon :icon="iconFactory.history" class="textarea-demo__inner-icon" />
+          </template>
+        </ETextarea>
       </div>
-    </div>
+    </article>
+
+    <article class="textarea-demo">
+      <h3>AutoGrow</h3>
+      <p class="textarea-demo__caption">
+        El campo crece automaticamente con el contenido, sin limite de altura.
+      </p>
+
+      <ETextarea
+        v-model="autoGrowNotes"
+        label="Sprint notes"
+        auto-grow
+        :rows="2"
+        detail="Type multiple lines to validate auto-grow behavior"
+        clearable
+      />
+    </article>
+
+    <article class="textarea-demo">
+      <h3>AutoGrow with maxRows</h3>
+      <p class="textarea-demo__caption">
+        Crece hasta un maximo y luego habilita scroll interno.
+      </p>
+
+      <ETextarea
+        v-model="autoGrowLimited"
+        label="Post-mortem summary"
+        auto-grow
+        :rows="2"
+        :max-rows="6"
+        detail="Max rows is set to 6"
+      />
+
+      <div class="textarea-demo__actions">
+        <EButton type="button" outlined @click="fillAutoGrowSample">Fill sample text</EButton>
+        <EButton type="button" outlined @click="resetAutoGrowSample">Reset text</EButton>
+      </div>
+    </article>
+
+    <article class="textarea-demo">
+      <h3>Validation in form</h3>
+      <p class="textarea-demo__caption">Integracion de textarea con reglas dentro de EForm.</p>
+
+      <EForm v-model="isValid" validate-on-submit @submit="onSubmit" @submit-invalid="onInvalid">
+        <ETextarea
+          v-model="feedback"
+          label="Product feedback"
+          detail="Share the issue and proposed improvement"
+          :rules="feedbackRules"
+          :rows="4"
+          clearable
+        />
+
+        <div class="textarea-demo__actions">
+          <EButton type="submit" color="primary">Submit feedback</EButton>
+          <EButton type="button" outlined @click="resetFeedback">Reset</EButton>
+        </div>
+      </EForm>
+
+      <p class="textarea-demo__state">Form valid: {{ isValid ? "yes" : "no" }}</p>
+      <p class="textarea-demo__state">Last action: {{ submitState }}</p>
+    </article>
+
+    <article class="textarea-demo">
+      <h3>Readonly and disabled</h3>
+      <p class="textarea-demo__caption">Comparativa de estados no editables.</p>
+
+      <div class="textarea-demo__stack">
+        <ETextarea
+          model-value="This text can be selected but not edited."
+          label="Readonly"
+          readonly
+          :rows="3"
+        />
+
+        <ETextarea
+          model-value="This textarea is disabled."
+          label="Disabled"
+          disabled
+          :rows="3"
+        />
+      </div>
+    </article>
   </section>
 </template>
 
-<script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+<script setup>
+import { ref } from "vue";
+import iconFactory from "./icons.ts";
 
-import EButton from "../../src/components/button/index.vue";
-import ECard from "../../src/components/card/index.vue";
-import EForm from "../../src/components/form/form.vue";
-import ETextarea from "../../src/components/form/textarea/index.vue";
+const bio = ref("");
+const summary = ref("Version 1.0.0 introduces a cleaner API and better field validation.");
+const estimateNotes = ref("1200 for implementation and 300 for QA.");
+const logMessage = ref("2026-07-06 10:05:12 Service restarted successfully.");
+const urlNotes = ref("catalog/users endpoint requires service token.");
+const innerIconNotes = ref("Deploy completed at 11:42 with zero-downtime migration.");
+const innerIconAutoGrow = ref("Documented rollback checks and smoke test plan.");
+const autoGrowNotes = ref("Initial note line.");
+const autoGrowLimited = ref("");
+const feedback = ref("");
+const isValid = ref(false);
+const submitState = ref("No submit yet");
 
-type TextareaFormModel = {
-  summary: string;
-  retrospective: string;
-  inlineLabel: string;
-  floatingLabel: string;
-  brandVoice: string;
-  releaseNotes: string;
-  escalationPlan: string;
+const feedbackRules = [
+  (value) => !!`${value || ""}`.trim() || "Feedback is required",
+  (value) => `${value || ""}`.trim().length >= 20 || "Write at least 20 characters",
+];
+
+const onSubmit = () => {
+  submitState.value = `Submitted at ${new Date().toLocaleTimeString()}`;
 };
 
-type SubmitState = {
-  kind: "success" | "warning" | "idle";
-  message: string;
+const onInvalid = () => {
+  submitState.value = "Validation blocked submission";
 };
 
-type FormInstance = {
-  validate?: () => Promise<boolean>;
-  reset?: () => void;
+const resetFeedback = () => {
+  feedback.value = "";
+  submitState.value = "Feedback reset";
 };
 
-const createInitialForm = (): TextareaFormModel => ({
-  summary: "",
-  retrospective: "",
-  inlineLabel:
-    "El label inline deja el placeholder siempre disponible mientras editas.",
-  floatingLabel:
-    "Este ejemplo arranca con valor para que el label se vea flotando desde el inicio.",
-  brandVoice: "Cercano, directo y con foco en decisiones accionables.",
-  releaseNotes:
-    "Se corrigio el espaciado del shell y se alinearon los details.",
-  escalationPlan:
-    "Si el entregable bloquea a otro equipo, se notifica en menos de 30 minutos.",
-});
-
-const requiredText = (value: unknown) => {
-  return `${value ?? ""}`.trim().length > 0 || "Este campo es obligatorio.";
+const fillAutoGrowSample = () => {
+  autoGrowLimited.value = [
+    "Incident timeline:",
+    "1. Alert triggered at 09:12",
+    "2. Team acknowledged at 09:15",
+    "3. Mitigation applied at 09:22",
+    "4. Root cause identified at 09:40",
+    "5. Permanent fix deployed at 10:05",
+    "6. Follow-up actions documented",
+    "7. Monitoring updated",
+  ].join("\n");
 };
 
-const maxRetrospectiveLength = (value: unknown) => {
-  return (
-    `${value ?? ""}`.length <= 240 ||
-    "La retrospectiva no puede superar 240 caracteres."
-  );
-};
-
-const summaryRules = [requiredText];
-const retrospectiveRules = [maxRetrospectiveLength];
-
-const formRef = ref<FormInstance | null>(null);
-const formValid = ref(false);
-const form = reactive<TextareaFormModel>(createInitialForm());
-const submitState = reactive<SubmitState>({
-  kind: "idle",
-  message:
-    "Completa los campos y usa validar o submit para revisar el comportamiento del textarea.",
-});
-const textareaPreview = computed(() => {
-  return JSON.stringify(form, null, 2);
-});
-
-const handleValidate = async (): Promise<void> => {
-  const valid = await formRef.value?.validate?.();
-
-  if (valid) {
-    submitState.kind = "success";
-    submitState.message = "Textarea validado correctamente.";
-    return;
-  }
-
-  submitState.kind = "warning";
-  submitState.message = "Hay campos pendientes o con validaciones incumplidas.";
-};
-
-const handleSubmit = async (): Promise<void> => {
-  const valid = await formRef.value?.validate?.();
-
-  if (!valid) {
-    submitState.kind = "warning";
-    submitState.message =
-      "Corrige las validaciones antes de simular el submit.";
-    return;
-  }
-
-  submitState.kind = "success";
-  submitState.message = "Submit simulado: el flujo de textarea quedo validado.";
-};
-
-const handleReset = (): void => {
-  formRef.value?.reset?.();
-  Object.assign(form, createInitialForm());
-  formValid.value = false;
-  submitState.kind = "idle";
-  submitState.message = "Estado restablecido para seguir probando el textarea.";
+const resetAutoGrowSample = () => {
+  autoGrowLimited.value = "";
 };
 </script>
 
 <style scoped>
-.textarea-playground {
-  display: grid;
-  gap: 24px;
-  margin: 0 auto;
-  max-width: 1100px;
-  padding: 24px;
-}
-
-.textarea-layout {
+.textarea-page {
   display: grid;
   gap: 20px;
-  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
 }
 
-.textarea-stack,
-.textarea-sidebar,
-.textarea-playground__hero,
-.textarea-card,
-.textarea-card__header {
+.textarea-page__header {
   display: grid;
-  gap: 10px;
+  gap: 6px;
 }
 
-.textarea-card {
-  border: 1px solid rgba(23, 32, 51, 0.08);
-  border-radius: 20px;
-  padding: 24px;
+.textarea-page__eyebrow {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.72;
 }
 
-.textarea-card__copy,
-.feedback,
-.hero-copy {
-  color: #5f6f86;
-  line-height: 1.6;
+.textarea-page__title {
   margin: 0;
 }
 
-.textarea-demo-grid,
-.textarea-color-grid {
+.textarea-page__lead {
+  margin: 0;
+  opacity: 0.84;
+}
+
+.textarea-demo {
   display: grid;
-  gap: 16px;
-}
-
-.textarea-demo-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.textarea-demo-form {
-  border: 1px solid rgba(23, 32, 51, 0.08);
-  border-radius: 18px;
+  gap: 12px;
   padding: 16px;
+  border-radius: 12px;
 }
 
-.textarea-actions {
+.textarea-demo h3 {
+  margin: 0;
+}
+
+.textarea-demo__caption {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.textarea-demo__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
 }
 
-.textarea-summary {
+.textarea-demo__state {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.78;
+}
+
+.textarea-demo__stack {
   display: grid;
-  gap: 14px;
+  gap: 12px;
 }
 
-.textarea-summary div {
-  border: 1px solid rgba(23, 32, 51, 0.08);
-  border-radius: 18px;
-  padding: 16px;
-}
-
-.textarea-summary span,
-.section-kicker {
-  color: var(--e-contrast-surface-1);
-  display: block;
+.textarea-demo__affix {
+  display: inline-flex;
+  align-items: center;
+  min-height: 100%;
+  padding: 0 6px;
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  margin: 0 0 4px;
+  letter-spacing: 0.04em;
+  opacity: 0.76;
   text-transform: uppercase;
 }
 
-.textarea-summary strong {
-  color: var(--e-contrast-surface-1);
-  font-size: 14px;
-}
-
-.feedback {
-  background: var(--e-color-surface-1);
-  border-radius: 14px;
-  margin-top: 4px;
-  padding: 14px 16px;
-}
-
-.feedback--success {
-  background: rgba(42, 138, 90, 0.1);
-  color: var(--e-color-success);
-}
-
-.feedback--warning {
-  background: rgba(196, 116, 37, 0.12);
-  color: var(--e-color-warning);
-}
-
-.payload-preview {
-  background: #111827;
-  border-radius: 16px;
-  color: #d9e2f1;
-  font-size: 12px;
-  line-height: 1.55;
-  margin: 0;
-  overflow: auto;
-  padding: 16px;
-}
-
-@media (max-width: 960px) {
-  .textarea-playground {
-    padding: 16px;
-  }
-
-  .textarea-layout,
-  .textarea-demo-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .textarea-card {
-    padding: 18px;
-  }
+.textarea-demo__inner-icon {
+  opacity: 0.76;
 }
 </style>

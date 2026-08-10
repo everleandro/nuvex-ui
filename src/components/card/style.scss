@@ -1,14 +1,31 @@
 .e-card {
   border-radius: var(--e-border-radius-root, 4px);
-  --card-bg: var(--e-color-surface-1, #ffffff);
-  --card-text: var(--e-contrast-surface-1, #000000);
-  --card-border-color: var(--card-bg);
+  --card-local-solid-bg: var(--card-color, var(--e-color-surface-base, #ffffff));
+  --card-local-text: var(--card-contrast-color, var(--e-contrast-surface-base, #000000));
+  --card-local-title-color: var(--e-card-title-color, var(--card-contrast-color, var(--e-text-heading, var(--card-local-text))));
+  --card-local-subtitle-color: var(--e-card-subtitle-color, var(--card-contrast-color, var(--e-text-muted, var(--card-local-text))));
+  --card-local-description-color: var(--e-card-description-color, var(--card-contrast-color, var(--e-text-default, var(--card-local-text))));
+  --card-local-accent: var(--card-color, var(--card-local-text, currentColor));
+  --card-local-tonal-opacity: var(--e-interactive-tonal-opacity, 0.08);
+  --card-border-color: var(--e-color-border);
+  --card-padding: calc(var(--e-space-base, 4px) * 4);
+  --card-gap: calc(var(--e-space-base, 4px) * 3);
 
-  background-color: var(--card-bg);
-  color: var(--card-text);
+  background-color: var(--card-local-solid-bg);
+  color: var(--card-local-text);
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+  }
 
   &--outlined {
     border: thin solid var(--card-border-color);
@@ -18,23 +35,206 @@
     box-shadow: none;
   }
 
-  &__container {
-    padding: var(--e-space-base, 4px);
+  &--tonal {
+    --card-local-title-color: var(--e-card-title-color, var(--card-local-accent, var(--card-local-text)));
+    --card-local-subtitle-color: var(--e-card-subtitle-color, var(--card-local-accent, var(--card-local-text)));
+    --card-local-description-color: var(--e-card-description-color, var(--card-local-accent, var(--card-local-text)));
+    --card-border-color: var(--card-local-accent);
+
+    background-color: transparent;
+    color: var(--card-local-accent);
+    box-shadow: none;
+
+    &::before {
+      opacity: var(--card-local-tonal-opacity);
+    }
+  }
+
+  &__main {
+    --card-main-columns: minmax(0, 1fr);
+    --card-main-rows: auto;
+    --card-content-column: 1;
+    --card-append-column: 2;
+    --card-column-gap: 0px;
+    --card-row-gap: 0px;
+    --card-header-row: 1;
+    --card-description-row: 1;
+    --card-body-row: 1;
+    --card-media-row-span: 1;
+
+    display: grid;
+    column-gap: var(--card-column-gap);
+    row-gap: var(--card-row-gap);
+    grid-template-columns: var(--card-main-columns);
+    grid-template-rows: var(--card-main-rows);
+    padding: var(--card-padding);
     flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__main--has-prepend {
+    --card-main-columns: auto minmax(0, 1fr);
+    --card-content-column: 2;
+    --card-column-gap: var(--card-gap);
+  }
+
+  &__main--has-append {
+    --card-main-columns: minmax(0, 1fr) auto;
+    --card-append-column: 2;
+    --card-column-gap: var(--card-gap);
+  }
+
+  &__main--has-prepend#{&}__main--has-append {
+    --card-main-columns: auto minmax(0, 1fr) auto;
+    --card-content-column: 2;
+    --card-append-column: 3;
+  }
+
+  &__main--has-body {
+    --card-main-rows: minmax(0, 1fr);
+  }
+
+  &__main--has-header {
+    --card-header-row: 1;
+    --card-description-row: 1;
+    --card-body-row: 1;
+  }
+
+  &__main--has-description {
+    --card-header-row: 2;
+    --card-description-row: 1;
+    --card-body-row: 1;
+  }
+
+  &__main--has-header#{&}__main--has-body,
+  &__main--has-description#{&}__main--has-body {
+    --card-main-rows: auto minmax(0, 1fr);
+    --card-row-gap: var(--card-gap);
+    --card-body-row: 2;
+    --card-media-row-span: 2;
+  }
+
+  &__main--has-header#{&}__main--has-description {
+    --card-main-rows: auto auto;
+    --card-row-gap: var(--card-gap);
+    --card-header-row: 1;
+    --card-description-row: 2;
+    --card-body-row: 2;
+    --card-media-row-span: 2;
+  }
+
+  &__main--has-header#{&}__main--has-description#{&}__main--has-body {
+    --card-main-rows: auto auto minmax(0, 1fr);
+    --card-row-gap: var(--card-gap);
+    --card-header-row: 1;
+    --card-description-row: 2;
+    --card-body-row: 3;
+    --card-media-row-span: 3;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: calc(var(--e-space-base, 4px) * 3);
+  }
+
+  &__prepend,
+  &__append {
+    display: inline-flex;
+  }
+
+  &__main>&__prepend,
+  &__main>&__append {
+    grid-row: 1 / span var(--card-media-row-span);
+  }
+
+  &__prepend-start,
+  &__append-start {
+    align-self: start;
+  }
+
+  &__prepend-center,
+  &__append-center {
+    align-self: center;
+  }
+
+  &__prepend-end,
+  &__append-end {
+    align-self: end;
+  }
+
+  &__prepend-stretch,
+  &__append-stretch {
+    align-self: stretch;
+  }
+
+  &__main>&__prepend {
+    grid-column: 1;
+  }
+
+  &__main>&__append {
+    grid-column: var(--card-append-column);
+  }
+
+  &__header>&__prepend,
+  &__header>&__append {
+    align-self: center;
+  }
+
+  &__header>&__append {
+    margin-inline-start: auto;
+  }
+
+  &__headline {
+    display: grid;
+    gap: var(--e-space-base, 4px);
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__header,
+  &__description,
+  &__body {
+    grid-column: var(--card-content-column);
+    min-width: 0;
+  }
+
+  &__header {
+    grid-row: var(--card-header-row);
+  }
+
+  &__description {
+    grid-row: var(--card-description-row);
+  }
+
+  &__body {
+    grid-row: var(--card-body-row);
+  }
+
+  &__title,
+  &__subtitle,
+  &__description {
+    margin: 0;
+  }
+
+  &__title {
+    color: var(--card-local-title-color);
+  }
+
+  &__subtitle {
+    color: var(--card-local-subtitle-color);
+    opacity: 0.7;
+  }
+
+  &__description {
+    color: var(--card-local-description-color);
   }
 
   &__footer {
-    flex: 1;
-
-    &-content {
-      padding: var(--e-space-base, 4px);
-      flex: 1;
-    }
-  }
-
-  &>.e-avatar {
-    &__wrapper {
-      padding: var(--e-space-base, 4px);
-    }
+    width: 100%;
+    padding: var(--card-padding);
+    position: relative;
+    z-index: 1;
   }
 }

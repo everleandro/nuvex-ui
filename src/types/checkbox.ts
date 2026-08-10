@@ -4,7 +4,6 @@ export type CheckboxValue = boolean | string | number;
 
 export interface CheckboxProps extends SelectionFieldBaseProps<CheckboxValue> {
   modelValue: CheckboxValue;
-  showOverlay?: boolean;
   trueValue?: CheckboxValue;
   falseValue?: CheckboxValue;
 }

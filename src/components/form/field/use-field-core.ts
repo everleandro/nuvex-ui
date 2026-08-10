@@ -1,12 +1,15 @@
 import * as Vue from "vue";
 import {
+  Comment,
   computed,
+  Fragment,
   getCurrentInstance,
   inject,
   onMounted,
   onUnmounted,
   reactive,
   ref,
+  Text,
   useSlots,
   watch,
 } from "vue";
@@ -21,6 +24,7 @@ import type {
   EFieldProps,
   FieldConfiguration,
   FieldLabelBehavior,
+  FormTableChild,
   FormInjection,
 } from "@/types";
 
@@ -55,13 +59,40 @@ export const useFieldCore = (props: FieldCoreProps, emit: FieldEmit) => {
   const slots = useSlots();
   const form = inject<FormInjection | undefined>(FORM_KEY, undefined);
 
-  const hasPrependSlot = computed(() => Boolean(slots.prepend));
-  const hasAppendSlot = computed(() => Boolean(slots.append));
+  const hasRenderableNodes = (nodes: unknown[]): boolean => {
+    return nodes.some((node) => {
+      if (!node || typeof node !== "object") return false;
+
+      const vnode = node as { type?: unknown; children?: unknown };
+      if (vnode.type === Comment) return false;
+
+      if (vnode.type === Text) {
+        return typeof vnode.children === "string" && vnode.children.trim().length > 0;
+      }
+
+      if (vnode.type === Fragment && Array.isArray(vnode.children)) {
+        return hasRenderableNodes(vnode.children as unknown[]);
+      }
+
+      return true;
+    });
+  };
+
+  const hasSlotContent = (name: string): boolean => {
+    const slot = slots[name];
+    if (!slot) return false;
+
+    const nodes = slot();
+    return hasRenderableNodes(nodes as unknown[]);
+  };
+
+  const hasPrependSlot = computed(() => hasSlotContent("prepend"));
+  const hasAppendSlot = computed(() => hasSlotContent("append"));
   const hasAppendContent = computed(() => hasAppendSlot.value || Boolean(props.appendIcon));
   const hasPrependContent = computed(() => hasPrependSlot.value || Boolean(props.prependIcon));
-  const hasPrependInnerSlot = computed(() => Boolean(slots["prepend-inner"]));
+  const hasPrependInnerSlot = computed(() => hasSlotContent("prepend-inner"));
   const hasPrependInnerContent = computed(() => hasPrependInnerSlot.value || Boolean(props.prependInnerIcon));
-  const hasAppendInnerSlot = computed(() => Boolean(slots["append-inner"]));
+  const hasAppendInnerSlot = computed(() => hasSlotContent("append-inner"));
   const hasAppendInnerContent = computed(() => hasAppendInnerSlot.value || Boolean(props.appendInnerIcon));
 
   const configuration = reactive<FieldConfigurationState>({
@@ -309,7 +340,7 @@ export const useFieldCore = (props: FieldCoreProps, emit: FieldEmit) => {
     resetValidation();
   };
 
-  const getGridColConfiguration = (): Pick<EFieldContract, "cols" | "xs" | "sm" | "md" | "lg" | "xl"> => ({
+  const getGridColConfiguration = (): Pick<FormTableChild, "cols" | "xs" | "sm" | "md" | "lg" | "xl"> => ({
     cols: props.cols,
     xs: props.xs,
     sm: props.sm,
@@ -332,7 +363,7 @@ export const useFieldCore = (props: FieldCoreProps, emit: FieldEmit) => {
   watch(
     () => [props.cols, props.xs, props.sm, props.md, props.lg, props.xl] as const,
     () => {
-      form?.updateField?.({ uid: instance.uid, ...getGridColConfiguration() });
+      form?.updateTableChild?.({ uid: instance.uid, ...getGridColConfiguration() });
     },
   );
 
@@ -374,6 +405,10 @@ export const useFieldCore = (props: FieldCoreProps, emit: FieldEmit) => {
       reset,
       resetValidation,
       setConfiguration,
+    });
+
+    form?.bindTableChild?.({
+      uid: instance.uid,
       setTableClasses,
       ...getGridColConfiguration(),
     });
@@ -383,6 +418,7 @@ export const useFieldCore = (props: FieldCoreProps, emit: FieldEmit) => {
 
   onUnmounted(() => {
     form?.unbindField?.(instance.uid);
+    form?.unbindTableChild?.(instance.uid);
   });
 
   const slotProps = computed(() => ({

@@ -1,203 +1,465 @@
 # Theming
 
-Drocket expone variables Sass y CSS custom properties para personalizar tema en build-time y runtime.
+Nuvex UI expone variables Sass y CSS custom properties para personalizar tema en build-time y runtime, con soporte para Light/Dark mode dinamico via CSS variables.
 
-## Import recomendado
+## Resumen rapido
+
+- `theme` en `app.use(NuvexUI, { theme })` es opcional.
+- La libreria siempre incluye `light` y `dark` por defecto.
+- `light` y `dark` se personalizan principalmente via Sass/CSS variables.
+- El runtime API (`useTheme`) sirve para cambiar tema y registrar temas adicionales.
+
+## Contrato oficial de surfaces
+
+La libreria usa `surface-canvas`, `surface-base`, `surface-raised` y `surface-subtle` como jerarquia visual comun. Esta jerarquia aplica tanto para `light` como para `dark`.
+
+- `surface-canvas`: fondo base de app y viewport.
+- `surface-base`: contenedores y paneles de contenido por defecto.
+- `surface-raised`: chrome persistente o capas elevadas frecuentes.
+- `surface-subtle`: enfasis puntual o apoyo neutral, no como fondo general.
+
+### Mapeo por componente de layout
+
+- `App` (`.e-app`): `surface-canvas` (via `--e-app-background`).
+- `Main` (`.e-main`) y `Container` (`.e-container`): heredan fondo del contexto, no definen surface propio.
+- `Bar` (`.e-bar`): `surface-raised`.
+- `Drawer` (`.e-drawer`): `surface-base` base, `surface-raised` en modo floating.
+- `Card`, `Dialog`, `Menu`: `surface-base`.
+
+### Regla de composicion
+
+Si un layout mezcla varios bloques visibles al mismo tiempo, prioriza esta progresion:
+
+`surface-canvas` -> `surface-base` -> `surface-raised` -> `surface-subtle`
+
+Evita saltar directamente de `surface-canvas` a `surface-subtle` para fondos estructurales.
+
+## Configuración inicial
+
+### Step 1: Prepara tu archivo de variables
+
+Crea un archivo centralizado para todas las customizaciones de tema:
 
 ```scss
 // assets/styles/variables.scss
+
+// Tamaños y espaciado
 $border-radius-root: 6px;
 $root-font-size: 16px;
 
+// Colores temáticos para modo Light
 $semantic-color-tokens-light: (
   'primary': #42b883,
   'secondary': #35495e,
+  'tertiary': #6c5ce7,
+  'error': #e74c3c,
   'warning': #f39c12,
-  'error': #e74c3c
+  'success': #27ae60,
+  'info': #3498db
 );
 
+// Colores temáticos para modo Dark
 $semantic-color-tokens-dark: (
   'primary': #58d78d,
   'secondary': #8ca0b8,
+  'tertiary': #a29bfe,
+  'error': #f58a8a,
   'warning': #f8b739,
-  'error': #f58a8a
+  'success': #55efc4,
+  'info': #74b9ff
 );
 
-@import 'drocket/setting.scss';
+// Importar después de tus customizaciones
+@import 'nuvex-ui/setting.scss';
 ```
 
-## Mixins
+### Step 2: Importa las variables en tu main.scss
 
 ```scss
-@import 'drocket/mixin.scss';
+// styles/main.scss
+@import 'variables.scss';
 ```
 
-## Buenas practicas
+## Uso en Vue
 
-- Mantener variables de tema en un archivo central.
-- Evitar sobrescribir clases internas de componentes cuando exista variable Sass equivalente.
-- Documentar cualquier variable nueva agregada por componente.
+```vue
+<script setup>
+import { useTheme } from 'nuvex-ui'
 
-## Temas dinamicos con CSS variables
+const { currentTheme, setTheme, toggleTheme, getThemes } = useTheme()
 
-El framework publica variables CSS `--e-*` para permitir cambios de tema sin recompilar.
+const useDark = () => setTheme('dark')
+</script>
 
-### Paleta primitiva publica
+<template>
+  <button @click="toggleTheme">Toggle theme</button>
+  <button @click="useDark">Dark</button>
+  <p>Theme actual: {{ currentTheme }}</p>
+  <p>Disponibles: {{ getThemes().map(t => t.name).join(', ') }}</p>
+</template>
+```
 
-Ademas de los tokens semanticos del tema, la libreria expone una paleta primitiva pensada para usuarios consumidores.
+## Configuracion del plugin de tema
 
-La idea es separar:
+```ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import { NuvexUI } from 'nuvex-ui'
 
-1. Paleta primitiva publica: `--e-palette-red-500`, `--e-palette-blue-700`, etc.
-2. Tokens semanticos del tema: `--e-color-primary`, `--e-color-surface-1`, etc.
+const app = createApp(App)
 
-La paleta primitiva no reemplaza el sistema actual `light` y `dark`; es una capa adicional para que la app consumidora tenga colores reutilizables consistentes.
+app.use(NuvexUI, {
+  theme: {
+    // Opcional: si no se define, fallback a light
+    defaultTheme: 'light',
+    storage: {
+      enabled: true,
+      key: 'my-app-theme',
+    },
+    system: {
+      enabled: true,
+    },
+    // Solo para agregar temas nuevos, no para sobrescribir light/dark
+    themes: {
+      ocean: {
+        name: 'ocean',
+        isDark: false,
+        tokens: {
+          brand: '#0ea5e9',
+          'surface-base': '#ecfeff',
+        },
+      },
+    },
+    applyTokensAsCssVars: true,
+  },
+})
+```
 
-Los props `color` de los componentes deben referenciar colores definidos en el sistema (`--e-color-*` o `--e-palette-*`).
-No se considera parte del contrato pasar valores literales como `#000`, `rgb(...)` o `hsl(...)` directamente al prop.
+## SSR
 
-#### API Sass
+- El sistema de tema es SSR-safe: no accede a `window`, `document` o `localStorage` durante la creacion del store en servidor.
+- La aplicacion de `data-theme` al DOM ocurre solo en cliente.
+- Si hay tema persistido en cliente, se reconcilia durante hidratacion sin romper render.
 
-En `public/styles/override/tokens/index.scss` existen tres piezas:
+## Buenas prácticas
 
-1. `$primitive-color-seeds`
-2. `$primitive-color-overrides`
-3. `$primitive-color-palettes`
+- **Centraliza variables:** Mantén todas las variaciones de tema en un único archivo de configuración
+- **Respeta la jerarquía:** No sobrescribas valores internos de componentes; usa las variables Sass documentadas
+- **Documenta customizaciones:** Si añades nuevas variables, actualiza este archivo con comentarios
+- **Separa concerns:** Usa variables para temas, no para sobrescrituras CSS puntuales
+- **No sobrescribas `light`/`dark` via plugin:** Para esos temas base, usa tokens Sass/CSS.
 
-`$primitive-color-seeds` define el color base por familia:
+## Sistema de Colores Avanzado
+
+### Paleta Primitiva vs. Colores Semánticos
+
+Nuvex UI diferencia entre dos sistemas de color:
+
+**Tokens Semánticos** (`--e-color-*`): Significado intencional
+- `primary`, `secondary`, `error`, `success`, etc.
+- Cambian con el tema Light/Dark
+- Usados internamente por componentes
+
+**Paleta Primitiva** (`--e-palette-*`): Colores reutilizables sin carga semántica
+- `--e-palette-red-500`, `--e-palette-blue-700`, etc.
+- Escala fija de 10 tonos (50-900) por color
+- Ideal para ilustraciones, gráficos y aplicaciones del usuario
+
+### Personalizar Seeds (Colores Base)
+
+Define el color raíz de cada familia antes de importar `setting.scss`:
 
 ```scss
+// assets/styles/variables.scss
 $primitive-color-seeds: (
-  red: #ef4444,
-  blue: #3b82f6,
-  green: #22c55e,
-  amber: #f59e0b,
-  neutral: #6b7280,
-) !default;
-```
-
-A partir de esas seeds, Drocket genera automaticamente una escala por color:
-
-```css
---e-palette-red: #ef4444;
---e-palette-red-50: ...;
---e-palette-red-100: ...;
---e-palette-red-200: ...;
---e-palette-red-300: ...;
---e-palette-red-400: ...;
---e-palette-red-500: #ef4444;
---e-palette-red-600: ...;
---e-palette-red-700: ...;
---e-palette-red-800: ...;
---e-palette-red-900: ...;
-```
-
-#### Personalizar la paleta
-
-Puedes redefinir las seeds antes de importar `drocket/setting.scss`:
-
-```scss
-$primitive-color-seeds: (
-  red: #dc2626,
-  blue: #2563eb,
-  green: #16a34a,
+  red: #dc2626,      // Rojo más oscuro
+  blue: #2563eb,     // Azul más vibrante
+  green: #16a34a,    // Verde más saturado
   amber: #d97706,
   neutral: #4b5563,
+  purple: #7c3aed,   // Agregar nuevo color
 ) !default;
 
-@import 'drocket/setting.scss';
+@import 'nuvex-ui/setting.scss';
 ```
 
-Si quieres corregir tonos especificos sin perder la generacion automatica, usa `$primitive-color-overrides`:
+Nuvex UI genera automaticamente la escala completa para cada color.
+
+### Corregir Tonos Específicos
+
+Si necesitas controlar tonos puntuales sin regenerar toda la escala:
 
 ```scss
 $primitive-color-overrides: (
   red: (
-    500: #dc2626,
-    700: #b91c1c,
+    50: #fee2e2,
+    500: #dc2626,  // Seed override
     900: #7f1d1d,
   ),
   blue: (
-    500: #2563eb,
+    700: #1d4ed8,
   ),
 ) !default;
 
-@import 'drocket/setting.scss';
+@import 'nuvex-ui/setting.scss';
 ```
 
-Eso te permite usar la paleta directamente en tu app:
+Luego úsalos en tu CSS:
 
 ```scss
-:root {
-  border-color: var(--e-palette-neutral-300);
-}
-
 .danger-banner {
-  background: var(--e-palette-red-100);
-  color: var(--e-palette-red-800);
+  background: var(--e-palette-red-50);
+  border-left: 4px solid var(--e-palette-red-600);
+  color: var(--e-palette-red-900);
+}
+
+.info-box {
+  background: var(--e-palette-blue-100);
+  color: var(--e-palette-blue-900);
 }
 ```
 
-### Como se generan
+## Utility Classes
 
-La fuente de verdad para tokens base vive en `public/styles/override/tokens/index.scss`.
+Nuvex UI genera automaticamente clases de utilidad para espaciado, flexbox, posicionamiento y mas. Estan optimizadas para reducir la cantidad de CSS custom que escribes.
 
-Reglas actuales:
+### Sistema de Espaciado
 
-1. Variables Sass simples se exportan automaticamente desde `public/styles/override/theme/base.scss`
-2. Si la variable Sass empieza con `$e-`, la CSS var resultante conserva el nombre
-3. Si no empieza con `$e-`, se le agrega el prefijo `e-`
-4. Los mapas Sass no se exportan automaticamente; solo se convierten en CSS vars si se agregan a `$theme-base-css-var-groups`
-5. La paleta primitiva publica se exporta ademas como `--e-palette-{color}` y `--e-palette-{color}-{tono}`
-
-Ejemplos:
+Genera clases usando `$space-base` (default: 4px) y `$space-scale` (0-16).
 
 ```scss
-$border-radius-root: 4px;   // -> --e-border-radius-root
-$e-bar-height: 64px;        // -> --e-bar-height
-$root-font-family: "Roboto", sans-serif; // -> --e-root-font-family
+// En assets/styles/variables.scss si quieres custom:
+$space-base: 4px;
+$space-scale: 16;
 ```
 
-Para grupos:
+Esto genera clases como `.m-0` a `.m-16`, `.p-0` a `.p-16`:
+
+```vue
+<template>
+  <!-- Margin/Padding -->
+  <div class="p-4">Padding: 16px</div>
+  <div class="m-8">Margin: 32px</div>
+  <div class="mt-2">Margin-top: 8px</div>
+  <div class="px-6">Padding left/right: 24px</div>
+  
+  <!-- Margin negativo (solo margin) -->
+  <div class="m-n4">Margin: -16px</div>
+  <div class="ml-n2">Margin-left: -8px</div>
+</template>
+```
+
+**Direcciones disponibles:**
+- `-X` (left+right), `-Y` (top+bottom), `-T`, `-R`, `-B`, `-L` (individual)
+- Ejemplo: `.px-4` = `padding-left: 16px; padding-right: 16px;`
+
+### Flexbox & Gap
+
+```vue
+<template>
+  <!-- Dirección y distribución -->
+  <div class="flex-row gap-4">Fila con espaciado</div>
+  <div class="flex-col gap-2">Columna con espaciado</div>
+  <div class="flex-wrap gap-x-6 gap-y-4">Wrappeable con gap custom por eje</div>
+  
+  <!-- Control de flex grow/shrink -->
+  <div class="flex-1">Ocupa espacio disponible</div>
+  <div class="flex-auto">Flexible con contenido natural</div>
+  <div class="flex-none">Tamaño fijo</div>
+  
+  <!-- Alineación -->
+  <div class="flex-row justify-center items-center">Centrado completo</div>
+  <div class="flex-row justify-between items-start">Distribuido + alineado arriba</div>
+</template>
+```
+
+### Posicionamiento Absoluto
+
+```vue
+<template>
+  <!-- Posición -->
+  <div class="absolute top-0 left-0">Arriba-izquierda</div>
+  <div class="absolute inset-0">Llena todo el contenedor</div>
+  <div class="fixed top-4 right-4">Fixed en arriba-derecha</div>
+  <div class="relative">Baseline para absolutas internas</div>
+</template>
+```
+
+### Overflow
+
+```vue
+<template>
+  <!-- Comportamiento de desborde -->
+  <div class="overflow-auto">Scroll si es necesario</div>
+  <div class="overflow-hidden">Recorta contenido</div>
+  <div class="overflow-x-auto overflow-y-hidden">Scroll horizontal apenas</div>
+</template>
+```
+
+### Texto
+
+```vue
+<template>
+  <!-- Truncamiento -->
+  <p class="text-truncate">El texto se corta en una línea con ellipsis...</p>
+  <p class="text-line-clamp-2">El texto no excede 2 líneas</p>
+  <p class="text-line-clamp-3">El texto no excede 3 líneas</p>
+
+  <!-- Transformación -->
+  <p class="text-uppercase">Texto utilitario en mayúsculas</p>
+  <p class="text-capitalize">Texto utilitario capitalizado</p>
+  <p class="text-lowercase">Texto utilitario en minúsculas</p>
+  <p class="text-none">Texto sin transformación forzada</p>
+
+  <!-- Decoración -->
+  <a class="text-underline">Link subrayado</a>
+  <a class="text-decoration-none">Link sin subrayado</a>
+  
+  <!-- Whitespace -->
+  <pre class="text-whitespace-pre">Respeta    espacios y
+saltos de línea</pre>
+  <p class="text-break-words">Unhyphenatedlongwordcanwrap</p>
+</template>
+```
+
+### Border Radius
+
+```vue
+<template>
+  <!-- Esquinas -->
+  <div class="rounded">Redondeado estándar (6px)</div>
+  <div class="rounded-lg">Redondeado grande</div>
+  <div class="rounded-full">Completamente redondo</div>
+  <div class="rounded-none">Sin redondeo</div>
+  
+  <!-- Lados específicos -->
+  <div class="rounded-t">Solo arriba</div>
+  <div class="rounded-b">Solo abajo</div>
+  <div class="rounded-l">Solo izquierda</div>
+  <div class="rounded-r">Solo derecha</div>
+</template>
+```
+
+### Display & Responsive
+
+```vue
+<template>
+  <!-- Display base -->
+  <div class="d-block">Block por default</div>
+  <div class="d-flex">Flex por default</div>
+  <div class="d-none">Oculto</div>
+  
+  <!-- Responsive (cambia con breakpoints) -->
+  <div class="d-none d-sm-block">Oculto < 600px, block >= 600px</div>
+  <div class="d-flex d-lg-none">Flex por default, oculto >= 1264px</div>
+</template>
+```
+
+**Breakpoints:** `xs` (0px), `sm` (600px), `md` (960px), `lg` (1264px), `xl` (1904px)
+
+### Colores con Utilidades
+
+Ahora puedes aplicar colores directamente con clases generadas:
+
+```vue
+<template>
+  <!-- Colores semánticos -->
+  <div class="primary">Fondo + contraste automático</div>
+  <div class="primary--text">Solo color de texto</div>
+  
+  <!-- Colores primitivos -->
+  <div class="red">Fondo red + contraste</div>
+  <div class="blue-500">Fondo blue-500 + contraste</div>
+  <div class="green-700--text">Texto green-700</div>
+  
+  <!-- Combinadas -->
+  <button class="blue-600 p-4 rounded gap-2 flex-row items-center">
+    Click me
+  </button>
+</template>
+```
+
+## Theming Runtime con CSS Variables
+
+El runtime manager aplica `data-theme` en `documentElement` y permite activar temas base (`light`/`dark`) o temas agregados.
+
+```ts
+import { useTheme } from 'nuvex-ui'
+
+const { setTheme } = useTheme()
+
+setTheme('light')
+setTheme('dark')
+setTheme('ocean')
+```
+
+Cuando `applyTokensAsCssVars` esta habilitado, los tokens del tema activo se escriben como CSS variables con prefijo configurable (`--e-theme-` por defecto).
+
+## API Sass
+
+### Variables Disponibles
+
+La libreria expone una escala tipografica semantica en CSS variables, por ejemplo `--e-typography-family-base`, `--e-typography-body-font-size-md` y `--e-typography-label-font-weight-md`. Los componentes base ya consumen estas variables para mantener la consistencia entre labels, inputs y texto de soporte.
+
+### Guia de uso tipografico
+
+Para mantener una jerarquia profesional y consistente en apps completas, usa esta regla:
+
+- Usa `h1`...`h6` para estructura semantica del documento.
+- Usa `.type-h1`...`.type-h6` cuando necesites la escala visual de heading sin cambiar la semantica HTML.
+- Usa `.type-body` para contenido principal.
+- Usa `.type-title` para encabezados de bloque o tarjeta.
+- Usa `.type-subtitle` para metadatos o etiquetas secundarias en mayusculas.
+- Usa `.type-lead` para parrafos introductorios despues de un heading.
+- Usa `.type-code` para contenido monoespaciado.
+- Los aliases legacy `.text-h*`, `.text-body`, `.title`, `.subtitle`, `.text-lead` y `.code` siguen funcionando mientras migras consumo existente.
+
+Ejemplo recomendado:
+
+```vue
+<template>
+  <section>
+    <h1>Documentacion de componentes</h1>
+    <p class="type-lead">Base visual y semantica para interfaces consistentes.</p>
+
+    <h2>Botones</h2>
+    <p class="type-body">Los botones heredan tipografia semantica por defecto.</p>
+
+    <div class="type-title">Tokens activos</div>
+    <div class="type-subtitle">sistema tipografico</div>
+    <pre class="type-code">--e-typography-headline-font-size-lg</pre>
+  </section>
+</template>
+```
+
+Nota: evita usar heading levels solo por apariencia visual; si solo quieres cambiar la apariencia, prefiere las clases `.text-h*`.
 
 ```scss
-$icon-font-sizes: (
-  small: 20px,
-  default: 24px,
-) !default;
+// Globales
+$border-radius-root: 6px;
+$root-font-size: 16px;
+$root-font-family: 'Segoe UI', Roboto, sans-serif;
 
-$theme-base-css-var-groups: (
-  "e-icon-size": $icon-font-sizes,
-) !default;
-```
+// Espaciado
+$space-base: 4px;
+$space-scale: 16;
 
-Eso genera:
+// Grid
+$grid-breakpoints: (
+  0: 0,
+  sm: 600px,
+  md: 960px,
+  lg: 1264px,
+  xl: 1904px,
+);
 
-```css
---e-icon-size-small: 20px;
---e-icon-size-default: 24px;
-```
+// Elevación (sombras)
+$elevation: (
+  xs: 0px 2px 4px rgba(0, 0, 0, 0.1),
+  sm: 0px 4px 6px rgba(0, 0, 0, 0.1),
+  // ... más niveles
+);
 
-### Variables disponibles
-
-```css
-/* Colores base (derivadas de $semantic-color-tokens-light) */
---e-color-primary: #42b883;
---e-color-secondary: #35495e;
---e-color-error: #e74c3c;
---e-contrast-white: #000;
-/* + todos los demás colores definidos */
-
-/* Breakpoints */
---e-grid-breakpoint-xs: 0;
---e-grid-breakpoint-sm: 600px;
---e-grid-breakpoint-md: 960px;
---e-grid-breakpoint-lg: 1264px;
---e-grid-breakpoint-xl: 1904px;
-
-/* Tamaños de botón */
---e-btn-height-x-small: 2.187rem;
---e-btn-height-small: 2.5rem;
 --e-btn-height-default: 3rem;
 /* + todas las variantes */
 

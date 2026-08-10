@@ -12,8 +12,12 @@
     --e-contrast-#{$color-name}: #{$color-value};
   }
 
+  @each $color-name, $color-value in setting.$semantic-text-tokens-light {
+    --e-text-#{$color-name}: #{$color-value};
+  }
+
   // App surface
-  --e-app-background: #{map.get(setting.$semantic-color-tokens-light, "surface-0")};
-  --e-app-color: #{map.get(setting.$semantic-contrast-tokens-light, "surface-0")};
+  --e-app-background: #{map.get(setting.$semantic-color-tokens-light, "surface-canvas")};
+  --e-app-color: var(--e-text-default);
 }
 

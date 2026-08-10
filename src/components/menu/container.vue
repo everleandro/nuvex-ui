@@ -16,15 +16,17 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { Ref, computed, nextTick, onMounted, onUnmounted, provide, ref, useId, watch } from 'vue';
+import { Ref, computed, isRef, nextTick, onMounted, onUnmounted, provide, ref, useId, watch } from 'vue';
 import { useResolvedColor } from '@/composables/color'
 import type { ElevationProps, MenuTypeTarget } from '@/types'
 import { useMenuStack } from '@/composables/menu-stack'
+import { resolveMenuWidth } from './sizing'
 
 const props = withDefaults(defineProps<ElevationProps & {
     absolute?: boolean
     closeOnContentClick?: boolean
     color?: string
+    fitContent?: boolean
     fullWidth?: boolean
     holdFocus?: boolean
     checkOffset?: boolean
@@ -98,14 +100,30 @@ const closeMenu = (): boolean => {
 
 const handleContentClick = (): boolean => Boolean(props.closeOnContentClick) && closeMenu()
 
+const unwrapTarget = (target: unknown): unknown => {
+    if (isRef(target)) {
+        return target.value
+    }
+    return target
+}
+
 const resolveTarget = (): HTMLElement | null => {
     if (typeof document === 'undefined') return null
 
-    if (typeof props.target === 'string') {
-        return (document.querySelector(props.target) || null) as HTMLElement | null
+    const rawTarget = unwrapTarget(props.target)
+
+    if (typeof rawTarget === 'string') {
+        const selector = rawTarget.trim()
+        if (!selector) return null
+
+        try {
+            return (document.querySelector(selector) || null) as HTMLElement | null
+        } catch {
+            return null
+        }
     }
 
-    return props.target ? (props.target as HTMLElement) : null
+    return rawTarget ? (rawTarget as HTMLElement) : null
 }
 
 const targetDOMRect = (): DOMRect | null => resolveTarget()?.getBoundingClientRect() || null
@@ -195,12 +213,24 @@ const updatemenuContentStyle = async (): Promise<void> => {
     const { width, top, left, height } = rect;
     const result: Record<string, string | number> = {}
     const menuHeight = getHeight()
-    const menuWidth = getWidth()
+    const contentWidth = getContentWidth(Boolean(props.fitContent))
+    const activatorWidth = Math.ceil(width)
+    const explicitWidth = typeof props.width === 'number' ? props.width : undefined
+    const menuWidth = resolveMenuWidth({
+        activatorWidth,
+        contentWidth,
+        explicitWidth,
+        fitContent: props.fitContent,
+        fullWidth: props.fullWidth,
+    })
     const margin = 12
 
     if (props.fullWidth) {
         result.minWidth = `${width}px`;
         result.maxWidth = `${width}px`;
+    } else if (props.width === undefined) {
+        result.width = `${menuWidth}px`
+        result.minWidth = `${menuWidth}px`
     }
 
     const origin: Array<string> = props.origin.split(' ');
@@ -286,8 +316,14 @@ const updatemenuContentStyle = async (): Promise<void> => {
     if (zIndex !== null) {
         result.zIndex = `${zIndex}`
     }
-    props.maxWidth && (result.maxWidth = `${props.maxWidth}px`);
-    props.width && (result.width = `${props.width}px`);
+    if (props.maxWidth !== undefined) {
+        result.maxWidth = typeof props.maxWidth === 'number' ? `${props.maxWidth}px` : String(props.maxWidth)
+    }
+
+    if (props.width !== undefined) {
+        result.width = typeof props.width === 'number' ? `${props.width}px` : String(props.width)
+    }
+
     await nextTick();
     menuContentStyle.value = result
 }
@@ -400,6 +436,75 @@ const getWidth = () => {
     el.style.visibility = el_visibility;
 
     return wanted_width;
+}
+
+const getContentWidth = (intrinsicOnly = false): number => {
+    const el = wrapper.value as HTMLElement
+    if (!el) return 0
+    if (typeof document === 'undefined') return 0
+
+    const measureCurrent = (): number => {
+        const firstChild = el.firstElementChild as HTMLElement | null
+        if (!firstChild) {
+            return Math.max(el.offsetWidth, el.scrollWidth)
+        }
+
+        return Math.max(
+            el.offsetWidth,
+            el.scrollWidth,
+            firstChild.offsetWidth,
+            firstChild.scrollWidth,
+        )
+    }
+
+    const measureIntrinsic = (): number => {
+        const firstChild = el.firstElementChild as HTMLElement | null
+        if (!firstChild) return 0
+
+        const host = document.createElement('div')
+        host.style.position = 'absolute'
+        host.style.left = '-9999px'
+        host.style.top = '0'
+        host.style.visibility = 'hidden'
+        host.style.pointerEvents = 'none'
+        host.style.width = 'max-content'
+        host.style.maxWidth = 'none'
+        host.style.minWidth = '0'
+
+        const clone = firstChild.cloneNode(true) as HTMLElement
+        clone.style.width = 'max-content'
+        clone.style.maxWidth = 'none'
+        clone.style.minWidth = '0'
+
+        host.appendChild(clone)
+        document.body.appendChild(host)
+
+        const value = Math.ceil(clone.getBoundingClientRect().width)
+        document.body.removeChild(host)
+        return value
+    }
+
+    const elStyle = window.getComputedStyle(el)
+    const elDisplay = elStyle.display
+    const elPosition = elStyle.position
+    const elVisibility = elStyle.visibility
+
+    if (elDisplay !== 'none') {
+        return intrinsicOnly ? measureIntrinsic() : Math.max(measureCurrent(), measureIntrinsic())
+    }
+
+    el.style.position = 'absolute'
+    el.style.visibility = 'hidden'
+    el.style.display = 'block'
+
+    const intrinsicWidth = measureIntrinsic()
+    const wantedWidth = intrinsicOnly ? intrinsicWidth : Math.max(measureCurrent(), intrinsicWidth)
+
+    el.style.display = elDisplay
+    el.style.position = elPosition
+    el.style.visibility = elVisibility
+
+    return wantedWidth
 }
 
 provide("EMenuContainer", {

@@ -11,35 +11,33 @@
 ## Importacion
 
 ```ts
-import { EList, EListItem, EListGroup } from 'drocket'
+import { EList, EListItem, EListGroup } from 'nuvex-ui'
 ```
 
-## EList Props
+## Props
+
+### EList
 
 | Prop | Tipo | Default | Descripcion |
 | --- | --- | --- | --- |
 | `disabled` | `boolean` | `false` | Deshabilita interaccion de toda la lista. |
 | `outlined` | `boolean` | `false` | Aplica la variante outlined cuando exista en estilos del contexto. |
 | `dense` | `boolean` | `false` | Reduce alturas, paddings y tipografia secundaria. |
+| `inset` | `boolean` | `false` | Agrega padding horizontal al contenedor y habilita el border radius visual de los `EListItem`. |
 | `size` | `'x-small' \| 'small' \| 'default' \| 'large' \| 'x-large'` | `undefined` | Define el size por defecto de los `EListItem` hijos que no declaren uno propio. |
 | `color` | `string` | `undefined` | Agrega la clase `{color}--text`. |
+| `activeColor` | `string` | `undefined` | Define el color de texto solo cuando el item esta activo (`interactive-element--active`, `router-link-active`, `router-link-exact-active`, `e-list-item--active` o `e-list-item-active`). |
 | `elevation` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `undefined` | Aplica una clase `e-elevation--*` al contenedor de la lista. |
 | `modelValue` | `string \| number \| Array<string \| number> \| undefined \| null` | `undefined` | Estado de seleccion de items. Si es array, la lista trabaja en multiple seleccion. |
 | `group` | `string \| number \| Array<string \| number> \| undefined \| null` | estado interno | Estado de grupos abiertos. Es opcional; si no se pasa, `EList` administra su propio estado. |
 
-## EList Eventos
-
-| Evento | Payload | Descripcion |
-| --- | --- | --- |
-| `update:modelValue` | `ListModelProp` | Emitido al cambiar la seleccion de items. |
-| `update:group` | `ListModelProp` | Emitido al abrir o cerrar grupos cuando el estado es controlado desde fuera. |
-
-## EListItem Props
+### EListItem
 
 | Prop | Tipo | Default | Descripcion |
 | --- | --- | --- | --- |
+| `clickable` | `boolean` | `undefined` | Fuerza o desactiva la interaccion de la fila. Sin valor explicito, los items dentro de `EList`, los enlaces y los activadores de grupo son interactivos. |
 | `disabled` | `boolean` | `false` | Deshabilita el item. |
-| `ripple` | `boolean` | `true` via estilo interactivo | Mantiene compatibilidad con el API del item interactivo. |
+| `ripple` | `boolean` | `true` | Habilita el ripple cuando la fila es interactiva. No tiene efecto sobre filas informativas. |
 | `prependIcon` | `IconPath \| IconPath[] \| string` | `undefined` | Icono al inicio. |
 | `appendIcon` | `IconPath \| IconPath[] \| string` | `undefined` | Icono al final. |
 | `prependAvatar` | `string` | `undefined` | Avatar al inicio. |
@@ -50,22 +48,32 @@ import { EList, EListItem, EListGroup } from 'drocket'
 | `subtitle` | `string` | `undefined` | Texto secundario del item. |
 | `tag` | `string` | `undefined` | Override del elemento raiz. |
 | `color` | `string` | `undefined` | Agrega la clase `{color}--text`. |
+| `activeColor` | `string` | `undefined` | Color de texto cuando el item esta activo. Tiene prioridad sobre `activeColor` definido en `EList`. |
 | `value` | `string \| number` | `undefined` | Valor explicito del item para seleccion. |
 | `size` | `'x-small' \| 'small' \| 'default' \| 'large' \| 'x-large'` | `'default'` | Define el tamano del item usando el mismo contrato que `EButton`. |
 
-## EListItem Eventos
-
-| Evento | Payload | Descripcion |
-| --- | --- | --- |
-| `click:item` | `MouseEvent` | Emitido al hacer click en el item. |
-
-## EListGroup Props
+### EListGroup
 
 | Prop | Tipo | Default | Descripcion |
 | --- | --- | --- | --- |
 | `disabled` | `boolean` | `false` | Deshabilita el grupo y su activador. |
 | `elevation` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `undefined` | Aplica elevacion al contenedor del grupo. |
 | `value` | `string \| number` | `useId()` | Identidad del grupo. Si no se pasa, el componente genera una interna. Para control externo o persistencia, conviene pasar un valor estable. |
+
+## Eventos
+
+### EList
+
+| Evento | Payload | Descripcion |
+| --- | --- | --- |
+| `update:modelValue` | `ListModelProp` | Emitido al cambiar la seleccion de items. |
+| `update:group` | `ListModelProp` | Emitido al abrir o cerrar grupos cuando el estado es controlado desde fuera. |
+
+### EListItem
+
+| Evento | Payload | Descripcion |
+| --- | --- | --- |
+| `click:item` | `MouseEvent \| KeyboardEvent` | Emitido al activar la fila con click, `Enter` o `Space`. No se emite desde controles interactivos descendientes. |
 
 ## Slots
 
@@ -143,6 +151,36 @@ En este ejemplo, el segundo item hereda `size="small"` desde `EList`, mientras q
 
 Si no pasas `value`, `EListItem` intenta usar `to`, `to.path` o `to.name` como identidad del item antes de caer a un id interno.
 
+### Composicion con acciones
+
+```vue
+<template>
+  <EList outlined inset>
+    <EListItem :clickable="false" title="Jordan Lee" subtitle="Product designer">
+      <template #prepend>
+        <EAvatar :src="avatar" />
+      </template>
+
+      <template #append>
+        <EButton
+          :icon="icons.dotsMenu"
+          aria-label="More actions"
+          @click="openActions"
+        />
+      </template>
+    </EListItem>
+  </EList>
+</template>
+```
+
+Los items dentro de `EList` son interactivos por defecto. Usa `clickable="false"` para convertir una fila en contenido informativo y conservar solamente la accion del boton. En una lista seleccionable, los controles `button`, `a`, `input`, `select`, `textarea` y los elementos marcados con `data-list-item-action` no activan ni seleccionan la fila contenedora.
+
+Para convertir una fila informativa completa en una accion, usa `clickable` y escucha `click:item`:
+
+```vue
+<EListItem clickable title="Open profile" @click:item="openProfile" />
+```
+
 ### Grupo basico
 
 ```vue
@@ -200,6 +238,7 @@ Internamente, los grupos anidados usan rutas jerarquicas para evitar colisiones 
 ## Accesibilidad
 
 - `EList` usa semantica de `listbox` cuando trabaja como lista seleccionable y mantiene semantica nativa de lista en los casos no seleccionables.
+- La presencia de `v-model` mantiene la semantica `listbox` aunque la seleccion simple sea `undefined` o `null`, o la seleccion multiple sea un arreglo vacio.
 - `EListItem` soporta foco administrado, `Enter`, `Space`, `ArrowUp`, `ArrowDown`, `Home` y `End`.
 - En listas agrupadas, `ArrowRight` y `ArrowLeft` navegan entre niveles:
   - `ArrowRight` expande el grupo o entra al primer hijo visible.
@@ -210,6 +249,7 @@ Internamente, los grupos anidados usan rutas jerarquicas para evitar colisiones 
 ## Errores comunes
 
 - Esperar que `v-model:group` sea obligatorio. No lo es; la lista mantiene estado interno para grupos si no lo pasas.
+- Usar una fila puramente informativa dentro de `EList` sin `clickable="false"`. Los items de una lista son interactivos por defecto.
 - Usar grupos anidados controlados sin `value` estable y luego intentar persistir la rama abierta. En esos casos conviene pasar `value` explicito.
 - Esperar que `color` cambie el fondo del item: hoy afecta el color de texto y el underlay usa `currentColor`.
 - Suponer que `ArrowRight` y `ArrowLeft` equivalen a seleccion. En grupos se usan para navegacion estructural; `Enter` y `Space` activan o hacen toggle.

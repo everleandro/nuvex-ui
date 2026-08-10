@@ -1,8 +1,11 @@
 .e-bar {
   margin-bottom: calc(var(--e-space-base, 4px) * 4);
   height: var(--e-bar-height, 64px);
-  background-color: var(--e-bar-bg, var(--e-color-surface-2, #ffffff));
-  color: var(--e-bar-color, var(--e-contrast-surface-2, #000000));
+  background-color: var(--e-bar-bg, var(--e-color-surface-base, #ffffff));
+  color: var(--e-bar-color, var(--e-contrast-surface-base, #000000));
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+  font-size: var(--e-typography-body-font-size-md, 0.875rem);
+  line-height: var(--e-typography-body-line-height-md, 1.25rem);
   flex-grow: 1;
   display: block;
   contain: layout;
@@ -21,13 +24,14 @@
 
   &--outlined,
   &--depressed {
-    box-shadow: none !important;
+    box-shadow: none;
   }
 
   &__content {
     align-items: center;
     display: flex;
     padding: var(--e-bar-vertical-padding, 0px) var(--e-bar-inline-padding, 16px);
+    gap: var(--e-bar-inline-gap, 16px);
     position: relative;
     z-index: 1;
     height: 100%;

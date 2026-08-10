@@ -3,6 +3,14 @@
 @use "sass:string";
 @use "../tokens/index.scss" as setting;
 
+@function e-primitive-contrast-tone($tone) {
+  @if $tone >= 500 {
+    @return 50;
+  }
+
+  @return 900;
+}
+
 // Base theme variables (same for both light and dark)
 :root {
   @each $var-name, $var-value in meta.module-variables("setting") {
@@ -21,17 +29,23 @@
 
   @each $palette-name, $palette-scale in setting.$primitive-color-palettes {
     @if map.has-key(setting.$primitive-color-seeds, $palette-name) {
+      $seed-contrast-tone: e-primitive-contrast-tone(500);
+
       --e-palette-#{$palette-name}: #{map.get(setting.$primitive-color-seeds, $palette-name)};
+      --e-palette-contrast-#{$palette-name}: var(--e-palette-#{$palette-name}-#{$seed-contrast-tone});
     }
 
     @each $tone-name, $tone-value in $palette-scale {
+      $tone-contrast-tone: e-primitive-contrast-tone($tone-name);
+
       --e-palette-#{$palette-name}-#{$tone-name}: #{$tone-value};
+      --e-palette-contrast-#{$palette-name}-#{$tone-name}: var(--e-palette-#{$palette-name}-#{$tone-contrast-tone});
     }
   }
 }
 
 body {
-  font-family: var(--e-root-font-family, #{setting.$root-font-family});
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, #{setting.$root-font-family}));
   background-color: var(--e-app-background, #ffffff);
   color: var(--e-app-color, #000000);
   transition: background-color 0.2s ease, color 0.2s ease;

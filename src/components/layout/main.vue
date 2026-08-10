@@ -9,10 +9,6 @@
 <script setup lang="ts" >
 import { useLayout } from '@/composables'
 
-interface Props {
-    theme?: string
-}
-const props = withDefaults(defineProps<Props>(), { theme: 'light' })
 const { mainLayoutStyle } = useLayout()
 
 </script>
@@ -21,11 +17,15 @@ const { mainLayoutStyle } = useLayout()
 @use '~/public/styles/_mixins.scss' as *;
 
 .e-main {
+    --main-local-bg: var(--e-main-bg, var(--e-color-surface-canvas, transparent));
+    --main-local-color: var(--e-main-color, var(--e-contrast-surface-canvas, inherit));
     max-width: 100%;
     transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex: 1 0 auto;
     max-width: 100%;
+    background-color: var(--main-local-bg);
+    color: var(--main-local-color);
 
 
     &__wrapper {

@@ -1,12 +1,41 @@
 @use '~/public/styles/_mixins.scss' as *;
 
+@function field-top-from-center($anchor-center-y, $element-height) {
+    @return calc(#{$anchor-center-y} - (#{$element-height} / 2));
+}
+
 
 .e-field {
     --field-layout-active-height: var(--e-field-height);
     --field-layout-control-padding-inline: calc(var(--e-field-slot-padding-base) * 3);
-    --field-layout-label-rest-y: calc((var(--field-layout-active-height) - var(--e-field-label-line-height)) / 2);
-    --field-layout-content-padding-top: var(--e-field-slot-padding-base);
-    --field-label-state-y: var(--field-layout-label-rest-y);
+    --e-field-input-line-height: var(--e-typography-body-line-height-md, 1.25rem);
+    --e-field-label-line-height: var(--e-typography-label-line-height-md, 1rem);
+    --field-center-y: calc(var(--field-layout-active-height) / 2);
+    --field-input-center-y: var(--field-center-y);
+    --field-label-anchor-y: var(--field-content-anchor-y);
+    --field-content-anchor-y: var(--field-input-center-y);
+    --field-control-center-y: var(--field-center-y);
+    --field-outer-affix-size: var(--e-icon-size-default, 24px);
+    --field-inner-affix-size: var(--e-icon-size-default, 24px);
+    --field-prepend-affix-size: var(--field-outer-affix-size);
+    --field-append-affix-size: var(--field-outer-affix-size);
+    --field-prepend-inner-affix-size: var(--field-inner-affix-size);
+    --field-append-inner-affix-size: var(--field-inner-affix-size);
+    --field-outer-affix-anchor-y: var(--field-control-center-y);
+    --field-inner-affix-anchor-y: var(--field-content-anchor-y);
+    --field-label-top-y: #{field-top-from-center(var(--field-label-anchor-y), var(--e-field-label-line-height))};
+    --field-input-top-y: #{field-top-from-center(var(--field-content-anchor-y), var(--e-field-input-line-height))};
+    --field-slot-content-height: var(--e-field-input-line-height);
+    --field-slot-top-y: #{field-top-from-center(var(--field-content-anchor-y), var(--field-slot-content-height))};
+    --field-slot-bottom-rest-y: calc(var(--field-layout-active-height) - var(--field-slot-top-y) - var(--field-slot-content-height));
+    --field-slot-bottom-y: max(var(--e-field-slot-padding-base), var(--field-slot-bottom-rest-y));
+    --field-outer-affix-top-y: #{field-top-from-center(var(--field-outer-affix-anchor-y), var(--field-outer-affix-size))};
+    --field-inner-affix-top-y: #{field-top-from-center(var(--field-inner-affix-anchor-y), var(--field-inner-affix-size))};
+    --field-prepend-affix-top-y: #{field-top-from-center(var(--field-outer-affix-anchor-y), var(--field-prepend-affix-size))};
+    --field-append-affix-top-y: #{field-top-from-center(var(--field-outer-affix-anchor-y), var(--field-append-affix-size))};
+    --field-prepend-inner-affix-top-y: #{field-top-from-center(var(--field-inner-affix-anchor-y), var(--field-prepend-inner-affix-size))};
+    --field-append-inner-affix-top-y: #{field-top-from-center(var(--field-inner-affix-anchor-y), var(--field-append-inner-affix-size))};
+    --field-label-state-y: var(--field-label-top-y);
     --field-label-state-translate-y: 0;
     --field-label-state-scale: 1;
     --field-state-input-color: var(--e-color-input);
@@ -14,6 +43,8 @@
     --field-state-border-width: var(--e-field-border-width);
     --field-state-border-color: var(--e-color-border);
     --field-layout-gap: 0.75rem;
+    --field-frame-padding-inline-start: var(--field-layout-gap);
+    --field-frame-padding-inline-end: var(--field-layout-gap);
     --field-control-ripple-display: var(--e-field-control-ripple-display, block);
     --control-size: var(--e-field-control-size);
 
@@ -24,7 +55,8 @@
     flex-grow: 1;
     position: relative;
     color: var(--e-field-rest-color);
-    font-size: 1rem;
+    font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+    font-size: var(--e-typography-body-font-size-md, 0.875rem);
     letter-spacing: normal;
     text-align: left;
     width: 100%;
@@ -139,7 +171,7 @@
             left: 0px;
             width: 100%;
             height: 100%;
-            border-style: solid;
+            border-style: var(--field-state-border-style);
             border-width: 0 0 var(--e-field-border-width);
             transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0s;
         }
@@ -197,42 +229,50 @@
     &__prefix {
         color: var(--field-state-input-color);
         line-height: var(--e-field-input-line-height);
-        align-self: center;
+        align-self: flex-start;
         cursor: default;
         transition: color var(--e-field-transition-duration) cubic-bezier(0.25, 0.8, 0.5, 1);
         white-space: nowrap;
         padding-right: calc(var(--field-layout-gap) / 2);
-        padding-top: var(--field-layout-content-padding-top);
+        padding-top: var(--field-input-top-y);
     }
 
     &__prepend,
     &__append {
         align-items: flex-start;
+        align-self: flex-start;
         color: currentColor;
         display: inline-flex;
         flex: 0 0 auto;
-        align-self: stretch;
         height: auto;
+        line-height: 1;
         min-width: 0;
+        padding-top: var(--field-outer-affix-top-y);
+        @include prefix(user-select, none);
     }
 
     &__prepend {
         grid-column: 1;
         grid-row: 1;
+        padding-top: var(--field-prepend-affix-top-y);
     }
 
     &__append {
         grid-column: 3;
         grid-row: 1;
+        padding-top: var(--field-append-affix-top-y);
     }
 
     &__prepend-inner,
     &__append-inner {
         align-items: center;
+        align-self: flex-start;
         color: currentColor;
         display: inline-flex;
         flex: 0 0 auto;
+        gap: var(--e-space-base);
         line-height: 1;
+        padding-top: var(--field-inner-affix-top-y);
         position: relative;
         z-index: 1;
         @include prefix(user-select, none);
@@ -241,6 +281,7 @@
     &__prepend-inner {
         grid-area: prepend-inner;
         margin-right: auto;
+        padding-top: var(--field-prepend-inner-affix-top-y);
         padding-right: var(--field-layout-gap);
 
     }
@@ -248,6 +289,14 @@
     &__append-inner {
         grid-area: append-inner;
         margin-left: auto;
+        padding-top: var(--field-append-inner-affix-top-y);
+    }
+
+    &__affix-content {
+        display: inline-flex;
+        align-items: inherit;
+        gap: inherit;
+        min-width: 0;
     }
 
     &__prefix {
@@ -261,8 +310,12 @@
     }
 
     .e-label {
+        font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+        font-size: var(--e-typography-label-font-size-md, 0.75rem);
+        font-weight: var(--e-typography-label-font-weight-md, 500);
+        letter-spacing: var(--e-typography-label-letter-spacing-md, 0.02em);
         line-height: var(--e-field-label-line-height);
-        margin-top: var(--field-layout-label-rest-y);
+        margin-top: var(--field-label-top-y);
         padding-right: var(--field-layout-gap);
         margin-bottom: 0;
         align-self: var(--label-align-self, flex-start);
@@ -276,7 +329,6 @@
             transform var(--e-field-transition-duration) cubic-bezier(0.4, 0, 0.2, 1),
             opacity var(--e-field-transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
         color: var(--e-field-label, var(--e-color-label));
-        white-space: nowrap;
         z-index: 1;
     }
 
@@ -288,15 +340,6 @@
     &__append {
         margin-left: auto;
         padding-left: 0.75rem;
-    }
-
-    &__prepend,
-    &__append {
-        align-self: center;
-        display: inline-flex;
-        line-height: 1;
-        color: currentColor;
-        @include prefix(user-select, none);
     }
 
     &__details {
@@ -320,11 +363,13 @@
     }
 
     &__slot {
-        // padding: var(--field-layout-content-padding-top) var(--field-layout-control-padding-inline) var(--e-field-slot-padding-base) 0;
-        padding: var(--field-layout-content-padding-top) 0 var(--e-field-slot-padding-base) 0;
+        // padding: var(--field-slot-top-y) var(--field-layout-control-padding-inline) var(--field-slot-bottom-y) 0;
+        padding: var(--field-slot-top-y) 0 var(--field-slot-bottom-y) 0;
+        align-self: flex-start;
         background: transparent;
         border: 0;
         box-sizing: border-box;
+        height: 100%;
         display: block;
         line-height: var(--e-field-input-line-height);
         width: 100%;
@@ -348,9 +393,8 @@
 
         border-top-left-radius: var(--e-field-border-radius);
         border-top-right-radius: var(--e-field-border-radius);
-
-
-        padding-inline: var(--field-layout-gap);
+        padding-inline-start: var(--field-frame-padding-inline-start);
+        padding-inline-end: var(--field-frame-padding-inline-end);
 
 
         input,
@@ -411,17 +455,13 @@
 
     &--label-floating {
         --field-layout-active-height: var(--e-field-height-default-with-label-floating);
-        --field-layout-content-padding-top: calc(var(--e-field-label-float-scale) * var(--e-field-label-line-height) + var(--e-field-label-float-y) + var(--e-field-slot-padding-base));
+        --field-input-center-y: calc((var(--e-field-label-float-scale) * var(--e-field-label-line-height)) + var(--e-field-label-float-y) + var(--e-field-slot-padding-base) + (var(--field-slot-content-height) / 2));
+        --field-label-top-y: #{field-top-from-center(var(--field-control-center-y), var(--e-field-label-line-height))};
         --field-label-state-translate-y: 0;
         --field-label-state-scale: 1;
 
         .e-field__frame {
             min-height: var(--field-layout-active-height);
-        }
-
-        .e-field__suffix,
-        .e-field__prefix {
-            align-self: center;
         }
 
         .e-label--floating {
@@ -442,7 +482,9 @@
         }
 
         .e-field__prefix,
-        .e-field__suffix {
+        .e-field__suffix,
+        .e-field__prepend-inner,
+        .e-field__append-inner {
             opacity: var(--e-field-affix-opacity, 0);
             transition: opacity var(--e-field-transition-duration) cubic-bezier(0.25, 0.8, 0.5, 1);
         }
@@ -451,8 +493,8 @@
 
     &--label-floated {
         --e-field-affix-opacity: 1;
-        --field-label-state-y: var(--e-field-label-float-y);
-        --field-label-state-translate-y: 0;
+        --field-label-state-y: var(--field-label-top-y);
+        --field-label-state-translate-y: calc(var(--e-field-label-float-y) - var(--field-label-top-y));
         --field-label-state-scale: var(--e-field-label-float-scale);
 
         .e-label--floated {
@@ -478,7 +520,8 @@
         z-index: 1;
         line-height: var(--e-field-input-line-height);
         min-width: 0;
-        font-size: 1rem;
+        font-size: var(--e-typography-body-font-size-md, 0.875rem);
+        font-family: inherit;
 
         &:active,
         &:focus {
@@ -488,11 +531,11 @@
         &::placeholder,
         &::-webkit-input-placeholder,
         &:-ms-input-placeholder {
-            color: color-mix(in srgb, var(--field-state-input-color) 38%, transparent);
+            color: color-mix(in srgb, var(--field-state-input-color) 50%, transparent);
         }
     }
 
     textarea {
-        overflow: hidden;
+        overflow: hidden auto;
     }
 }

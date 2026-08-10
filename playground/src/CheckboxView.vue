@@ -1,217 +1,152 @@
 <template>
-    <section class="checkbox-playground">
-        <div class="checkbox-playground__hero">
-            <p class="eyebrow">Playground</p>
-            <h1>Checkbox Playground</h1>
-            <p class="hero-copy">
-                Esta vista concentra pruebas de <strong>ECheckbox</strong> dentro de
-                <strong>EForm</strong> para validar estados booleanos, valores custom,
-                readonly y herencia de estilos.
-            </p>
+  <section class="checkbox-page">
+    <header class="checkbox-page__header">
+      <p class="checkbox-page__eyebrow">Components</p>
+      <h2 class="checkbox-page__title">Checkbox Examples</h2>
+      <p class="checkbox-page__lead">
+        Escenarios para revisar alineacion visual y estados de ECheckbox tras la migracion de EField.
+      </p>
+    </header>
+
+    <article class="checkbox-demo">
+      <h3>Basic alignment</h3>
+      <p class="checkbox-demo__caption">Validacion del control y label en casos simples.</p>
+
+      <EForm>
+        <ECheckbox v-model="termsAccepted" label="I accept terms and conditions" lg="6" tonal/>
+        <ECheckbox v-model="newsletter" label="Subscribe to product updates" lg="6" detail="Optional" />
+      </EForm>
+    </article>
+
+    <article class="checkbox-demo">
+      <h3>Validation in form</h3>
+      <p class="checkbox-demo__caption">Reglas y detalle de error para revisar espaciado con mensajes.</p>
+
+      <EForm v-model="isValid" validate-on-submit @submit="onSubmit" @submit-invalid="onInvalid">
+        <ECheckbox
+          v-model="privacyPolicy"
+          label="I have read the privacy policy"
+          :rules="requiredRule"
+          detail="Required to continue"
+          lg="6"
+        />
+
+        <ECheckbox
+          v-model="securityNotices"
+          label="Receive security notices"
+          detail="Recommended"
+          lg="6"
+        />
+
+        <div class="checkbox-demo__actions">
+          <EButton type="submit" color="primary">Submit</EButton>
+          <EButton type="button" outlined @click="resetDemo">Reset</EButton>
         </div>
+      </EForm>
 
-        <div class="checkbox-grid">
-            <ECard class="checkbox-card" elevation="md">
-                <div class="checkbox-card__header">
-                    <div>
-                        <p class="section-kicker">Integracion con form</p>
-                        <h2>Estados y comportamiento de seleccion</h2>
-                    </div>
-                    <p class="card-copy">
-                        Prueba <strong>labelBehavior</strong>, cambio de valor, readonly,
-                        disabled y herencia de color en checkboxes.
-                    </p>
-                </div>
+      <p class="checkbox-demo__state">Form valid: {{ isValid ? "yes" : "no" }}</p>
+      <p class="checkbox-demo__state">Last action: {{ submitState }}</p>
+    </article>
 
-                <EForm class="checkbox-demo-form" field-color="teal-900" label-behavior="floating" dense>
-                    <ECheckbox v-model="checkboxState.termsAccepted" :cols="12" :md="4" label="Acepto terminos"
-                        detail="Caso booleano simple para revisar color, focus y detalles." />
+    <article class="checkbox-demo">
+      <h3>Dense, readonly and disabled</h3>
+      <p class="checkbox-demo__caption">Casos comunes para inspeccionar metrica y no interactividad.</p>
 
-                    <ECheckbox v-model="checkboxState.releaseChecklist" :cols="12" :md="4"
-                        label="Checklist de release"
-                        detail="Usa valores custom ready/hold para probar modelValue." color="secondary"
-                        true-value="ready" false-value="hold" />
-
-                    <ECheckbox v-model="checkboxState.readonlyAudit" :cols="12" :md="4" readonly outlined
-                        label="Auditoria readonly"
-                        detail="Sirve para comprobar que readonly mantiene el valor." />
-
-                    <ECheckbox v-model="checkboxState.readonlyAudit" :cols="12" :md="4" disabled outlined
-                        label="Auditoria readonly"
-                        detail="Sirve para comprobar que readonly mantiene el valor." />
-
-                    <ECheckbox v-model="checkboxState.readonlyAudit" :cols="12" :md="4" readonly
-                        label="Auditoria readonly"
-                        detail="Sirve para comprobar que readonly mantiene el valor." />
-                </EForm>
-            </ECard>
-
-            <div class="checkbox-sidebar">
-                <ECard class="checkbox-card" elevation="sm">
-                    <p class="section-kicker">Estado</p>
-                    <h2>Resumen vivo</h2>
-
-                    <div class="checkbox-summary">
-                        <div>
-                            <span>Terminos</span>
-                            <strong>{{ checkboxState.termsAccepted ? "Aceptados" : "Pendientes" }}</strong>
-                        </div>
-                        <div>
-                            <span>Release checklist</span>
-                            <strong>{{ checkboxState.releaseChecklist }}</strong>
-                        </div>
-                        <div>
-                            <span>Readonly</span>
-                            <strong>{{ checkboxState.readonlyAudit ? "On" : "Off" }}</strong>
-                        </div>
-                    </div>
-                </ECard>
-
-                <ECard class="checkbox-card" elevation="sm">
-                    <p class="section-kicker">Payload</p>
-                    <h2>Checkbox state</h2>
-                    <pre class="payload-preview">{{ checkboxPreview }}</pre>
-                </ECard>
-            </div>
-        </div>
-    </section>
+      <EForm>
+        <ECheckbox v-model="denseChoice" dense label="Dense checkbox" lg="4" />
+        <ECheckbox :model-value="true" readonly label="Readonly checked" lg="4" />
+        <ECheckbox :model-value="false" disabled label="Disabled unchecked" lg="4" />
+      </EForm>
+    </article>
+  </section>
 </template>
 
-<script setup lang="ts">
-import { computed, reactive } from "vue";
+<script setup>
+import { ref } from "vue";
 
-import ECard from "../../src/components/card/index.vue";
-import ECheckbox from "../../src/components/form/checkbox/index.vue";
-import EForm from "../../src/components/form/form.vue";
+const termsAccepted = ref(false);
+const newsletter = ref(true);
 
-type CheckboxDemoModel = {
-    termsAccepted: boolean;
-    releaseChecklist: string;
-    readonlyAudit: boolean;
+const privacyPolicy = ref(false);
+const securityNotices = ref(true);
+const isValid = ref(false);
+const submitState = ref("No submit yet");
+
+const denseChoice = ref(true);
+
+const requiredRule = [
+  (value) => value === true || "This checkbox is required",
+];
+
+const onSubmit = () => {
+  submitState.value = `Submitted at ${new Date().toLocaleTimeString()}`;
 };
 
-const createInitialCheckboxState = (): CheckboxDemoModel => ({
-    termsAccepted: true,
-    releaseChecklist: "hold",
-    readonlyAudit: true,
-});
+const onInvalid = () => {
+  submitState.value = "Validation blocked submission";
+};
 
-const checkboxState = reactive<CheckboxDemoModel>(createInitialCheckboxState());
-
-const checkboxPreview = computed(() => {
-    return JSON.stringify(checkboxState, null, 2);
-});
+const resetDemo = () => {
+  privacyPolicy.value = false;
+  securityNotices.value = true;
+  submitState.value = "Demo reset";
+};
 </script>
 
 <style scoped>
-.checkbox-playground {
-    display: grid;
-    gap: 24px;
+.checkbox-page {
+  display: grid;
+  gap: 20px;
 }
 
-.checkbox-playground__hero {
-    display: grid;
-    gap: 8px;
-    max-width: 760px;
+.checkbox-page__header {
+  display: grid;
+  gap: 6px;
 }
 
-.eyebrow,
-.section-kicker {
-    color: #5b6b8a;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    margin: 0;
-    text-transform: uppercase;
+.checkbox-page__eyebrow {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.72;
 }
 
-.checkbox-playground__hero h1,
-.checkbox-card h2 {
-    color: #172033;
-    margin: 0;
+.checkbox-page__title {
+  margin: 0;
 }
 
-.hero-copy,
-.card-copy {
-    color: #596579;
-    line-height: 1.6;
-    margin: 0;
+.checkbox-page__lead {
+  margin: 0;
+  opacity: 0.84;
 }
 
-.checkbox-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+.checkbox-demo {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
 }
 
-.checkbox-sidebar {
-    display: grid;
-    gap: 16px;
+.checkbox-demo h3 {
+  margin: 0;
 }
 
-.checkbox-card {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 20px;
-    display: grid;
-    gap: 18px;
-    padding: 24px;
+.checkbox-demo__caption {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
-.checkbox-card__header {
-    display: grid;
-    gap: 10px;
+.checkbox-demo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.checkbox-demo-form {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-}
-
-.checkbox-summary {
-    display: grid;
-    gap: 14px;
-}
-
-.checkbox-summary div {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 16px;
-    padding: 14px 16px;
-}
-
-.checkbox-summary span {
-    color: #51617d;
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin: 0 0 4px;
-    text-transform: uppercase;
-}
-
-.checkbox-summary strong {
-    color: #172033;
-    font-size: 14px;
-}
-
-.payload-preview {
-    background: #111827;
-    border-radius: 16px;
-    color: #d9e2f1;
-    font-size: 12px;
-    line-height: 1.55;
-    margin: 0;
-    overflow: auto;
-    padding: 16px;
-}
-
-@media (max-width: 960px) {
-    .checkbox-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .checkbox-card {
-        padding: 18px;
-    }
+.checkbox-demo__state {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.78;
 }
 </style>

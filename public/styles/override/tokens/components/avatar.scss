@@ -2,11 +2,11 @@
 
 $avatar-size: map.merge(
     (
-        x-small: 24px,
-        small: 32px,
-        default: 65px,
-        large: 80px,
-        x-large: 96px,
+        x-small: 30px,
+        small: 38px,
+        default: 46px,
+        large: 54px,
+        x-large: 62px,
     ),
     ()
 ) !default;

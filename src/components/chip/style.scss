@@ -1,5 +1,6 @@
 .e-chip {
-  font-size: var(--e-chip-font-size, 0.875rem);
+  font-size: var(--e-chip-font-size, var(--e-typography-label-font-size-lg, 0.875rem));
+  line-height: var(--e-typography-label-line-height-lg, 1.25rem);
   height: var(--e-chip-height, 32px);
   padding: 0;
   --e-chip-content-padding-start: var(--e-chip-content-padding-x, 12px);
@@ -13,7 +14,8 @@
   font-family: inherit;
   margin: 0;
   gap: 8px;
-  font-weight: 400;
+  font-weight: var(--e-chip-font-weight, var(--e-typography-label-font-weight-lg, 400));
+  letter-spacing: var(--e-typography-label-letter-spacing-lg, 0.01em);
   max-width: 100%;
   overflow: hidden;
   padding: 0;
@@ -74,7 +76,7 @@
   }
 
   &--size-x-small {
-    --e-chip-font-size: var(--e-chip-font-size-x-small, 0.625rem);
+    --e-chip-font-size: var(--e-chip-font-size-x-small, var(--e-typography-label-font-size-sm, 0.625rem));
     --e-chip-height: var(--e-chip-height-x-small, 24px);
     --e-chip-content-padding-x: var(--e-chip-content-padding-x-x-small, 8px);
     --e-chip-edge-padding-x: var(--e-chip-edge-padding-x-x-small, 5px);
@@ -83,7 +85,7 @@
   }
 
   &--size-small {
-    --e-chip-font-size: var(--e-chip-font-size-small, 0.75rem);
+    --e-chip-font-size: var(--e-chip-font-size-small, var(--e-typography-label-font-size-md, 0.75rem));
     --e-chip-height: var(--e-chip-height-small, 28px);
     --e-chip-content-padding-x: var(--e-chip-content-padding-x-small, 10px);
     --e-chip-edge-padding-x: var(--e-chip-edge-padding-x-small, 6px);
@@ -92,7 +94,7 @@
   }
 
   &--size-default {
-    --e-chip-font-size: var(--e-chip-font-size-default, 0.875rem);
+    --e-chip-font-size: var(--e-chip-font-size-default, var(--e-typography-label-font-size-lg, 0.875rem));
     --e-chip-height: var(--e-chip-height-default, 32px);
     --e-chip-content-padding-x: var(--e-chip-content-padding-x-default, 12px);
     --e-chip-edge-padding-x: var(--e-chip-edge-padding-x-default, 7px);
@@ -101,7 +103,7 @@
   }
 
   &--size-large {
-    --e-chip-font-size: var(--e-chip-font-size-large, 0.9375rem);
+    --e-chip-font-size: var(--e-chip-font-size-large, var(--e-typography-body-font-size-lg, 0.9375rem));
     --e-chip-height: var(--e-chip-height-large, 36px);
     --e-chip-content-padding-x: var(--e-chip-content-padding-x-large, 14px);
     --e-chip-edge-padding-x: var(--e-chip-edge-padding-x-large, 8px);
@@ -110,7 +112,7 @@
   }
 
   &--size-x-large {
-    --e-chip-font-size: var(--e-chip-font-size-x-large, 1rem);
+    --e-chip-font-size: var(--e-chip-font-size-x-large, var(--e-typography-body-font-size-lg, 1rem));
     --e-chip-height: var(--e-chip-height-x-large, 40px);
     --e-chip-content-padding-x: var(--e-chip-content-padding-x-x-large, 16px);
     --e-chip-edge-padding-x: var(--e-chip-edge-padding-x-x-large, 9px);

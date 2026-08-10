@@ -30,69 +30,56 @@
         {{ prefix }}
       </div>
 
-      <div :class="['e-select__selections', slotClass]">
+      <div ref="selectionsEl" :class="['e-select__selections', slotClass]" @mousedown="handleSelectInteractionIntent">
         <div v-if="showPlaceholderSelection" class="e-select__selection" :style="selectionStyle">
-          <span class="e-select__selection-placeholder">
-            {{ props.placeholder }}
-          </span>
+          <div class="e-select__selection-content">
+            <span class="e-select__selection-placeholder">
+              {{ props.placeholder }}
+            </span>
+          </div>
         </div>
 
-        <template v-else-if="multiple && chip">
-          <div
-            v-for="(itemValue, index) in selectedItems"
-            :key="index"
-            class="e-select__selection"
-            :style="selectionStyle">
-            <slot name="selection" :selection="selectionItem(itemValue)" :attrs="selectionAttrs(itemValue)">
-              <EChip
-                v-if="chip"
-                v-bind="selectionAttrs(itemValue)"
-                :color="color"
-                closable>
-                {{ selectedText(itemValue) }}
-              </EChip>
-            </slot>
+        <template v-else-if="multiple">
+          <template v-if="shouldRenderMultipleSelections">
+            <div v-for="(itemValue, index) in selectedItems" :key="index" class="e-select__selection"
+              :style="selectionStyle">
+              <div class="e-select__selection-content">
+                <slot name="selection" :selection="selectionItem(itemValue)" :attrs="selectionAttrs(itemValue)">
+                  <EChip v-if="chip" v-bind="selectionAttrs(itemValue)" :color="color" closable>
+                    {{ selectedText(itemValue) }}
+                  </EChip>
+                </slot>
+              </div>
+            </div>
+          </template>
+
+          <div v-else class="e-select__selection e-select__selection--text" :style="selectionStyle">
+            <div class="e-select__selection-content">
+              <span class="e-select__selection-text" :title="multipleSelectedText">
+                {{ multipleSelectedText }}
+              </span>
+            </div>
           </div>
         </template>
 
-        <div v-else-if="multiple" class="e-select__selection e-select__selection--text" :style="selectionStyle">
-          <span class="e-select__selection-text" :title="multipleSelectedText">
-            {{ multipleSelectedText }}
-          </span>
-        </div>
-
         <div v-else-if="!empty" class="e-select__selection" :style="selectionStyle">
-          <slot name="selection" :selection="selectionItem()" :attrs="selectionAttrs()">
-            <EChip v-if="chip" v-bind="selectionAttrs()" :color="color" :closable="chipClosable">
-              {{ selectedText() }}
-            </EChip>
-            <span v-else>{{ selectedText() }}</span>
-          </slot>
+          <div class="e-select__selection-content">
+            <slot name="selection" :selection="selectionItem()" :attrs="selectionAttrs()">
+              <EChip v-if="chip" v-bind="selectionAttrs()" :color="color" :closable="chipClosable">
+                {{ selectedText() }}
+              </EChip>
+              <span v-else>{{ selectedText() }}</span>
+            </slot>
+          </div>
         </div>
 
-        <input
-          ref="input"
-          :value="searchValue"
-          :id="inputId"
-          :readonly="inputReadonly"
-          :disabled="isDisabled"
-          :data-field-id-base="fieldIdBase"
-          class="e-select__input input--text"
-          type="text"
-          role="combobox"
-          :aria-autocomplete="props.autocomplete ? 'list' : 'none'"
-          :aria-controls="getListboxId(fieldIdBase)"
-          :aria-expanded="isMenuOpen"
-          :aria-invalid="hasError"
-          :aria-describedby="detailsId"
-          :aria-disabled="isDisabled"
-          :aria-readonly="inputReadonly"
-          :placeholder="props.placeholder"
-          autocomplete="off"
-          @blur="(event) => { clearSelectedChip(); handleBlur(event); }"
-          @focus="(event) => handleInputFocus(event, handleFocus)"
-          @input="handleInput"
-          @keydown="handleInputKeydown" />
+        <input ref="input" :value="searchValue" :id="inputId" :readonly="inputReadonly" :disabled="isDisabled"
+          :data-field-id-base="fieldIdBase" class="e-select__input input--text" type="text" role="combobox"
+          :aria-autocomplete="props.autocomplete ? 'list' : 'none'" :aria-controls="getListboxId(fieldIdBase)"
+          :aria-expanded="isMenuOpen" :aria-invalid="hasError" :aria-describedby="detailsId" :aria-disabled="isDisabled"
+            :aria-readonly="inputReadonly" :placeholder="props.placeholder" autocomplete="off"
+          @mousedown="handleSelectInteractionIntent" @blur="(event) => handleInputBlur(event, handleBlur)"
+          @focus="(event) => handleInputFocus(event, handleFocus)" @input="handleInput" @keydown="handleInputKeydown" />
       </div>
 
       <div v-if="suffix" class="e-select__suffix e-field__suffix" aria-hidden="true">
@@ -101,35 +88,17 @@
 
       <EProgressLinear v-if="loading" :color="color" :indeterminate="loading" height="3" />
 
-      <EMenu
-        :activator="frameEl"
-        v-model="isMenuOpen"
-        full-width
-        hold-focus
-        check-offset
-        :color="props.menuColor ?? color"
-        :close-on-content-click="false"
-        aria-haspopup="listbox"
-        :aria-controls="getListboxId(fieldIdBase)"
-        content-role="presentation">
-        <div
-          v-focus-outside="{ handler: handleMenuFocusOutside, include: frameEl, enabled: isMenuOpen }"
+      <EMenu :activator="frameEl" v-model="isMenuOpen" full-width hold-focus check-offset
+        :color="props.menuColor ?? color" :close-on-content-click="false" aria-haspopup="listbox"
+        :aria-controls="getListboxId(fieldIdBase)" content-role="presentation">
+        <div v-focus-outside="{ handler: handleMenuFocusOutside, include: frameEl, enabled: isMenuOpen }"
           class="e-select__menu">
-          <e-list
-            :id="getListboxId(fieldIdBase)"
-            role="listbox"
-            :model-value="listModel"
-            :aria-label="listAriaLabel"
-            @update:modelValue="handleListModelValueChange"
-            @keydown="handleMenuKeydown">
+          <e-list :id="getListboxId(fieldIdBase)" role="listbox" :model-value="listModel" :aria-label="listAriaLabel"
+            @update:modelValue="handleListModelValueChange" @keydown="handleMenuKeydown">
             <template v-for="(item, index) in items">
               <slot name="item" :attrs="slotItemAttrs(item, index, fieldIdBase)" :item="item">
-                <e-list-item
-                  v-bind="slotItemAttrs(item, index, fieldIdBase)"
-                  active-class="e-list-item--active"
-                  :isActive="active(item)"
-                  :key="index"
-                  :value="getListItemValue(item)">
+                <e-list-item v-bind="slotItemAttrs(item, index, fieldIdBase)" active-class="e-list-item--active"
+                  :isActive="active(item)" :key="index" :value="getListItemValue(item)">
                   {{ getItemText(item) }}
                 </e-list-item>
               </slot>
@@ -158,7 +127,7 @@ import { getNextTabbable, getPrevTabbable } from "@/utils/field";
 import { useUtils } from "@/composables/utils";
 import { useFieldIntegration } from "@/composables/field-integration";
 
-import { computed, nextTick, ref, useSlots, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useSlots, watch } from "vue";
 import ButtonClear from "@/components/form/button-clear/index.vue";
 import EChip from "@/components/chip/index.vue";
 import EField from "@/components/form/field/index.vue";
@@ -178,6 +147,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
   itemText: "text",
   itemValue: "value",
   inputAlign: "start",
+  tonal: true,
 });
 
 const slots = useSlots();
@@ -190,9 +160,13 @@ const { blur, field, fieldProps, focus, passThroughSlots } = useFieldIntegration
 // Local reactive state.
 const { isObject } = useUtils();
 const input = ref<HTMLInputElement | null>(null);
+const selectionsEl = ref<HTMLElement | null>(null);
 const isMenuOpen = ref<boolean>(false);
 const selectionCache = ref<Record<string, SelectItemType>>({});
 const selectedChipIndex = ref<number>(-1);
+const pendingOpenAfterLoading = ref<boolean>(false);
+const SELECTION_CONTENT_HEIGHT_VAR = "--e-select-selection-content-height";
+let selectionResizeObserver: ResizeObserver | undefined;
 
 // Two-way bindings.
 const searchValue = computed<string | number>({
@@ -341,6 +315,11 @@ const selectClass = computed(() => {
   return result;
 });
 
+const hasSelectionSlot = computed(() => Boolean(slots.selection));
+const shouldRenderMultipleSelections = computed((): boolean => {
+  return props.multiple && (props.chip || hasSelectionSlot.value);
+});
+
 const selectionStyle = computed((): Record<string, string> => {
   return { textAlign: props.inputAlign };
 });
@@ -349,6 +328,76 @@ const isSearchEmpty = computed((): boolean => {
   return `${searchValue.value ?? ""}`.length === 0;
 });
 const currentFieldIdBase = computed((): string => input.value?.dataset.fieldIdBase ?? "");
+
+const getSelectRootElement = (): HTMLElement | null => {
+  return input.value?.closest(".e-select") as HTMLElement | null;
+};
+
+const setSelectionHeightVar = (value: number): void => {
+  const root = getSelectRootElement();
+
+  if (!root) return;
+
+  if (value > 0) {
+    root.style.setProperty(SELECTION_CONTENT_HEIGHT_VAR, `${value}px`);
+  } else {
+    root.style.removeProperty(SELECTION_CONTENT_HEIGHT_VAR);
+  }
+};
+
+const getSelectionContentElements = (): Array<HTMLElement> => {
+  if (!selectionsEl.value) return [];
+
+  return Array.from(
+    selectionsEl.value.querySelectorAll<HTMLElement>(".e-select__selection-content"),
+  );
+};
+
+const measureSelectionContentHeight = (): number => {
+  const elements = getSelectionContentElements();
+  if (!elements.length) return 0;
+
+  return elements.reduce((maxHeight, element) => {
+    const rect = element.getBoundingClientRect();
+    const nextHeight = Number.isFinite(rect.height) ? rect.height : 0;
+
+    return Math.max(maxHeight, nextHeight);
+  }, 0);
+};
+
+const syncSelectionContentHeight = (): void => {
+  if (!hasSelectionSlot.value || empty.value) {
+    setSelectionHeightVar(0);
+    return;
+  }
+
+  setSelectionHeightVar(measureSelectionContentHeight());
+};
+
+const bindSelectionContentMeasurement = (): void => {
+  selectionResizeObserver?.disconnect();
+
+  if (!hasSelectionSlot.value || typeof ResizeObserver === "undefined") {
+    syncSelectionContentHeight();
+    return;
+  }
+
+  const elements = getSelectionContentElements();
+  if (!elements.length) {
+    syncSelectionContentHeight();
+    return;
+  }
+
+  selectionResizeObserver = new ResizeObserver(() => {
+    syncSelectionContentHeight();
+  });
+
+  elements.forEach((element) => {
+    selectionResizeObserver?.observe(element);
+  });
+
+  syncSelectionContentHeight();
+};
 
 // Selection lookup and matching.
 const syncSelectionCache = (items: Array<SelectItemType>): void => {
@@ -492,6 +541,32 @@ const canOpenMenu = (): boolean => {
   return props.items.length > 0;
 };
 
+const isInputFocused = (): boolean => {
+  return document.activeElement === input.value;
+};
+
+const handleSelectInteractionIntent = (): void => {
+  pendingOpenAfterLoading.value = true;
+};
+
+const tryOpenMenuAfterLoading = (): void => {
+  if (!pendingOpenAfterLoading.value) return;
+  if (props.loading) return;
+  if (isMenuOpen.value) {
+    pendingOpenAfterLoading.value = false;
+    return;
+  }
+  if (props.disabled || props.readonly) {
+    pendingOpenAfterLoading.value = false;
+    return;
+  }
+  if (props.items.length === 0) return;
+  if (!isInputFocused()) return;
+
+  openMenu();
+  pendingOpenAfterLoading.value = false;
+};
+
 const getOptionElement = (index: number): HTMLElement | null => {
   if (index < 0 || !currentFieldIdBase.value) return null;
 
@@ -523,6 +598,17 @@ const handleInputFocus = (
 ): void => {
   clearSelectedChip();
   handleFieldFocus(event);
+  emit("focus", event);
+};
+
+const handleInputBlur = (
+  event: FocusEvent,
+  handleFieldBlur: (event?: Event) => void,
+): void => {
+  clearSelectedChip();
+  pendingOpenAfterLoading.value = false;
+  handleFieldBlur(event);
+  emit("blur", event);
 };
 
 const handleInput = (event: Event): void => {
@@ -662,9 +748,12 @@ const handleMenuKeydown = async (event: KeyboardEvent): Promise<void> => {
 const selectionAttrs = (item?: SelectItemType) => {
   const chipIndex = item ? findSelectedIndex(selectedItems.value, item) : -1;
   const isActiveChip = chipIndex >= 0 ? isSelectedChipIndex(chipIndex) : undefined;
+  const isMultipleSelectionSlot = props.multiple && hasSelectionSlot.value;
 
   return {
-    closable: Boolean(props.chip && (props.chipClosable || props.multiple)),
+    closable: Boolean(
+      (props.chip && (props.chipClosable || props.multiple)) || isMultipleSelectionSlot,
+    ),
     clickable: isActiveChip,
     selected: isActiveChip,
     tabindex: -1,
@@ -723,8 +812,19 @@ watch(
   () => props.items,
   (items) => {
     syncSelectionCache(items);
+    tryOpenMenuAfterLoading();
+    void nextTick(() => {
+      bindSelectionContentMeasurement();
+    });
   },
   { deep: true },
+);
+
+watch(
+  () => props.loading,
+  () => {
+    tryOpenMenuAfterLoading();
+  },
 );
 
 watch(
@@ -739,12 +839,35 @@ watch(
 watch(selectedItems, (items) => {
   if (items.length === 0) {
     clearSelectedChip();
-    return;
-  }
-
-  if (selectedChipIndex.value >= items.length) {
+  } else if (selectedChipIndex.value >= items.length) {
     selectedChipIndex.value = items.length - 1;
   }
+
+  void nextTick(() => {
+    bindSelectionContentMeasurement();
+  });
+});
+
+watch(
+  [hasSelectionSlot, empty],
+  () => {
+    void nextTick(() => {
+      bindSelectionContentMeasurement();
+    });
+  },
+  { immediate: true },
+);
+
+onMounted(() => {
+  void nextTick(() => {
+    bindSelectionContentMeasurement();
+  });
+});
+
+onBeforeUnmount(() => {
+  selectionResizeObserver?.disconnect();
+  selectionResizeObserver = undefined;
+  setSelectionHeightVar(0);
 });
 
 // Keyboard interaction.

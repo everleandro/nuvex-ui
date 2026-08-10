@@ -1,7 +1,8 @@
-$border-radius-root: .95rem !default;
+$border-radius-root: 0rem !default;
 $root-font-size: 1rem !default;
 $space-base: 0.25rem !default;
-$root-font-family: "Roboto", sans-serif !default;
+$root-font-family: "Roboto Flex", "Roboto", sans-serif !default;
+$root-font-family-mono: "Roboto Mono", monospace !default;
 $border-width: thin !default;
 $space-scale: 10 !default;
 $grid-cols: 12 !default;

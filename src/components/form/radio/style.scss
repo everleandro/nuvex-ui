@@ -4,7 +4,7 @@
   display: flex;
 
   &__label {
-    --field-layout-label-rest-y: 0;
+    --field-label-top-y: 0;
     --label-align-self: center;
   }
 }
@@ -12,6 +12,8 @@
 .e-radio-group-field {
   --group-flex-direction: column;
   --frame-flex-direction: row;
+  --field-slot-content-height: var(--control-size);
+  --field-slot-bottom-y: var(--field-slot-bottom-rest-y);
 
   &--row {
     --group-flex-direction: row;

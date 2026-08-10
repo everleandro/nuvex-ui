@@ -46,17 +46,17 @@
   &-panel {
     --panel-border-radius: var(--e-expansion-panel-border-radius, 4px);
     --panel-space-base: 0px;
-    --panel-header-height: var(--e-expansion-header-height, 2.5rem);
-    --panel-inline-padding: calc(var(--e-space-base, 4px) * 3);
-    --panel-body-padding-inline: calc(var(--e-space-base, 4px) * 3);
-    --panel-body-padding-bottom: calc(var(--e-space-base, 4px) * 2);
+    --panel-header-height: var(--e-expansion-header-height, 3rem);
+    --panel-inline-padding: calc(var(--e-space-base, 4px) * 6);
+    --panel-body-padding-inline: calc(var(--e-space-base, 4px) * 6);
+    --panel-body-padding-bottom: calc(var(--e-space-base, 4px) * 4);
     --panel-margin-transition: margin-top 0.3s ease;
     --panel-content-transition: height 0.3s ease;
     --panel-icon-transition: transform 0.5s ease;
 
     border-top: var(--e-expansion-panel-border-width, thin) solid var(--e-color-border, rgb(0, 0, 0));
-    background-color: var(--e-expansion-panel-background-color, var(--e-color-surface-1, #ffffff));
-    color: var(--e-expansion-panel-color, var(--e-contrast-surface-1, #000000));
+    background-color: var(--e-expansion-panel-background-color, var(--e-color-surface-base, #ffffff));
+    color: var(--e-expansion-panel-color, var(--e-contrast-surface-base, #000000));
     margin-top: var(--panel-space-base);
     border-radius: var(--panel-border-radius);
     width: 100%;
@@ -80,17 +80,19 @@
       padding: 0;
 
       &-button {
-        display: flex;
-        flex: 1 0 auto;
         width: 100%;
         text-transform: uppercase;
-        color: var(--e-expansion-panel-button-color, var(--e-contrast-surface-1, #000000));
-        background-color: var(--e-expansion-panel-button-background-color, var(--e-color-surface-1, #ffffff));
-        font-size: var(--e-expansion-header-font-size, 0.875rem);
-        padding: 0 var(--panel-inline-padding);
+        color: var(--e-expansion-panel-button-color, var(--e-contrast-surface-base, #000000));
+        background-color: var(--e-expansion-panel-button-background-color, var(--e-color-surface-base, #ffffff));
+        font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+        font-size: var(--e-expansion-header-font-size, var(--e-typography-label-font-size-lg, 0.875rem));
+        line-height: var(--e-typography-label-line-height-lg, 1.25rem);
+        font-weight: var(--e-typography-label-font-weight-lg, 500);
+        letter-spacing: var(--e-typography-label-letter-spacing-lg, 0.01em);
         @include prefix(user-select, none);
         @include button-reset();
         @include button-before($interactive: true);
+        padding: 0 var(--panel-inline-padding);
 
         &-content {
           transition: var(--panel-content-transition);
@@ -131,7 +133,7 @@
       padding-top: 0;
 
       &-content-wrapper {
-        padding: var(--e-space-base, 4px) var(--panel-body-padding-inline) var(--panel-body-padding-bottom);
+        padding: calc(var(--e-space-base, 4px) * 2) var(--panel-body-padding-inline) var(--panel-body-padding-bottom);
       }
 
       &-content {
@@ -142,7 +144,7 @@
     }
 
     &--opened {
-      --e-expansion-header-height: var(--e-expansion-header-height-opened, 3.25rem);
+      --e-expansion-header-height: var(--e-expansion-header-height-opened, 4rem);
 
       &:not(.e-expansion-panel--disable-icon-rotation) {
         .e-expansion-panel__header-button-icon i {

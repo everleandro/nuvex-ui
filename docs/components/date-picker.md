@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { EDatePicker } from 'drocket'
+import { EDatePicker } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida
@@ -28,7 +28,7 @@ import { EDatePicker } from 'drocket'
 | `view` | `datePickerViewType` | `undefined` | Vista controlada externamente (`day`, `month`, `year`). |
 | `weekStart` | `number` | `1` | Dia inicial de semana (`0` domingo, `1` lunes, etc.). |
 | `format` | `string` | `undefined` | Formato de texto usado para la fecha del encabezado. |
-| `lng` | `suportedLng` | `'en'` | Idioma usado por nombres de meses y dias. |
+| `lng` | `suportedLng` | `locale global` | Idioma usado por nombres de meses y dias. Si no se pasa, usa el locale configurado en `app.use(NuvexUI, { locale })`. |
 | `color` | `string` | `'primary'` | Color base para estados visuales. |
 | `elevation` | `ElevationLevel` | `undefined` | Aplica sombra al contenedor del picker. |
 | `gridButtonElevation` | `ElevationLevel` | `undefined` | Aplica sombra a los botones seleccionados de dias, meses y anios. |
@@ -67,6 +67,49 @@ import { EDatePicker } from 'drocket'
 </template>
 ```
 
+### Locale por defecto desde plugin
+
+```ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import { NuvexUI } from 'nuvex-ui'
+
+const app = createApp(App)
+
+app.use(NuvexUI, {
+  locale: 'fr',
+})
+
+app.mount('#app')
+```
+
+Con esa configuracion, `EDatePicker` usara `fr` por defecto sin necesidad de pasar `lng` en cada instancia.
+
+### Override por instancia
+
+```vue
+<template>
+  <EDatePicker v-model="value" lng="es" />
+</template>
+```
+
+## DateBuilder y formato
+
+`DateBuilder` (internamente `UtilDate`) comparte el mismo locale por defecto de la libreria.
+
+```ts
+import { DateBuilder } from 'nuvex-ui'
+
+const date = new DateBuilder(new Date())
+console.log(date.format('week-dddd month-mmmm year-YYYY'))
+```
+
+Notas:
+
+- `format` mantiene el contrato de tokens actual (`week-*`, `month-*`, `year-*`, `hour-*`, `minutes-*`, `nth-su`).
+- La funcion ahora reemplaza todas las ocurrencias del token en la cadena (no solo la primera).
+- Si pasas locale regional como `es-MX`, el sistema intenta resolver primero `es-mx` y luego `es`.
+
 ### Con fechas deshabilitadas y resaltadas
 
 ```vue
@@ -78,6 +121,18 @@ import { EDatePicker } from 'drocket'
     color="secondary"
     elevation="md"
     grid-button-elevation="sm"
+  />
+</template>
+```
+
+### Layout horizontal completo
+
+```vue
+<template>
+  <EDatePicker
+    v-model="value"
+    landscape
+    color="secondary"
   />
 </template>
 ```

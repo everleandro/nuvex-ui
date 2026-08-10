@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { ESwitch } from 'drocket'
+import { ESwitch } from 'nuvex-ui'
 ```
 
 ## Navegacion Rapida
@@ -60,7 +60,7 @@ Tambien expone `input` via `ref` si necesitas acceso al `HTMLInputElement` nativ
 
 ## Ejemplos
 
-### Basico
+### Básico
 
 ```vue
 <template>
@@ -79,32 +79,137 @@ const notifications = ref(false)
 ```vue
 <template>
   <ESwitch
-    v-model="releaseGate"
-    label="Release gate"
-    true-value="publish"
+    v-model="deploymentStatus"
+    label="Publicar cambios"
+    true-value="published"
     false-value="draft"
+    detail="Controla visibilidad pública"
   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const releaseGate = ref<'publish' | 'draft'>('draft')
+const deploymentStatus = ref<'published' | 'draft'>('draft')
 </script>
 ```
 
-### En loading
+### Estado de carga (async)
 
 ```vue
 <template>
   <ESwitch
-    v-model="analytics"
+    v-model="analyticsEnabled"
     label="Analytics en vivo"
-    :loading="true"
-    :true-value="1"
-    :false-value="0"
+    detail="Recolecta datos de sesión"
+    :loading="isSaving"
+    @update:model-value="saveAnalyticsSetting"
   />
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const analyticsEnabled = ref(true)
+const isSaving = ref(false)
+
+const saveAnalyticsSetting = async (value: boolean) => {
+  isSaving.value = true
+  try {
+    // Simular API call
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    console.log('Guardado:', value)
+  } finally {
+    isSaving.value = false
+  }
+}
+</script>
+```
+
+### Integrado con EForm
+
+```vue
+<template>
+  <EForm v-model="settingsValid" label-behavior="floating">
+    <ESwitch
+      v-model="settings.emailNotifications"
+      label="Notificaciones por email"
+      detail-errors
+      color="primary"
+    />
+    
+    <ESwitch
+      v-model="settings.pushNotifications"
+      label="Notificaciones push"
+      detail="Solo en navegadores compatibles"
+    />
+    
+    <ESwitch
+      v-model="settings.darkMode"
+      label="Modo oscuro"
+      @update:model-value="toggleTheme"
+    />
+  </EForm>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const settingsValid = ref<boolean | undefined>()
+const settings = ref({
+  emailNotifications: true,
+  pushNotifications: false,
+  darkMode: false
+})
+
+const toggleTheme = (darkMode: boolean) => {
+  const theme = darkMode ? 'dark' : 'light'
+  document.documentElement.setAttribute('data-theme', theme)
+}
+</script>
+```
+
+### Estados combinados
+
+```vue
+<template>
+  <div class="flex-col gap-4">
+    <!-- Normal -->
+    <ESwitch v-model="feature1" label="Característica 1" />
+    
+    <!-- Deshabilitada -->
+    <ESwitch
+      v-model="feature2"
+      label="Característica 2 (Beta)"
+      disabled
+      detail="Próximamente disponible"
+    />
+    
+    <!-- Readonly -->
+    <ESwitch
+      v-model="feature3"
+      label="Característica 3 (Requerida)"
+      readonly
+      detail="No puede ser desactivada"
+    />
+    
+    <!-- Con color -->
+    <ESwitch
+      v-model="feature4"
+      label="Característica 4 (Critical)"
+      color="error"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const feature1 = ref(true)
+const feature2 = ref(false)
+const feature3 = ref(true)
+const feature4 = ref(true)
+</script>
 ```
 
 ## Accesibilidad

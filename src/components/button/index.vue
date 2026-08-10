@@ -9,17 +9,17 @@
       </slot>
     </span>
     <span v-if="prependIcon" class="e-btn__prepend">
-      <EIcon v-bind="iconSize" :icon="prependIcon" />
+      <EIcon :icon="prependIcon" />
     </span>
     <span class="e-btn__content">
       <slot name="default">
         <template v-if="icon || fab">
-          <EIcon v-bind="iconSize" :icon="icon" />
+          <EIcon :icon="icon" />
         </template>
       </slot>
     </span>
     <span v-if="appendIcon" class="e-btn__append">
-      <EIcon v-bind="iconSize" :icon="appendIcon" />
+      <EIcon :icon="appendIcon" />
     </span>
   </component>
 </template>
@@ -55,6 +55,7 @@ export interface ButtonProps extends SizeProps {
   elevation?: ButtonElevation;
   text?: boolean;
   outlined?: boolean;
+  tonal?: boolean;
   useContrastColor?: boolean;
   block?: boolean;
   type?: string;
@@ -72,6 +73,7 @@ const configuration = reactive({
 const attrs = useAttrs();
 const props = withDefaults(defineProps<ButtonProps>(), {
   ripple: true,
+  elevation: 'sm',
 });
 
 const booleanClassKeys = [
@@ -81,11 +83,11 @@ const booleanClassKeys = [
   "block",
   "loading",
   "outlined",
+  "tonal",
   "rounded",
   "stacked",
 ] as const;
 
-const iconSize = computed((): Partial<IconProps> => ({ size: props.size }));
 const slots = useSlots();
 
 const tag = computed(() => {
@@ -164,7 +166,7 @@ const ariaLabelComputed = computed(() => {
 });
 
 const btnClass = computed((): Array<string> => {
-  const classes = ["e-btn v-ripple-element"];
+  const classes = ["e-btn"];
 
   if (configuration.focused) {
     classes.push("e-btn--focused");
@@ -181,15 +183,17 @@ const btnClass = computed((): Array<string> => {
     classes.push("e-btn--use-contrast-color");
   }
 
+  if (props.tonal) {
+    classes.push("interactive-element--tonal");
+  }
+
   if (isIconOnly.value) {
     classes.push("e-btn--icon");
   }
 
   // Handle elevation
-  if (props.elevation && props.elevation !== "none" && !props.text && !props.outlined) {
+  if (props.elevation && props.elevation !== "none" && !props.text && !props.outlined && !props.tonal) {
     classes.push(`e-elevation--${props.elevation}`);
-  } else if (props.elevation === undefined && !props.text && !props.outlined) {
-    classes.push("e-btn--elevated");
   }
 
   return classes;

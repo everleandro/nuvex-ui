@@ -52,6 +52,7 @@ import EDetails from "@/components/form/details.vue";
 import EField from "@/components/form/field/index.vue";
 const vRipple = { ...ripple };
 const props = withDefaults(defineProps<CheckboxProps>(), {
+    tonal: false,
     trueValue: true,
     falseValue: false,
 });

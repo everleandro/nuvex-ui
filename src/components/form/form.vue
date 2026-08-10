@@ -13,7 +13,7 @@ export default defineComponent({
 <script lang="ts" setup>
 import { FORM_KEY } from '@/components/form/constants';
 import { useGridRow } from '@/composables/grid-row';
-import type { Breakpoint, ColProps, EField, ElevationProps, FieldConfiguration, FieldLabelBehavior, RowProps } from '@/types';
+import type { Breakpoint, ColProps, EField, ElevationProps, FieldConfiguration, FieldLabelBehavior, FormTableChild, RowProps } from '@/types';
 import { getColorContrastCssValue, getColorCssValue, normalizeCssSize } from '@/utils/style';
 import { computed, nextTick, onMounted, onUnmounted, provide, reactive, ref, watch } from 'vue';
 
@@ -51,6 +51,7 @@ const emit = defineEmits<{
 const state = reactive({
     fieldsChild: new Array<Partial<EField>>(),
     fieldsChildError: new Array<boolean>(),
+    tableChildren: new Array<Partial<FormTableChild>>(),
 });
 const activeBreakpoint = ref<Breakpoint>('xs')
 
@@ -106,7 +107,7 @@ const formStyle = computed<Record<string, string>>(() => {
     const resolvedLineColor = getColorCssValue(resolvedTableLineColor)
     const resolvedCellBackgroundColor = getColorCssValue(resolvedTableCellBackgroundColor)
     const resolvedLegacyContrastCellBackgroundColor = getColorContrastCssValue(legacyTableLineColor, {
-        fallbackContrast: 'var(--e-color-surface-1, white)',
+        fallbackContrast: 'var(--e-color-surface-base, white)',
     })
     const resolvedLineOpacity = props.tableLineOpacity
 
@@ -131,7 +132,7 @@ const effectiveGridRowStyle = computed<Record<string, string>>(() => {
     const result = { ...gridRowStyle.value }
 
     if (props.table && !result['--e-grid-gap']) {
-        result['--e-grid-gap'] = '1px'
+        result['--e-grid-gap'] = '0.1px'
     }
 
     return result
@@ -205,24 +206,24 @@ const normalizeSpan = (value: ColProps['cols'], totalCols: number): number => {
     return Math.min(parsed, totalCols)
 }
 
-const resolveSpanForBreakpoint = (field: Partial<EField>, breakpoint: Breakpoint, totalCols: number): number => {
+const resolveSpanForBreakpoint = (child: Partial<FormTableChild>, breakpoint: Breakpoint, totalCols: number): number => {
     const activeIndex = breakpointOrder.indexOf(breakpoint)
 
     for (let index = activeIndex; index >= 0; index -= 1) {
         const key = breakpointOrder[index]
-        const value = field[key]
+        const value = child[key]
 
         if (value !== undefined && value !== null) {
             return normalizeSpan(value, totalCols)
         }
     }
 
-    return normalizeSpan(field.cols, totalCols)
+    return normalizeSpan(child.cols, totalCols)
 }
 
 const syncTableClasses = (): void => {
     if (!props.table) {
-        state.fieldsChild.forEach((field) => field.setTableClasses?.([]))
+        state.tableChildren.forEach((child) => child.setTableClasses?.([]))
         return
     }
 
@@ -230,8 +231,8 @@ const syncTableClasses = (): void => {
     let row = 1
     let col = 1
 
-    const layout = state.fieldsChild.map((field) => {
-        const span = resolveSpanForBreakpoint(field, activeBreakpoint.value, totalCols)
+    const layout = state.tableChildren.map((child) => {
+        const span = resolveSpanForBreakpoint(child, activeBreakpoint.value, totalCols)
 
         if ((col + span - 1) > totalCols) {
             row += 1
@@ -239,7 +240,7 @@ const syncTableClasses = (): void => {
         }
 
         const currentField = {
-            field,
+            child,
             row,
             colStart: col,
             colEnd: col + span - 1,
@@ -252,7 +253,7 @@ const syncTableClasses = (): void => {
 
     const lastRow = layout.at(-1)?.row || 1
 
-    layout.forEach(({ field, row: fieldRow, colStart, colEnd }) => {
+    layout.forEach(({ child, row: fieldRow, colStart, colEnd }) => {
         const classes = ['e-form__child']
         const firstRow = fieldRow === 1
         const lastRowField = fieldRow === lastRow
@@ -269,7 +270,7 @@ const syncTableClasses = (): void => {
         if (lastRowField && firstCol) classes.push('e-form__child--bottom-left')
         if (lastRowField && lastCol) classes.push('e-form__child--bottom-right')
 
-        field.setTableClasses?.(classes)
+        child.setTableClasses?.(classes)
     })
 }
 
@@ -297,6 +298,10 @@ const bindField = (component: Partial<EField>) => {
     state.fieldsChild.push(component);
     state.fieldsChildError.push(Boolean(component.hasError));
     component.setConfiguration?.(effectiveConfiguration.value);
+}
+
+const bindTableChild = (component: Partial<FormTableChild>) => {
+    state.tableChildren.push(component)
     syncTableClasses()
 }
 
@@ -305,6 +310,13 @@ const unbindField = (uid: number) => {
     if (index > -1) {
         state.fieldsChild.splice(index, 1);
         state.fieldsChildError.splice(index, 1);
+    }
+}
+
+const unbindTableChild = (uid: number) => {
+    const index = state.tableChildren.findIndex((c) => c.uid === uid)
+    if (index > -1) {
+        state.tableChildren.splice(index, 1)
         syncTableClasses()
     }
 }
@@ -317,7 +329,14 @@ const updateField = (component: Partial<EField>) => {
         if (component.hasError !== undefined) {
             state.fieldsChildError.splice(index, 1, Boolean(component.hasError))
         }
+    }
+}
 
+const updateTableChild = (component: Partial<FormTableChild>) => {
+    const index = state.tableChildren.findIndex((c) => c.uid === component.uid)
+
+    if (index > -1) {
+        Object.assign(state.tableChildren[index], component)
         syncTableClasses()
     }
 }
@@ -325,7 +344,10 @@ const updateField = (component: Partial<EField>) => {
 provide(FORM_KEY, {
     bindField,
     unbindField,
-    updateField
+    updateField,
+    bindTableChild,
+    unbindTableChild,
+    updateTableChild,
 });
 
 const changeValue = (value: boolean): void => {

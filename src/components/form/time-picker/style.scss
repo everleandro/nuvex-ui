@@ -2,6 +2,7 @@
 
 .e-time-picker {
     cursor: pointer;
+    font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
 
     @include animation('seconds') {
         33% {
@@ -22,7 +23,8 @@
     }
 
     &__separator {
-        font-size: 1rem;
+        font-size: var(--e-typography-body-font-size-lg, 1rem);
+        line-height: var(--e-typography-body-line-height-lg, 1.5rem);
         align-self: center;
         padding-inline: calc(var(--e-space-base, 4px) * 4);
     }
@@ -64,7 +66,8 @@
             padding-inline: calc(var(--e-space-base, 4px) * 4);
 
             .e-time-picker__separator {
-                font-size: 2rem;
+                font-size: var(--e-typography-headline-font-size-lg, 2rem);
+                line-height: var(--e-typography-headline-line-height-lg, 2.5rem);
                 animation: seconds 1s infinite;
             }
         }
@@ -85,7 +88,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 2rem;
+        font-size: var(--e-typography-headline-font-size-lg, 2rem);
+        line-height: var(--e-typography-headline-line-height-lg, 2.5rem);
+        font-weight: var(--e-typography-headline-font-weight-lg, 500);
         flex: 1 1 auto;
         width: 100%;
         text-align: center;

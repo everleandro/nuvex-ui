@@ -13,16 +13,21 @@
   --schedule-local-day-chip-size: 40px;
   --schedule-local-day-chip-size-xs: 25px;
   --schedule-local-event-bg: var(--e-schedule-event-bg, #ffffff);
-  --schedule-local-event-color: var(--e-schedule-event-color, var(--e-contrast-surface-1, #000000));
+  --schedule-local-event-color: var(--e-schedule-event-color, var(--e-contrast-surface-base, #000000));
   --schedule-local-space-base: var(--e-space-base);
 
+  height: 100%;
   color: var(--schedule-local-color);
   background: var(--schedule-local-bg);
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
   display: grid;
   grid-template-rows: auto 1fr;
   border-bottom-left-radius: var(--schedule-local-radius);
   border-bottom-right-radius: var(--schedule-local-radius);
   z-index: 0;
+
+  display: flex;
+  flex-direction: column;
 
   // Shell
   &__toolbar-slot {
@@ -55,6 +60,7 @@
   &__content {
     display: flex;
     min-width: 0;
+    overflow: auto;
   }
 
   &__body {
@@ -71,7 +77,6 @@
   &__viewport {
     flex: 1 1 100%;
     min-width: 0;
-    overflow-x: hidden;
     overflow-y: visible;
     position: relative;
   }
@@ -188,8 +193,9 @@
   }
 
   &__day-chip {
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: var(--e-typography-body-font-size-lg, 1rem);
+    line-height: var(--e-typography-body-line-height-lg, 1.5rem);
+    font-weight: var(--e-typography-title-font-weight-md, 500);
     margin-top: 0.25rem;
 
     &[aria-current="date"] {
@@ -209,17 +215,20 @@
   // Content labels
   [data-day-of-week="true"] {
     display: block;
-    font-size: 0.75rem;
+    font-size: var(--e-typography-label-font-size-md, 0.75rem);
+    line-height: var(--e-typography-label-line-height-md, 1rem);
+    font-weight: var(--e-typography-label-font-weight-md, 500);
+    letter-spacing: var(--e-typography-label-letter-spacing-md, 0.02em);
     text-transform: uppercase;
   }
 
   .hour-label {
     color: var(--schedule-local-color);
     display: inline-block;
-    font-size: 14px;
+    font-size: var(--e-typography-body-font-size-md, 14px);
     font-style: normal;
-    font-weight: 400;
-    line-height: 23px;
+    font-weight: var(--e-typography-body-font-weight-md, 400);
+    line-height: var(--e-typography-body-line-height-lg, 23px);
     padding-right: 14px;
     padding-top: 8px;
     position: relative;
@@ -227,10 +236,10 @@
     &::after {
       content: "H";
       height: 14px;
-      font-size: 10px;
+      font-size: var(--e-typography-label-font-size-sm, 10px);
       font-style: normal;
-      font-weight: 600;
-      line-height: 13px;
+      font-weight: var(--e-typography-label-font-weight-sm, 600);
+      line-height: var(--e-typography-label-line-height-sm, 13px);
       position: absolute;
       right: 0;
       top: 12px;
@@ -296,6 +305,7 @@
     user-select: none;
     border-radius: var(--schedule-local-radius);
     background-color: var(--schedule-local-event-bg);
+    color: var(--e-schedule-contrast-color);
 
     &-container {
       appearance: none;
@@ -344,22 +354,22 @@
         }
 
         &-name {
-          font-size: 14px;
-          font-weight: 400;
-          line-height: 15px;
+          font-size: var(--e-typography-body-font-size-md, 14px);
+          font-weight: var(--e-typography-body-font-weight-md, 400);
+          line-height: var(--e-typography-body-line-height-md, 15px);
         }
 
         &-subtitle {
-          font-size: 12px;
-          font-weight: 400;
-          line-height: 14px;
+          font-size: var(--e-typography-body-font-size-sm, 12px);
+          font-weight: var(--e-typography-body-font-weight-sm, 400);
+          line-height: var(--e-typography-body-line-height-sm, 14px);
         }
 
         &-footer {
           color: currentColor;
-          font-size: 12px;
-          font-weight: 200;
-          line-height: 15px;
+          font-size: var(--e-typography-body-font-size-sm, 12px);
+          font-weight: var(--e-typography-body-font-weight-sm, 400);
+          line-height: var(--e-typography-body-line-height-md, 15px);
           opacity: 0.72;
         }
       }
@@ -408,24 +418,24 @@
 
     .e-schedule {
       [data-day-of-week="true"] {
-        font-size: 11px;
+        font-size: var(--e-typography-label-font-size-sm, 11px);
         text-transform: capitalize;
       }
 
       &__empty-slot.e-btn {
-        font-size: 12px;
+        font-size: var(--e-typography-body-font-size-sm, 12px);
         min-width: unset;
         padding: 0 4px;
       }
 
       &-btn--day {
-        font-size: 12px;
+        font-size: var(--e-typography-body-font-size-sm, 12px);
         width: var(--schedule-local-day-chip-size-xs);
         height: var(--schedule-local-day-chip-size-xs);
       }
 
       &__day-chip {
-        font-size: 12px;
+        font-size: var(--e-typography-body-font-size-sm, 12px);
         width: var(--schedule-local-day-chip-size-xs);
         height: var(--schedule-local-day-chip-size-xs);
       }
@@ -444,6 +454,7 @@
   // Outer container
   &-container {
     --schedule-container-local-radius: var(--e-schedule-border-radius);
+    height: 100%;
     flex: 1;
     border-radius: var(--schedule-container-local-radius);
 

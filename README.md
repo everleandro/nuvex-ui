@@ -1,8 +1,8 @@
-# Drocket Vue UI Components Library
+# Nuvex UI Vue Components Library
 
 A comprehensive collection of reusable Vue.js UI components to streamline your development process. It contains frequently used components, adaptable to your needs. You can use each of the proposed components or just use the one you need.
 
-## You can read the full documentation [here](https://drocket-doc.vercel.app/).
+## You can read the full documentation [here](https://nuvex-ui-doc.vercel.app/).
 
 ## Local documentation
 
@@ -28,39 +28,39 @@ npm run playground:build
 npm run playground:preview
 ```
 
-- [Get Started](https://drocket-doc.vercel.app/)
+- [Get Started](https://nuvex-ui-doc.vercel.app/)
 - Forms & Inputs
-  - [form](https://drocket-doc.vercel.app/form)
-  - [Text Fields](https://drocket-doc.vercel.app/form/text-fields)
-  - [Selects](https://drocket-doc.vercel.app/form/selects)
-  - [Checkboxes](https://drocket-doc.vercel.app/form/checkboxes)
-  - [Switches](https://drocket-doc.vercel.app/form/switches)
-  - [Radio Buttons](https://drocket-doc.vercel.app/form/radio-buttons)
+  - [form](https://nuvex-ui-doc.vercel.app/form)
+  - [Text Fields](https://nuvex-ui-doc.vercel.app/form/text-fields)
+  - [Selects](https://nuvex-ui-doc.vercel.app/form/selects)
+  - [Checkboxes](https://nuvex-ui-doc.vercel.app/form/checkboxes)
+  - [Switches](https://nuvex-ui-doc.vercel.app/form/switches)
+  - [Radio Buttons](https://nuvex-ui-doc.vercel.app/form/radio-buttons)
 - Containment
-  - [Buttons](https://drocket-doc.vercel.app/containment/buttons)
-  - [schedule](https://drocket-doc.vercel.app/containment/schedule)
-  - [Icons](https://drocket-doc.vercel.app/containment/icons)
-  - [Date Pickers](https://drocket-doc.vercel.app/containment/date-picker)
-  - [Expansion Panel](https://drocket-doc.vercel.app/containment/expansion-panel)
-  - [Menu](https://drocket-doc.vercel.app/containment/menu)
-  - [Chips](https://drocket-doc.vercel.app/containment/chips)
-  - [Dialog](https://drocket-doc.vercel.app/containment/dialog)
-  - [Tabs](https://drocket-doc.vercel.app/containment/tabs)
-  - [Lists](https://drocket-doc.vercel.app/containment/lists)
+  - [Buttons](https://nuvex-ui-doc.vercel.app/containment/buttons)
+  - [schedule](https://nuvex-ui-doc.vercel.app/containment/schedule)
+  - [Icons](https://nuvex-ui-doc.vercel.app/containment/icons)
+  - [Date Pickers](https://nuvex-ui-doc.vercel.app/containment/date-picker)
+  - [Expansion Panel](https://nuvex-ui-doc.vercel.app/containment/expansion-panel)
+  - [Menu](https://nuvex-ui-doc.vercel.app/containment/menu)
+  - [Chips](https://nuvex-ui-doc.vercel.app/containment/chips)
+  - [Dialog](https://nuvex-ui-doc.vercel.app/containment/dialog)
+  - [Tabs](https://nuvex-ui-doc.vercel.app/containment/tabs)
+  - [Lists](https://nuvex-ui-doc.vercel.app/containment/lists)
 - Layout
-  - [Drawer](https://drocket-doc.vercel.app/layout/drawer)
-  - [Bar](https://drocket-doc.vercel.app/layout/bar)
+  - [Drawer](https://nuvex-ui-doc.vercel.app/layout/drawer)
+  - [Bar](https://nuvex-ui-doc.vercel.app/layout/bar)
 
 # Instalation and basic setup
 
 ## Installation
 
 ```bash
-npm install drocket
+npm install nuvex-ui
 ```
 
 ```javascript
-import { EButton, EForm, ECheckbox, EDIalog, ESelect,...rest } from "drocket";
+import { EButton, EForm, ECheckbox, EDIalog, ESelect,...rest } from "nuvex-ui";
 ```
 
 # Setup
@@ -71,13 +71,13 @@ import { EButton, EForm, ECheckbox, EDIalog, ESelect,...rest } from "drocket";
 // src/main.ts
 
 import { createApp } from "vue";
-import "drocket/styles.css";
+import "nuvex-ui/styles.css";
 import App from "./App.vue";
-import { Drocket } from "drocket";
+import { NuvexUI } from "nuvex-ui";
 
 const app = createApp(App);
 // this line auto imports all components and directives
-app.use(Drocket);
+app.use(NuvexUI);
 app.mount("#app");
 ```
 
@@ -104,18 +104,18 @@ export default defineConfig({
 
 ```scss
 // src/style.scss
-@import "drocket/framework.scss";
+@import "nuvex-ui/framework.scss";
 ```
 
 ### nuxt app
 
 ```javascript
-// plugins/drocket.ts
+// plugins/nuvex-ui.ts
 
-import { Drocket } from "drocket";
+import { NuvexUI } from "nuvex-ui";
 export default defineNuxtPlugin((nuxtApp) => {
   // this line auto imports all components and directives
-  nuxtApp.vueApp.use(Drocket);
+  nuxtApp.vueApp.use(NuvexUI);
 });
 ```
 
@@ -123,7 +123,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 // nuxt.config.ts
 
 export default defineNuxtConfig({
-  css: ["drocket/styles.css", "drocket/framework.scss"],
+  css: ["nuvex-ui/styles.css", "nuvex-ui/framework.scss"],
   vite: {
     css: {
       preprocessorOptions: {
@@ -159,7 +159,7 @@ $colors: (
 );
 
 // This is mandatory
-@import "drocket/setting.scss";
+@import "nuvex-ui/setting.scss";
 ```
 
 # Contribute
@@ -171,7 +171,7 @@ We welcome and encourage contributions from the community! If you'd like to cont
 Fork the repository on GitHub and clone it to your local machine.
 
 ```bash
-git clone https://github.com/your-username/drocket-contributions.git
+git clone https://github.com/your-username/nuvex-ui-contributions.git
 ```
 
 ## Create a Branch
@@ -209,8 +209,16 @@ Visit your forked repository on GitHub, and open a pull request to the main repo
 
 ## Report Issues
 
-If you encounter any issues or have suggestions for improvements, please report them on our [Issues](https://github.com/everleandro/drocket/issues) page. Before creating a new issue, check if a similar one already exists.
+If you encounter any issues or have suggestions for improvements, please report them on our [Issues](https://github.com/everleandro/nuvex-ui/issues) page. Before creating a new issue, check if a similar one already exists.
 
 # Thank You!
 
-We appreciate your contributions and feedback. Together, let's make the Drocket even better!
+We appreciate your contributions and feedback. Together, let's make Nuvex UI even better!
+
+## Package naming convention
+
+- Main package: `nuvex-ui`
+- Future scoped packages: `@nuvex-ui/<package>`
+- Suggested next modules:
+  - `@nuvex-ui/icons`
+  - `@nuvex-ui/themes`

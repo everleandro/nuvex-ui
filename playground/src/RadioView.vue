@@ -1,255 +1,169 @@
 <template>
-    <section class="radio-playground">
-        <div class="radio-playground__hero">
-            <p class="eyebrow">Playground</p>
-            <h1>Radio Playground</h1>
-            <p class="hero-copy">
-                Esta vista concentra pruebas de <strong>ERadioGroup</strong> y
-                <strong>ERadio</strong> dentro de <strong>EForm</strong> para validar
-                patrones de seleccion en modo row y column.
-            </p>
+  <section class="radio-page">
+    <header class="radio-page__header">
+      <p class="radio-page__eyebrow">Components</p>
+      <h2 class="radio-page__title">Radio Examples</h2>
+      <p class="radio-page__lead">
+        Escenarios para validar alineacion de ERadioGroup con la arquitectura nueva de EField.
+      </p>
+    </header>
+
+    <article class="radio-demo">
+      <h3>Basic alignment</h3>
+      <p class="radio-demo__caption">Comparativa visual de opciones en columna y fila.</p>
+
+      <EForm>
+        <ERadioGroup v-model="plan" label="Plan" detail="Default column layout" lg="6">
+          <ERadio model-value="starter" label="Starter" />
+          <ERadio model-value="pro" label="Pro" />
+          <ERadio model-value="enterprise" label="Enterprise" />
+        </ERadioGroup>
+
+        <ERadioGroup v-model="billing" label="Billing" row detail="Row layout" lg="6">
+          <ERadio model-value="monthly" label="Monthly" />
+          <ERadio model-value="yearly" label="Yearly" />
+        </ERadioGroup>
+      </EForm>
+    </article>
+
+    <article class="radio-demo">
+      <h3>Validation and mandatory</h3>
+      <p class="radio-demo__caption">Reglas de seleccion requerida y comportamiento en submit.</p>
+
+      <EForm v-model="isValid" validate-on-submit @submit="onSubmit" @submit-invalid="onInvalid">
+        <ERadioGroup v-model="channel" label="Preferred channel" :rules="requiredRule" detail="Required" lg="6">
+          <ERadio model-value="email" label="Email" />
+          <ERadio model-value="sms" label="SMS" />
+          <ERadio model-value="push" label="Push" />
+        </ERadioGroup>
+
+        <ERadioGroup v-model="language" label="Language" mandatory detail="Mandatory fallback" lg="6">
+          <ERadio model-value="en" label="English" />
+          <ERadio model-value="es" label="Spanish" />
+        </ERadioGroup>
+
+        <div class="radio-demo__actions">
+          <EButton type="submit" color="primary">Submit</EButton>
+          <EButton type="button" outlined @click="resetDemo">Reset</EButton>
         </div>
+      </EForm>
 
-        <div class="radio-grid">
-            <ECard class="radio-card" elevation="md">
-                <div class="radio-card__header">
-                    <div>
-                        <p class="section-kicker">Integracion con form</p>
-                        <h2>Row, column y herencia de estado</h2>
-                    </div>
-                    <p class="card-copy">
-                        Prueba <strong>labelBehavior</strong>, cambio de valor, readonly,
-                        disabled y herencia de color en radios.
-                    </p>
-                </div>
-                <e-card elevation="sm" class="p-4">
-                    <h1>radioState.contactChannel: {{ radioState.contactChannel }}</h1>
-                </e-card>
+      <p class="radio-demo__state">Form valid: {{ isValid ? "yes" : "no" }}</p>
+      <p class="radio-demo__state">Last action: {{ submitState }}</p>
+    </article>
 
-                <EForm class="radio-demo-form" field-color="teal-900" label-behavior="floating" dense>
-                    <ERadioGroup v-model="radioState.contactChannel" :cols="12" :md="6" row
-                        label="Canal de contacto"
-                        detail="En modo row el label floating debe seguir el comportamiento del field.">
-                        <ERadio model-value="email" label="Email" />
-                        <ERadio model-value="slack" label="Slack" />
-                        <ERadio model-value="meet" label="Meet" />
-                    </ERadioGroup>
+    <article class="radio-demo">
+      <h3>Dense, readonly and disabled</h3>
+      <p class="radio-demo__caption">Casos no interactivos para inspeccionar metrica final.</p>
 
-                    <ERadioGroup v-model="radioState.releaseTrack" :cols="12" :md="6"
-                        label="Release track"
-                        detail="En columna el label se mantiene estatico aunque el form use floating."
-                        color="secondary">
-                        <ERadio model-value="stable" label="Stable" />
-                        <ERadio model-value="beta" label="Beta" />
-                        <ERadio model-value="canary" label="Canary" />
-                    </ERadioGroup>
-                </EForm>
+      <EForm>
+        <ERadioGroup v-model="denseMode" dense label="Dense options" lg="4">
+          <ERadio model-value="a" label="Mode A" />
+          <ERadio model-value="b" label="Mode B" />
+        </ERadioGroup>
 
-                <EForm class="radio-demo-form" field-color="cyan-800" >
-                    <ERadioGroup v-model="radioState.approvalStage" :cols="12" row outlined
-                        label="Aprobacion final"
-                        detail="Este grupo hereda disabled desde el formulario para validar la integracion.">
-                        <ERadio model-value="pending" label="Pending" />
-                        <ERadio model-value="approved" label="Approved" />
-                        <ERadio model-value="rejected" label="Rejected" />
-                    </ERadioGroup>
-                </EForm>
+        <ERadioGroup :model-value="readonlyMode" readonly label="Readonly group" lg="4">
+          <ERadio model-value="x" label="Option X" />
+          <ERadio model-value="y" label="Option Y" />
+        </ERadioGroup>
 
-                <EForm class="radio-demo-form" field-color="cyan-800" label-behavior="floating" >
-                    <ERadioGroup v-model="radioState.approvalStage" :cols="12" row 
-                        label="Aprobacion final"
-                        detail="Este grupo hereda disabled desde el formulario para validar la integracion.">
-                        <ERadio model-value="pending" label="Pending" />
-                        <ERadio model-value="approved" label="Approved" />
-                        <ERadio model-value="rejected" label="Rejected" />
-                    </ERadioGroup>
-                </EForm>
-
-                <EForm class="radio-demo-form" field-color="secondary" readonly>
-                    <ERadioGroup v-model="radioState.audience" :cols="12" row
-                        label="Audience"
-                        detail="Sirve para comprobar que readonly mantiene el valor al intentar interactuar.">
-                        <ERadio model-value="internal" label="Internal" />
-                        <ERadio model-value="beta-users" label="Beta users" />
-                        <ERadio model-value="public" label="Public" />
-                    </ERadioGroup>
-                </EForm>
-            </ECard>
-
-            <div class="radio-sidebar">
-                <ECard class="radio-card" elevation="sm">
-                    <p class="section-kicker">Estado</p>
-                    <h2>Resumen vivo</h2>
-
-                    <div class="radio-summary">
-                        <div>
-                            <span>Canal</span>
-                            <strong>{{ radioState.contactChannel }}</strong>
-                        </div>
-                        <div>
-                            <span>Track</span>
-                            <strong>{{ radioState.releaseTrack }}</strong>
-                        </div>
-                        <div>
-                            <span>Aprobacion</span>
-                            <strong>{{ radioState.approvalStage }}</strong>
-                        </div>
-                        <div>
-                            <span>Audience</span>
-                            <strong>{{ radioState.audience }}</strong>
-                        </div>
-                    </div>
-                </ECard>
-
-                <ECard class="radio-card" elevation="sm">
-                    <p class="section-kicker">Payload</p>
-                    <h2>Radio state</h2>
-                    <pre class="payload-preview">{{ radioPreview }}</pre>
-                </ECard>
-
-            </div>
-        </div>
-    </section>
+        <ERadioGroup :model-value="disabledMode" disabled label="Disabled group" lg="4">
+          <ERadio model-value="on" label="On" />
+          <ERadio model-value="off" label="Off" />
+        </ERadioGroup>
+      </EForm>
+    </article>
+  </section>
 </template>
 
-<script setup lang="ts">
-import { computed, reactive } from "vue";
+<script setup>
+import { ref } from "vue";
 
-import ECard from "../../src/components/card/index.vue";
-import EForm from "../../src/components/form/form.vue";
-import ERadio from "../../src/components/form/radio/index.vue";
-import ERadioGroup from "../../src/components/form/radio/group.vue";
+const plan = ref("pro");
+const billing = ref("monthly");
 
-type RadioDemoModel = {
-    contactChannel: string;
-    releaseTrack: string;
-    approvalStage: string;
-    audience: string;
+const channel = ref(undefined);
+const language = ref(undefined);
+const isValid = ref(false);
+const submitState = ref("No submit yet");
+
+const denseMode = ref("a");
+const readonlyMode = ref("x");
+const disabledMode = ref("off");
+
+const requiredRule = [
+  (value) => !!value || "Please select one option",
+];
+
+const onSubmit = () => {
+  submitState.value = `Submitted at ${new Date().toLocaleTimeString()}`;
 };
 
-const createInitialRadioState = (): RadioDemoModel => ({
-    contactChannel: "slack",
-    releaseTrack: "beta",
-    approvalStage: "pending",
-    audience: "internal",
-});
+const onInvalid = () => {
+  submitState.value = "Validation blocked submission";
+};
 
-const radioState = reactive<RadioDemoModel>(createInitialRadioState());
-
-const radioPreview = computed(() => {
-    return JSON.stringify(radioState, null, 2);
-});
+const resetDemo = () => {
+  channel.value = undefined;
+  language.value = undefined;
+  submitState.value = "Demo reset";
+};
 </script>
 
 <style scoped>
-.radio-playground {
-    display: grid;
-    gap: 24px;
+.radio-page {
+  display: grid;
+  gap: 20px;
 }
 
-.radio-playground__hero {
-    display: grid;
-    gap: 8px;
-    max-width: 760px;
+.radio-page__header {
+  display: grid;
+  gap: 6px;
 }
 
-.eyebrow,
-.section-kicker {
-    color: #5b6b8a;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    margin: 0;
-    text-transform: uppercase;
+.radio-page__eyebrow {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.72;
 }
 
-.radio-playground__hero h1,
-.radio-card h2 {
-    color: #172033;
-    margin: 0;
+.radio-page__title {
+  margin: 0;
 }
 
-.hero-copy,
-.card-copy {
-    color: #596579;
-    line-height: 1.6;
-    margin: 0;
+.radio-page__lead {
+  margin: 0;
+  opacity: 0.84;
 }
 
-.radio-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+.radio-demo {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
 }
 
-.radio-sidebar {
-    display: grid;
-    gap: 16px;
+.radio-demo h3 {
+  margin: 0;
 }
 
-.radio-card {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 20px;
-    display: grid;
-    gap: 18px;
-    padding: 24px;
+.radio-demo__caption {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
-.radio-card__header {
-    display: grid;
-    gap: 10px;
+.radio-demo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.radio-demo-form {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-}
-
-.radio-summary {
-    display: grid;
-    gap: 14px;
-}
-
-.radio-summary div {
-    border: 1px solid rgba(23, 32, 51, 0.08);
-    border-radius: 16px;
-    padding: 14px 16px;
-}
-
-.radio-summary span {
-    color: #51617d;
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin: 0 0 4px;
-    text-transform: uppercase;
-}
-
-.radio-summary strong {
-    color: #172033;
-    font-size: 14px;
-}
-
-.payload-preview {
-    background: #111827;
-    border-radius: 16px;
-    color: #d9e2f1;
-    font-size: 12px;
-    line-height: 1.55;
-    margin: 0;
-    overflow: auto;
-    padding: 16px;
-}
-
-@media (max-width: 960px) {
-    .radio-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .radio-card {
-        padding: 18px;
-    }
+.radio-demo__state {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.78;
 }
 </style>

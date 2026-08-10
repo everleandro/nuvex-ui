@@ -40,9 +40,9 @@
     $opacity: 0,
     $transition: opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1),
     $interactive: false,
-    $hover-opacity: var(--e-btn-state-hover, 0.08),
-    $focus-opacity: var(--e-btn-state-focus, 0.12),
-    $active-opacity: var(--e-btn-state-active, 0.12)) {
+    $hover-opacity: var(--e-interactive-state-hover, 0.08),
+    $focus-opacity: var(--e-interactive-state-focus, 0.12),
+    $active-opacity: var(--e-interactive-state-active, 0.12)) {
     &::before {
         content: '';
         position: absolute;
@@ -69,6 +69,23 @@
         &:active:before {
             opacity: $active-opacity;
         }
+    }
+}
+
+@mixin state-layer($bg: currentColor,
+    $opacity: 0.08,
+    $radius: inherit,
+    $inset: 0,
+    $transition: opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1)) {
+    &::before {
+        content: '';
+        position: absolute;
+        inset: $inset;
+        background-color: $bg;
+        border-radius: $radius;
+        opacity: $opacity;
+        pointer-events: none;
+        transition: $transition;
     }
 }
 
@@ -154,17 +171,51 @@
     }
 }
 
+@mixin from_sm {
+    @media (min-width: #{map.get($grid-breakpoints, 'sm')}) {
+        @content;
+    }
+}
+
+@mixin from_md {
+    @media (min-width: #{map.get($grid-breakpoints, 'md')}) {
+        @content;
+    }
+}
+
+@mixin from_lg {
+    @media (min-width: #{map.get($grid-breakpoints, 'lg')}) {
+        @content;
+    }
+}
+
 @mixin generate-grid-classes {
 
     .e-col {
-        grid-column: span var(--e-grid-cols, #{$grid-cols});
+        --e-col-span: #{$grid-cols};
+
+        box-sizing: border-box;
+        min-width: 0;
+
+        $track-size: calc((100% - (var(--e-grid-cols, #{$grid-cols}) - 1) * var(--e-grid-gap, 16px)) / var(--e-grid-cols, #{$grid-cols}));
+        $col-size: calc((#{$track-size} * var(--e-col-span)) + ((var(--e-col-span) - 1) * var(--e-grid-gap, 16px)));
+
+        flex: 0 0 #{$col-size};
+        max-width: #{$col-size};
     }
 
     // ✅ 1. BASE FIRST
     @for $i from 1 through $grid-cols {
         .e-col-#{$i} {
-            grid-column: span #{$i};
+            --e-col-span: #{$i};
         }
+    }
+
+    .e-col-auto {
+        flex: 0 0 auto;
+        width: auto;
+        max-width: none;
+        --e-col-span: initial;
     }
 
     // ✅ 2. RESPONSIVE AFTER (para que tengan más especificidad que la clase base)
@@ -172,12 +223,15 @@
         @include media-up($breakpoint) {
             @for $i from 1 through $grid-cols {
                 .e-col-#{$breakpoint}-#{$i} {
-                    grid-column: span #{$i};
+                    --e-col-span: #{$i};
                 }
             }
 
             .e-col-#{$breakpoint}-auto {
-                grid-column: auto;
+                flex: 0 0 auto;
+                width: auto;
+                max-width: none;
+                --e-col-span: initial;
             }
         }
     }

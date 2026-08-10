@@ -5,10 +5,14 @@
   --track-height: var(--e-switch-track-height);
   --thumb-height: var(--e-switch-thumb-height);
   --control-size: calc(var(--track-width) + var(--e-space-base, 4px));
+  --field-slot-content-height: var(--control-size);
+  --field-slot-bottom-y: var(--field-slot-bottom-rest-y);
 
   --thumb-offset: calc(var(--track-width) - var(--track-height));
   --switch-color: var(--e-field-color, currentColor);
-  --switch-thumb-background: var(--e-color-surface-3);
+  --switch-thumb-background: var(--e-color-surface-subtle);
+
+  --e-progress-circular-overlay-color: var(--switch-color, var(--e-contrast-surface-canvas));
 
 
   &__slot {
@@ -22,6 +26,7 @@
   &--active {
     --switch-thumb-transform: translate(var(--thumb-offset));
     --switch-thumb-background: var(--switch-color);
+    --e-progress-circular-overlay-color: var(--e-color-surface-canvas);
   }
 
   .e-label {

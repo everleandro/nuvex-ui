@@ -7,6 +7,7 @@ const fieldPropKeys = [
   "appendInnerIcon",
   "color",
   "cols",
+  "clearable",
   "dense",
   "detail",
   "detailErrors",
@@ -25,6 +26,7 @@ const fieldPropKeys = [
   "retainColor",
   "rules",
   "sm",
+  "tonal",
   "xl",
   "xs",
 ] as const;
@@ -61,7 +63,11 @@ export const useFieldIntegration = <TValue = unknown>(
     const result: Record<string, unknown> = {};
 
     fieldPropKeys.forEach((key) => {
-      result[key] = props[key as FieldPropKey];
+      const value = props[key as FieldPropKey];
+
+      if (value !== undefined) {
+        result[key] = value;
+      }
     });
 
     return result as EFieldProps<unknown>;

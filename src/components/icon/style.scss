@@ -1,7 +1,6 @@
 @use '~/public/styles/_mixins.scss' as *;
 .e-icon {
   color: var(--e-icon-color, inherit);
-  overflow: hidden;
   align-items: center;
   display: inline-flex;
   font-feature-settings: "liga";
@@ -13,9 +12,37 @@
   vertical-align: middle;
   @include prefix(user-select, none);
   opacity: 1;
+  --icon-local-size: var(--e-icon-size-default, 24px);
+  --state-layer-size: calc(var(--icon-local-size) + var(--e-icon-state-layer-inset, 0) * 2);
+  font-size: var(--icon-local-size);
 
   .e-icon__svg {
     fill: currentColor;
+    height: var(--icon-local-size);
+    width: var(--icon-local-size);
+  }
+
+  &--stateLayer {
+    isolation: isolate;
+    inline-size: var(--state-layer-size);
+    block-size: var(--state-layer-size);
+
+    .e-icon__state-layer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: var(--state-layer-size);
+      height: var(--state-layer-size);
+      transform: translate(-50%, -50%);
+      z-index: -1;
+
+      @include state-layer(
+        $bg: var(--e-icon-state-layer-bg, currentColor),
+        $opacity: var(--e-icon-state-layer-opacity, 0.08),
+        $radius: var(--e-icon-state-layer-radius, 999px),
+        $inset: 0
+      );
+    }
   }
 
   &--disabled {
@@ -23,47 +50,22 @@
   }
 
   &--size-x-small {
-    font-size: var(--e-icon-size-x-small, 18px);
-
-    .e-icon__svg {
-      height: var(--e-icon-size-x-small, 18px);
-      width: var(--e-icon-size-x-small, 18px);
-    }
+    --icon-local-size: var(--e-icon-size-x-small, 16px);
   }
 
   &--size-small {
-    font-size: var(--e-icon-size-small, 20px);
-
-    .e-icon__svg {
-      height: var(--e-icon-size-small, 20px);
-      width: var(--e-icon-size-small, 20px);
-    }
+    --icon-local-size: var(--e-icon-size-small, 20px);
   }
 
   &--size-default {
-    font-size: var(--e-icon-size-default, 24px);
-
-    .e-icon__svg {
-      height: var(--e-icon-size-default, 24px);
-      width: var(--e-icon-size-default, 24px);
-    }
+      --icon-local-size: var(--e-icon-size-default, 24px);
   }
 
   &--size-large {
-    font-size: var(--e-icon-size-large, 28px);
-
-    .e-icon__svg {
-      height: var(--e-icon-size-large, 28px);
-      width: var(--e-icon-size-large, 28px);
-    }
+   --icon-local-size: var(--e-icon-size-large, 28px);
   }
 
   &--size-x-large {
-    font-size: var(--e-icon-size-x-large, 32px);
-
-    .e-icon__svg {
-      height: var(--e-icon-size-x-large, 32px);
-      width: var(--e-icon-size-x-large, 32px);
-    }
+    --icon-local-size: var(--e-icon-size-x-large, 32px);
   }
 }

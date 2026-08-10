@@ -1,11 +1,12 @@
 $icon-close-font-size: 24px !default;
 $icon-class: "icon" !default;
 $icon-prefix: "icon-" !default;
+$icon-state-layer-inset: calc(var(--e-space-base) * 2) !default;
 
 $icon-font-sizes: (
-    x-small: 18px,
-    small: 20px,
-    default: 24px,
-    large: 28px,
-    x-large: 32px,
+  x-small: 1.125rem,
+  small: 1.25rem,   
+  default: 1.5rem,  
+  large: 1.75rem,   
+  x-large: 2rem,    
 ) !default;

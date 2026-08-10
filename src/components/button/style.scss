@@ -2,13 +2,62 @@
 
 $button-sizes: x-small, small, default, large, x-large;
 
+@mixin button-contract-vars() {
+  --button-local-height: var(--btn-height, unset);
+  --button-local-height-responsive: var(--btn-height-responsive, var(--btn-height, unset));
+  --button-local-font-size: var(--btn-font-size, inherit);
+  --button-local-font-weight: var(--e-typography-label-font-weight-md, var(--e-btn-font-weight, 500));
+  --button-local-letter-spacing: var(--e-typography-label-letter-spacing-md, var(--e-btn-letter-spacing, 0.089em));
+  --button-local-text-transform: var(--e-btn-text-transform, none);
+  --button-local-transition-duration: var(--e-btn-transition-duration, 0.28s);
+  --button-local-radius: var(--e-btn-border-radius, 4px);
+  --button-local-rounded-radius: var(--e-btn-rounded-border-radius, 28px);
+  --button-local-font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+  --button-local-bg: var(--e-btn-color);
+  --button-local-surface-bg: var(--e-btn-surface-bg, var(--e-color-button-surface, transparent));
+  --button-local-solid-bg: var(--e-btn-color, var(--button-local-surface-bg));
+  --button-local-icon-bg: var(--e-btn-color, var(--button-local-surface-bg));
+  --button-local-accent: var(--e-btn-color, currentColor);
+  --button-local-text: var(--e-btn-contrast-color);
+  --button-local-state-focus: var(--e-interactive-state-focus, 0.12);
+  --button-local-state-hover: var(--e-interactive-state-hover, 0.08);
+  --button-local-state-active: var(--e-interactive-state-active, 0.12);
+  --interactive-element-local-state-focus: var(--button-local-state-focus);
+  --interactive-element-local-state-hover: var(--button-local-state-hover);
+  --interactive-element-local-state-active: var(--button-local-state-active);
+  --button-local-border-width: var(--e-btn-border-width, 1px);
+  --button-local-border-style: var(--e-btn-border-style, solid);
+  --button-local-inline-gap: 0.5rem;
+  --button-local-stacked-gap: 0.25rem;
+  --e-icon-size-default: var(--btn-icon-size, var(--button-local-font-size));
+}
+
+@mixin button-base-rules() {
+  height: var(--button-local-height);
+  font-size: var(--button-local-font-size);
+  font-weight: var(--button-local-font-weight);
+  letter-spacing: var(--button-local-letter-spacing);
+  text-indent: var(--button-local-letter-spacing);
+  text-transform: var(--button-local-text-transform);
+  transition-duration: var(--button-local-transition-duration);
+  border-radius: var(--button-local-radius);
+  font-family: var(--button-local-font-family);
+  color: var(--button-local-text);
+  background-color: var(--button-local-solid-bg);
+  border-color: var(--button-local-solid-bg);
+
+  @include button-reset();
+  @include prefix(user-select, none);
+}
+
 @mixin button-size-variant($size) {
   &--size-#{$size} {
     --btn-font-size: var(--e-btn-font-size-#{$size});
+    --btn-icon-size: var(--e-btn-icon-size-#{$size});
     --btn-height: var(--e-btn-height-#{$size});
 
     &.e-btn--icon {
-      --btn-font-size: var(--e-icon-size-#{$size});
+      --btn-font-size: var(--e-btn-icon-size-#{$size});
     }
 
     &.e-btn--fab {
@@ -22,55 +71,7 @@ $button-sizes: x-small, small, default, large, x-large;
   }
 }
 
-.e-btn {
-  // Theme contract
-  --button-local-height: var(--btn-height, unset);
-  --button-local-height-responsive: var(--btn-height-responsive, var(--btn-height, unset));
-  --button-local-font-size: var(--btn-font-size, inherit);
-  --button-local-font-weight: var(--e-btn-font-weight, 500);
-  --button-local-letter-spacing: var(--e-btn-letter-spacing, 0.089em);
-  --button-local-text-transform: var(--e-btn-text-transform, uppercase);
-  --button-local-transition-duration: var(--e-btn-transition-duration, 0.28s);
-  --button-local-radius: var(--e-btn-border-radius, 4px);
-  --button-local-rounded-radius: var(--e-btn-rounded-border-radius, 28px);
-  --button-local-font-family: var(--e-root-font-family, inherit);
-  --button-local-bg: var(--e-btn-color);
-  --button-local-text: var(--e-btn-contrast-color);
-  --button-local-state-focus: var(--e-btn-state-focus, 0.12);
-  --button-local-state-hover: var(--e-btn-state-hover, 0.08);
-  --button-local-state-active: var(--e-btn-state-active, 0.12);
-  --button-local-border-width: var(--e-btn-border-width, 1px);
-  --button-local-border-style: var(--e-btn-border-style, solid);
-  --button-local-default-elevation: var(--e-btn-elevation,
-      var(--e-elevation-sm,
-        0 1px 3px 0 rgba(0, 0, 0, 0.2),
-        0 1px 1px 0 rgba(0, 0, 0, 0.14),
-        0 2px 1px -1px rgba(0, 0, 0, 0.12)));
-  --button-local-inline-gap: 0.5rem;
-  --button-local-stacked-gap: 0.25rem;
-
-  height: var(--button-local-height);
-  font-size: var(--button-local-font-size);
-  font-weight: var(--button-local-font-weight);
-  letter-spacing: var(--button-local-letter-spacing);
-  text-indent: var(--button-local-letter-spacing);
-  text-transform: var(--button-local-text-transform);
-  transition-duration: var(--button-local-transition-duration);
-  border-radius: var(--button-local-radius);
-  font-family: var(--button-local-font-family);
-  color: var(--button-local-text);
-  background-color: var(--button-local-bg);
-  border-color: var(--button-local-bg);
-
-  @include button-reset();
-  @include prefix(user-select, none);
-  @include button-before($interactive: true);
-
-  // Shell
-  +.e-btn {
-    margin-left: var(--e-space-base, 4px);
-  }
-
+@mixin button-slot-rules() {
   .e-icon__svg {
     fill: currentColor;
   }
@@ -80,62 +81,12 @@ $button-sizes: x-small, small, default, large, x-large;
     flex-direction: column;
   }
 
-  &::before {
-    z-index: 0;
-  }
-
-  .v-ripple {
-    z-index: 0;
-  }
-
   &__loader,
   &__prepend,
   &__content,
   &__append {
     position: relative;
     z-index: 1;
-  }
-
-  &.e-btn {
-
-    &--icon,
-    &--fab {
-      padding: 0;
-      min-width: 0;
-      border-radius: 50%;
-    }
-  }
-
-  // Variants
-  &--rounded {
-    border-radius: var(--button-local-rounded-radius);
-  }
-
-  &--elevated {
-    box-shadow: var(--button-local-default-elevation);
-  }
-
-  &--disabled,
-  &--text {
-    box-shadow: none;
-  }
-
-  &--focused:not(.e-btn--disabled):not(.e-btn--loading) {
-    outline: 2px solid var(--e-btn-bg);
-    outline-offset: 2px;
-  }
-
-  &--text {
-    background-color: transparent;
-    color: var(--button-local-bg);
-  }
-
-  &--block {
-    &:not(.e-btn--fab):not(.e-btn--icon) {
-      display: flex;
-      flex: 1 0 auto;
-      min-width: 100% !important;
-    }
   }
 
   &__prepend {
@@ -160,18 +111,48 @@ $button-sizes: x-small, small, default, large, x-large;
     }
   }
 
-  // Icon-like variants
+  &__loader {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}
+
+@mixin button-variant-rules() {
+  &--icon,
+  &--fab {
+    padding: 0;
+    min-width: 0;
+    border-radius: 50%;
+  }
+
+  &--rounded {
+    border-radius: var(--button-local-rounded-radius);
+  }
+
+  &--block {
+    &:not(.e-btn--fab):not(.e-btn--icon) {
+      display: flex;
+      flex: 1 0 auto;
+      min-width: 100% !important;
+    }
+  }
 
   &--icon {
-    color: var(--button-local-text);
-    background-color: transparent;
+    color: var(--e-btn-contrast-color, var(--button-local-accent));
+    background-color: var(--button-local-icon-bg);
     padding: 0;
     width: var(--button-local-height);
   }
 
   &--fab {
     border-radius: 100%;
-    width: var(--btn-height, unset);
+    --e-icon-size-default: var(--button-local-font-size);
   }
 
   &--fab,
@@ -185,44 +166,6 @@ $button-sizes: x-small, small, default, large, x-large;
     }
   }
 
-  &--loading {
-    pointer-events: none;
-
-    .e-btn {
-      &__content,
-      &__append,
-      &__prepend {
-        opacity: 0;
-      }
-    }
-  }
-
-  // Sizes
-
-  @each $size in $button-sizes {
-    @include button-size-variant($size);
-  }
-
-  &__loader {
-    align-items: center;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
-
-  // State variants
-
-  &--disabled {
-    --e-btn-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
-    --e-btn-text: var(--e-contrast-disabled, white);
-    pointer-events: none;
-    cursor: not-allowed;
-  }
-
   &--outlined {
     border: var(--button-local-border-width) var(--button-local-border-style);
     background-color: unset;
@@ -232,5 +175,55 @@ $button-sizes: x-small, small, default, large, x-large;
 
   &--use-contrast-color {
     color: var(--button-local-text);
+  }
+
+  &--tonal,
+  &--text {
+    box-shadow: none;
+    background-color: transparent;
+    color: var(--button-local-bg);
+  }
+}
+
+@mixin button-state-rules() {
+  &--disabled {
+    box-shadow: none;
+    --button-local-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-solid-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-icon-bg: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-accent: var(--e-color-disabled, rgba(0, 0, 0, 0.38));
+    --button-local-text: var(--e-contrast-disabled, white);
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  &--focused:not(.e-btn--disabled):not(.e-btn--loading) {
+    outline: 2px solid var(--e-btn-bg);
+    outline-offset: 2px;
+  }
+
+  &--loading {
+    pointer-events: none;
+
+    .e-btn__content,
+    .e-btn__append,
+    .e-btn__prepend {
+      opacity: 0;
+    }
+  }
+}
+
+.e-btn {
+  // Theme contract + base styles
+  @include button-contract-vars();
+  @include button-base-rules();
+  @include button-slot-rules();
+  @include button-variant-rules();
+  @include button-state-rules();
+
+  // Sizes
+
+  @each $size in $button-sizes {
+    @include button-size-variant($size);
   }
 }

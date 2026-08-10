@@ -1,20 +1,22 @@
 @use "sass:map";
 @use "../foundation/globals" as globals;
 
-$btn-border-radius: globals.$border-radius-root !default;
+$btn-border-radius: var(--e-border-radius-root, #{globals.$border-radius-root}) !default;
 $btn-font-weight: 500 !default;
 $btn-letter-spacing: 0.089em !default;
 $btn-border-style: solid !default;
 $btn-border-width: 1px !default;
 $btn-rounded-border-radius: 28px !default;
-$btn-text-transform: uppercase !default;
+$btn-text-transform: none !default;
 $btn-transition-duration: 0.3s !default;
+$btn-surface-bg: var(--e-color-button-surface) !default;
+$interactive-tonal-opacity: 0.06 !default;
 
-$btn-states: map.merge(
+$interactive-states: map.merge(
     (
-        focus: 0.12,
-        hover: 0.08,
-        active: 0.12,
+        focus: 0.15,
+        hover: 0.11,
+        active: 0.17,
     ),
     ()
 ) !default;
@@ -30,12 +32,23 @@ $btn-font-sizes: map.merge(
     ()
 ) !default;
 
+$btn-icon-sizes: map.merge(
+    (
+        x-small: 1.125rem,
+        small: 1.25rem,
+        default: 1.5rem,
+        large: 1.75rem,
+        x-large: 2rem,
+    ),
+    ()
+) !default;
+
 $fab-font-sizes: map.merge(
     (
         x-small: 1.25rem,
         small: 1.25rem,
         default: 1.5rem,
-        large: 0.714rem,
+        large: 1.714rem,
         x-large: 2rem,
     ),
     ()
@@ -74,5 +87,4 @@ $btn-height: map.merge(
     ()
 ) !default;
 
- $btn-bg: transparent;
-  $btn-text: currentColor;
+$btn-text: currentColor;

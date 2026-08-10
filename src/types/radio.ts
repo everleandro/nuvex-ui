@@ -11,7 +11,6 @@ export interface RadioGroupProps extends SelectionFieldBaseProps<ERadioType> {
   mandatory?: boolean;
   modelValue: ERadioType;
   row?: boolean;
-  showOverlay?: boolean;
 }
 
 export interface RadioGroupEmits {

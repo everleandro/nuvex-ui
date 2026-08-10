@@ -1,8 +1,11 @@
 @use '~/public/styles/_mixins.scss' as *;
 
 .e-dialog {
-  background-color: var(--e-color-surface-1, #ffffff);
-  color: var(--e-contrast-surface-1, #000000);
+  background-color: var(--e-color-surface-base, #ffffff);
+  color: var(--e-contrast-surface-base, #000000);
+  font-family: var(--e-typography-family-base, var(--e-root-font-family, inherit));
+  font-size: var(--e-typography-body-font-size-md, 0.875rem);
+  line-height: var(--e-typography-body-line-height-md, 1.25rem);
   border-radius: var(--e-border-radius-root, 4px);
   margin: 8px;
   overflow-y: auto;
@@ -10,13 +13,13 @@
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: auto;
   width: fit-content;
-  max-width: calc(100vw - 16px);
   z-index: inherit;
   transform-origin: center center;
   user-select: text;
 
   &:not(.e-dialog--fullscreen) {
-    max-height: 90%;
+    max-height: calc(100vh - calc(var(--e-space-base) * 4));
+    max-width: calc(100vw - calc(var(--e-space-base) * 4));
   }
 
   &--fluid {

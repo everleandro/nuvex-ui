@@ -48,6 +48,7 @@ export type { ERadioType, RadioProps, RadioGroupProps, RadioGroupEmits } from ".
 
 export type {
   EForm,
+  FormTableChild,
   FormInjection,
   ERadio,
   ERadioGroup,
@@ -55,7 +56,13 @@ export type {
 
 export type { BarProps } from "./bar";
 
-export type { IconPath, IconProps } from "./icon";
+export type {
+  IconFontClassResolver,
+  IconFontClassValue,
+  IconFontOptions,
+  IconPath,
+  IconProps,
+} from "./icon";
 export type {
   DatesRange,
   Day,

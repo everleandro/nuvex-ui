@@ -7,7 +7,7 @@
 ## Importacion
 
 ```ts
-import { EAvatar } from 'drocket'
+import { EAvatar } from 'nuvex-ui'
 ```
 
 ## Props
@@ -74,9 +74,10 @@ import iconFactory from '@/utils/icons'
 
 ## Accesibilidad
 
-- Si el avatar es decorativo, no necesita texto adicional por si solo.
-- Si representa una persona o entidad importante, acompanal con nombre visible o contexto cercano.
-- El `alt` interno actual de la imagen es generico (`avatar`), asi que no confies en `EAvatar` como unica fuente semantica para identidad critica.
+- Si el avatar es decorativo, mantenlo como apoyo visual y no lo uses como unica fuente de informacion.
+- Si representa una persona o entidad importante, acompanal con nombre visible o con una etiqueta textual cercana.
+- El `alt` interno actual de la imagen es generico (`avatar`), por lo que no reemplaza una descripcion semantica real.
+- Si el avatar funciona como accion (por ejemplo, abrir perfil), envuelvelo en un control accesible (`button` o `a`) con `aria-label` explicito.
 
 ## Errores comunes
 
@@ -84,3 +85,4 @@ import iconFactory from '@/utils/icons'
 - Pasar un valor fuera del conjunto de sizes soportados esperando un tamano custom: `EAvatar` ahora usa solo los presets compartidos.
 - Esperar que `color` afecte la imagen: solo afecta el modo icon/fallback y clases de texto.
 - Usar `src` vacio esperando fallback transparente: string vacio se trata como ausencia de imagen y cae al icono.
+- Usar el avatar como unico identificador de usuario en listas densas: en casos reales agrega nombre y, si aplica, rol o correo.

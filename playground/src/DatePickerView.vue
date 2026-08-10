@@ -1,463 +1,395 @@
 <template>
-    <section class="date-picker-playground">
-        <div class="date-picker-playground__hero">
-            <p class="section-kicker">Playground</p>
-            <h1>Date Picker Playground</h1>
-            <p class="hero-copy">
-                Esta vista sirve para probar <strong>EDatePicker</strong> inline, dentro de menu y dentro de dialog,
-                incluyendo modos de fecha, mes y anio.
-            </p>
-        </div>
+  <section class="date-picker-page">
+    <header class="date-picker-page__header">
+      <p class="date-picker-page__eyebrow">Components</p>
+      <h2 class="date-picker-page__title">Date Picker Examples</h2>
+      <p class="date-picker-page__lead">
+        Escenarios para validar navegacion, restricciones de fechas, localizacion, slots y cierre en dialog para
+        EDatePicker.
+      </p>
+    </header>
 
-        <div class="date-picker-layout">
-            <ECard class="date-picker-card date-picker-card--controls" elevation="md">
-                <p class="section-kicker">Controles</p>
-                <h2>Configuracion</h2>
+    <article class="date-picker-demo">
+      <h3>Interactive controls</h3>
+      <p class="date-picker-demo__caption">Controla la vista activa y activa fines de semana deshabilitados desde un
+        panel lateral.</p>
 
-                <div class="control-grid">
-                    <label class="control-field">
-                        <span>Modo</span>
-                        <select v-model="sandbox.mode">
-                            <option value="date">Date</option>
-                            <option value="month">Month</option>
-                            <option value="year">Year</option>
-                        </select>
-                    </label>
+      <div class="date-picker-demo__split">
+        <EDatePicker v-model="usageDate" :view="usageView" :disabled="usageDisabledConfig" color="primary" />
 
-                    <label class="control-field">
-                        <span>Idioma</span>
-                        <select v-model="sandbox.lng">
-                            <option value="en">en</option>
-                            <option value="es">es</option>
-                            <option value="fr">fr</option>
-                        </select>
-                    </label>
-
-                    <label class="control-field">
-                        <span>Color</span>
-                        <select v-model="sandbox.color">
-                            <option value="primary">primary</option>
-                            <option >None</option>
-                            <option value="secondary">secondary</option>
-                            <option value="success">success</option>
-                            <option value="warning">warning</option>
-                            <option value="teal-300">teal-300</option>
-                            <option value="teal-900">teal-900</option>
-                        </select>
-                    </label>
-
-                    <label class="control-field">
-                        <span>Week start</span>
-                        <select v-model.number="sandbox.weekStart">
-                            <option :value="0">0 - Sunday</option>
-                            <option :value="1">1 - Monday</option>
-                            <option :value="6">6 - Saturday</option>
-                        </select>
-                    </label>
-
-                    <label class="control-field">
-                        <span>Elevation</span>
-                        <select v-model="sandbox.elevation">
-                            <option value="">none</option>
-                            <option value="xs">xs</option>
-                            <option value="sm">sm</option>
-                            <option value="md">md</option>
-                            <option value="lg">lg</option>
-                            <option value="xl">xl</option>
-                        </select>
-                    </label>
-
-                    <label class="control-field">
-                        <span>Grid button elevation</span>
-                        <select v-model="sandbox.gridButtonElevation">
-                            <option value="">none</option>
-                            <option value="xs">xs</option>
-                            <option value="sm">sm</option>
-                            <option value="md">md</option>
-                            <option value="lg">lg</option>
-                            <option value="xl">xl</option>
-                        </select>
-                    </label>
-                </div>
-
-                <div class="toggle-grid">
-                    <label class="toggle-field">
-                        <input v-model="sandbox.landscape" type="checkbox">
-                        <span>Landscape</span>
-                    </label>
-
-                    <label class="toggle-field">
-                        <input v-model="sandbox.noTitle" type="checkbox">
-                        <span>No title</span>
-                    </label>
-
-                    <label class="toggle-field">
-                        <input v-model="sandbox.showHighlighted" type="checkbox">
-                        <span>Highlighted range</span>
-                    </label>
-
-                    <label class="toggle-field">
-                        <input v-model="sandbox.showDisabled" type="checkbox">
-                        <span>Disabled dates</span>
-                    </label>
-                </div>
-
-                <div class="state-panel">
-                    <p class="state-panel__title">Estado</p>
-                    <pre>{{ statePreview }}</pre>
-                </div>
-            </ECard>
-
-            <div class="date-picker-grid">
-                <ECard class="date-picker-card" elevation="md">
-                    <p class="section-kicker">Inline</p>
-                    <h2>Picker embebido</h2>
-                    <p class="card-copy">
-                        Seleccion actual: <strong>{{ formatDate(inlineValue) }}</strong>
-                    </p>
-
-                    <div class="picker-frame">
-                        <EDatePicker
-                            v-model="inlineValue"
-                            :lng="sandbox.lng"
-                            :color="sandbox.color"
-                            :elevation="resolvedElevation"
-                            :grid-button-elevation="resolvedGridButtonElevation"
-                            :week-start="sandbox.weekStart"
-                            :landscape="sandbox.landscape"
-                            :no-title="sandbox.noTitle"
-                            :only-month="isMonthMode"
-                            :only-year="isYearMode"
-                            :highlighted="highlightedConfig"
-                            :disabled="disabledConfig"
-                        />
-                    </div>
-                </ECard>
-
-                <ECard class="date-picker-card" elevation="md">
-                    <p class="section-kicker">Menu</p>
-                    <h2>Close on change</h2>
-                    <p class="card-copy">
-                        Fecha del menu: <strong>{{ formatDate(menuValue) }}</strong>
-                    </p>
-
-                    <div class="actions-row">
-                        <EMenu v-model="menuOpen" :close-on-content-click="false" origin="bottom left">
-                            <template #activator="activator">
-                                <EButton :color="sandbox.color" outlined v-bind="buildActivatorBindings(activator)">
-                                    Open menu picker
-                                </EButton>
-                            </template>
-
-                            <EDatePicker
-                                v-model="menuValue"
-                                close-on-change
-                                :lng="sandbox.lng"
-                                :color="sandbox.color"
-                                :elevation="resolvedElevation"
-                                :grid-button-elevation="resolvedGridButtonElevation"
-                                :week-start="sandbox.weekStart"
-                                :only-month="isMonthMode"
-                                :only-year="isYearMode"
-                            />
-                        </EMenu>
-                    </div>
-                </ECard>
-
-                <ECard class="date-picker-card" elevation="md">
-                    <p class="section-kicker">Dialog</p>
-                    <h2>Picker en dialog</h2>
-                    <p class="card-copy">
-                        Fecha del dialog: <strong>{{ formatDate(dialogValue) }}</strong>
-                    </p>
-
-                    <div class="actions-row">
-                        <EButton :color="sandbox.color" @click="dialogOpen = true">Open dialog picker</EButton>
-                    </div>
-
-                    <EDialog v-model="dialogOpen" elevation="xl">
-                        <ECard class="dialog-picker-card">
-                            <EDatePicker
-                                v-model="dialogValue"
-                                close-on-change
-                                :lng="sandbox.lng"
-                                :color="sandbox.color"
-                                :elevation="resolvedElevation"
-                                :grid-button-elevation="resolvedGridButtonElevation"
-                                :week-start="sandbox.weekStart"
-                                :landscape="sandbox.landscape"
-                                :no-title="sandbox.noTitle"
-                                :only-month="isMonthMode"
-                                :only-year="isYearMode"
-                                :highlighted="highlightedConfig"
-                            />
-                        </ECard>
-                    </EDialog>
-                </ECard>
+        <ECard elevation="sm">
+          <div class="date-picker-meta">
+            <div>
+              <strong>Current view</strong>
+              <p>{{ selectedViewLabel }}</p>
             </div>
+            <div>
+              <strong>Selected date</strong>
+              <p>{{ formatDisplayDate(usageDate) }}</p>
+            </div>
+          </div>
+
+          <EForm>
+            <ESelect v-model="usageView" :items="viewOptions" item-text="label" item-value="value" label="View" />
+            <ECheckbox v-model="usageWithDisabled" label="Disable weekends" />
+          </EForm>
+        </ECard>
+      </div>
+    </article>
+
+    <article class="date-picker-demo">
+      <h3>Controlled view modes</h3>
+      <p class="date-picker-demo__caption">Prueba el flujo controlado con update:view para day, month y year.</p>
+
+      <ECard elevation="sm">
+        <div class="date-picker-demo__actions">
+          <EButton v-for="option in viewOptions" :key="option.value" color="primary"
+            :tonal="controlledView === option.value" @click="controlledView = option.value">
+            {{ option.label }}
+          </EButton>
         </div>
-    </section>
+
+        <p class="date-picker-demo__state">Current view: {{ controlledViewLabel }}</p>
+
+        <EDatePicker v-model="controlledDate" :view="controlledView" color="primary"
+          @update:view="controlledView = $event" />
+      </ECard>
+    </article>
+
+    <article class="date-picker-demo">
+      <h3>Highlighted dates</h3>
+      <p class="date-picker-demo__caption">Combina reglas de bloqueo con hitos resaltados y una ventana de
+        congelamiento.</p>
+
+      <div class="date-picker-demo__split">
+        <EDatePicker v-model="highlightedDate" color="blue" :highlighted="highlightedDateRules" elevation="sm" />
+
+
+      </div>
+    </article>
+
+    <article class="date-picker-demo">
+      <h3>Disabled dates</h3>
+      <p class="date-picker-demo__caption">Combina reglas de bloqueo con hitos resaltados y una ventana de
+        congelamiento.</p>
+
+      <div class="date-picker-demo__split">
+        <EDatePicker v-model="highlightedDate" color="secondary" :disabled="disabledDateRules" elevation="sm" />
+
+      </div>
+    </article>
+
+    <article class="date-picker-demo">
+      <h3>Layout and header options</h3>
+      <p class="date-picker-demo__caption">Casos para landscape completo, only-month horizontal y una version sin bloque
+        superior.</p>
+
+      <div class="date-picker-demo__grid">
+        <ECard title="Landscape date selection" subtitle="Layout horizontal para flujos con mas ancho disponible."
+          elevation="sm">
+          <EDatePicker v-model="landscapeDate" landscape color="secondary" />
+        </ECard>
+
+        <ECard title="Landscape month selection" subtitle="Solo mes para billing o reporting." elevation="sm">
+          <EDatePicker v-model="monthOnlyDate" only-month landscape color="primary" />
+        </ECard>
+
+        <ECard title="Header-only scheduling" subtitle="no-title con inicio de semana en domingo." elevation="sm">
+          <EDatePicker v-model="headerlessDate" no-title :week-start="0" format="month-mmmm year-YYYY"
+            color="primary" />
+        </ECard>
+      </div>
+    </article>
+
+    <article class="date-picker-demo">
+      <h3>Localization</h3>
+      <p class="date-picker-demo__caption">Overrides por instancia para mezclar idioma del calendario segun el flujo.
+      </p>
+
+      <div class="date-picker-demo__grid">
+        <ECard title="Locale override: es" subtitle="El picker ignora el locale global de la app." elevation="sm">
+          <EDatePicker v-model="localizedSpanishDate" lng="es" color="secondary" />
+        </ECard>
+
+        <ECard title="Locale override: en" subtitle="Mantiene la navegacion en ingles para este caso." elevation="sm">
+          <EDatePicker v-model="localizedEnglishDate" lng="en" color="primary" />
+        </ECard>
+      </div>
+    </article>
+
+    <article class="date-picker-demo">
+      <h3>Slots customization</h3>
+      <p class="date-picker-demo__caption">Ejemplo con title y header custom usando prev, next, changeViewMode y
+        pageDate.</p>
+
+      <ECard title="Custom title and header" subtitle="Mantiene la logica interna del picker con framing propio."
+        elevation="sm">
+        <EDatePicker v-model="slotDate" color="primary">
+          <template #title>
+            <div class="date-picker-slot-title">
+              <span>Release plan</span>
+              <strong>{{ formatDisplayDate(slotDate) }}</strong>
+            </div>
+          </template>
+
+          <template #header="{ prev, next, changeViewMode, pageDate }">
+            <div class="date-picker-slot-header">
+              <EButton text color="primary" @click="prev()">Prev</EButton>
+              <div class="date-picker-slot-header__copy">
+                <span>Selected window</span>
+                <strong>{{ formatMonthYear(pageDate) }}</strong>
+              </div>
+              <div class="date-picker-slot-header__actions">
+                <EButton text color="primary" @click="changeViewMode(datePickerViewType.month)">
+                  Jump to month view
+                </EButton>
+                <EButton text color="primary" @click="next()">Next</EButton>
+              </div>
+            </div>
+          </template>
+        </EDatePicker>
+      </ECard>
+    </article>
+
+    <article class="date-picker-demo">
+      <h3>Dialog integration</h3>
+      <p class="date-picker-demo__caption">Usa close-on-change para cerrar el dialog tan pronto exista una seleccion
+        valida.
+      </p>
+
+      <ECard title="Release planning" subtitle="Seleccion rapida dentro de overlay." elevation="sm">
+        <p class="date-picker-demo__state">Saved date: {{ formatDisplayDate(dialogDate) }}</p>
+        <EButton color="secondary" @click="dialogOpen = true">Schedule release</EButton>
+
+        <EDialog v-model="dialogOpen">
+          <ECard class="date-picker-dialog-card">
+            <EDatePicker v-model="dialogDate" color="secondary" close-on-change />
+          </ECard>
+        </EDialog>
+      </ECard>
+    </article>
+
+    <article class="date-picker-demo">
+      <h3>Menu fit content</h3>
+      <p class="date-picker-demo__caption">
+        El menu usa el ancho intrinseco del Date Picker aunque el campo activador sea mas ancho.
+      </p>
+
+      <EMenu fit-content origin="bottom right">
+        <template #activator="{ attrs }">
+          <ETextfield :model-value="formatDisplayDate(menuDate)" label="Deadline" input-align="end" input-readonly
+            v-bind="attrs" />
+        </template>
+        <EDatePicker v-model="menuDate" color="primary" close-on-change />
+      </EMenu>
+    </article>
+  </section>
 </template>
 
-<script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+<script setup>
+import { computed, ref } from "vue";
+import { datePickerViewType } from "../../src";
 
-import EButton from "../../src/components/button/index.vue";
-import ECard from "../../src/components/card/index.vue";
-import EDatePicker from "../../src/components/date-picker/index.vue";
-import EDialog from "../../src/components/dialog/index.vue";
-import EMenu from "../../src/components/menu/index.vue";
-
-type PickerMode = "date" | "month" | "year";
-type ActivatorBindings = {
-    ref?: (value: unknown) => void;
-    onClick?: (event?: Event) => void;
-    onKeydown?: (event: KeyboardEvent) => void;
-    "aria-haspopup"?: string;
-    "aria-expanded"?: string;
-    "aria-controls"?: string;
-    "aria-disabled"?: string;
-    [key: string]: unknown;
+const createDate = (year, month, day) => {
+  return new Date(year, month, day);
 };
 
-const sandbox = reactive({
-    mode: "date" as PickerMode,
-    lng: "en",
-    color: undefined,
-    elevation: "",
-    gridButtonElevation: "",
-    weekStart: 1,
-    landscape: false,
-    noTitle: false,
-    showHighlighted: true,
-    showDisabled: true,
+const viewOptions = [
+  { label: "Day", value: datePickerViewType.day },
+  { label: "Month", value: datePickerViewType.month },
+  { label: "Year", value: datePickerViewType.year },
+];
+
+const resolveViewLabel = (value) => {
+  return viewOptions.find((item) => item.value === value)?.label || "Day";
+};
+
+const formatDisplayDate = (value) => {
+  const normalized = value instanceof Date ? value : new Date(value || createDate(2026, 8, 14));
+
+  return new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(normalized);
+};
+
+const formatMonthYear = (value) => {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    year: "numeric",
+  }).format(value);
+};
+
+const weekendDisabledConfig = {
+  days: [0, 6],
+};
+
+const disabledDateRules = {
+  days: [0, 6],
+  ranges: [
+    {
+      from: createDate(2026, 8, 14),
+      to: createDate(2026, 8, 18),
+    },
+  ],
+};
+
+const highlightedDateRules = {
+  dates: [createDate(2026, 8, 14), createDate(2026, 8, 29)],
+  ranges: [
+    {
+      from: createDate(2026, 8, 10),
+      to: createDate(2026, 8, 12),
+    },
+  ],
+};
+
+const usageDate = ref(createDate(2026, 8, 14));
+const usageView = ref(datePickerViewType.day);
+const usageWithDisabled = ref(false);
+
+const usageDisabledConfig = computed(() => {
+  return usageWithDisabled.value ? weekendDisabledConfig : undefined;
 });
 
-const inlineValue = ref(new Date(2026, 2, 14));
-const menuValue = ref(new Date(2026, 2, 21));
-const dialogValue = ref(new Date(2026, 2, 28));
-const menuOpen = ref(false);
+const selectedViewLabel = computed(() => resolveViewLabel(usageView.value));
+
+const controlledDate = ref(createDate(2026, 9, 18));
+const controlledView = ref(datePickerViewType.day);
+const controlledViewLabel = computed(() => resolveViewLabel(controlledView.value));
+
+const highlightedDate = ref(createDate(2026, 8, 14));
+const landscapeDate = ref(createDate(2026, 9, 9));
+const monthOnlyDate = ref(createDate(2026, 11, 1));
+const headerlessDate = ref(createDate(2026, 8, 18));
+const localizedSpanishDate = ref(createDate(2026, 8, 14));
+const localizedEnglishDate = ref(createDate(2026, 8, 14));
+const slotDate = ref(createDate(2026, 8, 14));
+
 const dialogOpen = ref(false);
-
-const isMonthMode = computed(() => sandbox.mode === "month");
-const isYearMode = computed(() => sandbox.mode === "year");
-const resolvedElevation = computed(() => sandbox.elevation || undefined);
-const resolvedGridButtonElevation = computed(() => sandbox.gridButtonElevation || undefined);
-
-const highlightedConfig = computed(() => {
-    if (!sandbox.showHighlighted || isYearMode.value) {
-        return undefined;
-    }
-
-    return {
-        from: new Date(2026, 2, 18),
-        to: new Date(2026, 2, 22),
-    };
-});
-
-const disabledConfig = computed(() => {
-    if (!sandbox.showDisabled || isYearMode.value) {
-        return undefined;
-    }
-
-    return {
-        days: [0, 6],
-        dates: [new Date(2026, 2, 17)],
-    };
-});
-
-const statePreview = computed(() => {
-    return JSON.stringify(
-        {
-            props: {
-                lng: sandbox.lng,
-                color: sandbox.color,
-                elevation: resolvedElevation.value,
-                gridButtonElevation: resolvedGridButtonElevation.value,
-                weekStart: sandbox.weekStart,
-                landscape: sandbox.landscape,
-                noTitle: sandbox.noTitle,
-                onlyMonth: isMonthMode.value || undefined,
-                onlyYear: isYearMode.value || undefined,
-                highlighted: Boolean(highlightedConfig.value),
-                disabled: Boolean(disabledConfig.value),
-            },
-            values: {
-                inline: inlineValue.value,
-                menu: menuValue.value,
-                dialog: dialogValue.value,
-            },
-        },
-        null,
-        2,
-    );
-});
-
-const buildActivatorBindings = (activator: ActivatorBindings) => ({
-    ref: activator.ref,
-    onClick: activator.onClick,
-    onKeydown: activator.onKeydown,
-    "aria-haspopup": activator["aria-haspopup"],
-    "aria-expanded": activator["aria-expanded"],
-    "aria-controls": activator["aria-controls"],
-    "aria-disabled": activator["aria-disabled"],
-});
-
-const formatDate = (value: Date | string) => {
-    const date = value instanceof Date ? value : new Date(value);
-
-    return new Intl.DateTimeFormat(sandbox.lng, {
-        weekday: "short",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-    }).format(date);
-};
+const dialogDate = ref(createDate(2026, 10, 3));
+const menuDate = ref(createDate(2026, 10, 8));
 </script>
 
 <style scoped>
-.date-picker-playground {
-    display: grid;
-    gap: 24px;
+.date-picker-page {
+  display: grid;
+  gap: 20px;
 }
 
-.date-picker-playground__hero {
-    display: grid;
-    gap: 8px;
-    max-width: 780px;
+.date-picker-page__header {
+  display: grid;
+  gap: 6px;
 }
 
-.section-kicker {
-    color: #5b6b8a;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    margin: 0;
-    text-transform: uppercase;
+.date-picker-page__eyebrow {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.72;
 }
 
-.date-picker-playground__hero h1,
-.date-picker-card h2 {
-    color: var(--e-primary-color, #172033);
-    margin: 0;
+.date-picker-page__title {
+  margin: 0;
 }
 
-.hero-copy,
-.card-copy {
-    color: var(--e-secondary-color, #596579);
-    line-height: 1.6;
-    margin: 0;
+.date-picker-page__lead {
+  margin: 0;
+  opacity: 0.84;
 }
 
-.date-picker-layout {
-    display: grid;
-    gap: 20px;
+.date-picker-demo {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
 }
 
-.date-picker-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+.date-picker-demo h3,
+.date-picker-demo__caption,
+.date-picker-demo__state {
+  margin: 0;
 }
 
-.date-picker-card {
-    border-radius: 20px;
-    display: grid;
-    gap: 18px;
-    padding: 24px;
+.date-picker-demo__caption,
+.date-picker-demo__state {
+  font-size: 14px;
+  opacity: 0.8;
 }
 
-.date-picker-card--controls {
-    max-width: 960px;
+.date-picker-demo__split {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, auto) minmax(18rem, 24rem);
+  align-items: start;
 }
 
-.control-grid {
-    display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+.date-picker-demo__grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
 }
 
-.control-field,
-.toggle-field {
-    display: grid;
-    gap: 8px;
+.date-picker-demo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.control-field span,
-.toggle-field span,
-.state-panel__title {
-    color: #42526b;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin: 0;
-    text-transform: uppercase;
+.date-picker-demo__list {
+  margin: 0;
+  padding-left: 20px;
 }
 
-.control-field select {
-    appearance: none;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(148, 163, 184, 0.35);
-    border-radius: 12px;
-    color: #172033;
-    font: inherit;
-    min-height: 44px;
-    padding: 0 12px;
+.date-picker-meta {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.toggle-grid {
-    display: grid;
-    gap: 12px;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+.date-picker-meta p {
+  margin: 4px 0 0;
+  opacity: 0.8;
 }
 
-.toggle-field {
-    align-items: center;
-    background: rgba(239, 244, 255, 0.9);
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    border-radius: 14px;
-    grid-auto-flow: column;
-    justify-content: start;
-    padding: 12px 14px;
+.date-picker-slot-title {
+  display: grid;
+  gap: 4px;
 }
 
-.toggle-field input {
-    margin: 0;
+.date-picker-slot-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.picker-frame {
-    display: grid;
-    justify-content: center;
+.date-picker-slot-header__copy {
+  display: grid;
+  gap: 2px;
+  text-align: center;
 }
 
-.actions-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.date-picker-slot-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.dialog-picker-card {
-    min-width: 0;
-    padding: 8px;
+.date-picker-dialog-card {
+  padding: 16px;
 }
 
-.state-panel {
-    background: #0f172a;
-    border-radius: 16px;
-    color: #dbe7ff;
-    padding: 16px;
-}
+@media (max-width: 960px) {
 
-.state-panel pre {
-    font-size: 12px;
-    line-height: 1.5;
-    margin: 0;
-    overflow: auto;
-}
-
-@media (max-width: 680px) {
-    .date-picker-card {
-        padding: 18px;
-    }
+  .date-picker-demo__split,
+  .date-picker-demo__grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

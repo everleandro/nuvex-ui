@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+nuvex-ui-1.0.0.tgz
 *.local
 
 # Editor directories and files
@@ -26,3 +27,4 @@ dist-ssr
 
 # VitePress local cache
 docs/.vitepress/cache/
+docs/.vitepress/dist/

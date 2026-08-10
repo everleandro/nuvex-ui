@@ -26,9 +26,13 @@ export type {
 	TextInputValue,
 	TextInputValueEventPayload,
 	UseTextInputProps,
+	EForm,
 	FormInjection,
 	ERadioType,
 	BarProps,
+	IconFontClassResolver,
+	IconFontClassValue,
+	IconFontOptions,
 	IconPath,
 	IconProps,
 	DatesRange,
@@ -64,10 +68,18 @@ export type {
 export { ScheduleView, CalendarScale } from "./types";
 export { datePickerViewType } from "./types";
 export * from "./utils/style";
+export * from "./theme";
 export { default as DateBuilder } from "./utils/date";
-export { Lng, getLocales, hasLocale, registerLocales } from "./locales";
+export {
+	Lng,
+	getDefaultLocaleCode,
+	hasLocale,
+	getLocales,
+	registerLocales,
+	setDefaultLocaleCode,
+} from "./locales";
 export type { Locale, LocaleCode } from "./locales";
 export { version } from "../package.json";
 import "@/style/main.scss";
 
-export { default as Drocket } from "./framework";
+export { default as NuvexUI } from "./framework";
