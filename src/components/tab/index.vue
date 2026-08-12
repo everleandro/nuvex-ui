@@ -15,7 +15,6 @@ import EButton from "@/components/button/index.vue";
 import { ButtonProps } from "@/components/button/index.vue";
 export interface Props extends ButtonProps {
     value: string | number
-    to?: any
 }
 const attrs = useAttrs();
 const props = withDefaults(defineProps<Props>(), {
