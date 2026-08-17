@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://nuvex-ui-doc.vercel.app/
+    about: Check the official docs and examples before opening an issue.
+  - name: Community discussion
+    url: https://github.com/everleandro/nuvex-ui/discussions
+    about: Ask questions, share ideas, or discuss usage in the community forum.

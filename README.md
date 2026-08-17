@@ -25,6 +25,15 @@ Nuvex UI brings together reusable interface primitives, token-based theming, for
 - Theming: [docs/theming.md](./docs/theming.md)
 - Components: [docs/components/README.md](./docs/components/README.md)
 
+## Support the Project
+
+If you use Nuvex UI in production or want to help sustain ongoing development, consider supporting the project.
+
+- GitHub Sponsors: https://github.com/sponsors/everleandro
+- Sponsorship guide: [SPONSORING.md](./SPONSORING.md)
+
+Your support helps fund component work, documentation, accessibility improvements, testing, and long-term maintenance.
+
 ## Requirements
 
 - Vue 3
