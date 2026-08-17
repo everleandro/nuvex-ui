@@ -1,10 +1,21 @@
 # Nuvex UI
 
-Nuvex UI is a Vue 3 component framework focused on building consistent, reusable interfaces with a practical theming system, form controls, layout primitives, and scheduling components.
+Modern Vue 3 UI foundations for product teams building fast, polished, and consistent digital experiences.
+
+Nuvex UI brings together reusable interface primitives, token-based theming, form controls, layout patterns, and dashboard-ready components in a single framework designed for real product work.
 
 - Package: `nuvex-ui`
 - Framework: Vue 3
 - Distribution: ESM + UMD + TypeScript declarations
+- Focus: scalable UI architecture, design consistency, fast delivery
+
+## Why Teams Choose Nuvex UI
+
+- Built for modern Vue 3 applications
+- Flexible light and dark theming out of the box
+- Token-driven styling for consistent design systems
+- Components designed for SaaS, dashboards, admin tools, and internal products
+- A practical balance between flexibility and implementation speed
 
 ## Documentation
 
@@ -19,6 +30,17 @@ Nuvex UI is a Vue 3 component framework focused on building consistent, reusable
 - Vue 3
 - Node.js 18+
 - ESM-compatible bundler (Vite recommended)
+
+## Product Highlights
+
+### Design system foundation
+A token-based architecture helps you define and evolve visual identity without scattering styles across the app.
+
+### Seamless integration
+Works naturally in Vue 3 and Nuxt 3 projects with a straightforward setup and predictable component APIs.
+
+### Built for real product workflows
+From forms and layout patterns to scheduling and dashboard interfaces, Nuvex UI is shaped around the needs of real applications, not just isolated demo components.
 
 ## Installation
 
@@ -165,14 +187,14 @@ Run the component playground:
 npm run playground:dev
 ```
 
-Build and preview playground:
+Build and preview the playground:
 
 ```bash
 npm run playground:build
 npm run playground:preview
 ```
 
-Run docs locally:
+Run the docs locally:
 
 ```bash
 npm run docs:dev
@@ -196,7 +218,7 @@ npm run pack:local
 npm pack --dry-run
 ```
 
-Then install the generated `.tgz` in a consumer app:
+Then install the generated `.tgz` in a consumer application:
 
 ```bash
 npm install ../<path-to-repo>/nuvex-ui-<version>.tgz
@@ -208,7 +230,11 @@ Contributions are welcome.
 
 1. Fork this repository.
 2. Create a feature branch.
-3. Add tests/docs when applicable.
+3. Add tests and documentation where relevant.
 4. Open a pull request.
 
 Issues and suggestions: https://github.com/everleandro/nuvex-ui/issues
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
