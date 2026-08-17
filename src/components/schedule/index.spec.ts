@@ -299,7 +299,7 @@ describe("ESchedule", () => {
   });
 
   it("allows returning to week after drilling down into a day", async () => {
-    const wrapper = mountSchedule({ scale: "week" });
+    const wrapper = mountSchedule({ scale: "week", hideToolbar: true });
     await nextTick();
 
     const weekDayButtons = wrapper.findAll("button.e-schedule-btn--day");

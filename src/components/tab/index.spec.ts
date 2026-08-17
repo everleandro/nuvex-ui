@@ -127,6 +127,27 @@ describe("ETab + ETabGroup", () => {
     expect(verticalWithTrack.get('.e-tabs__track').classes()).toContain('e-tabs__track--vertical');
   });
 
+  it("forwards anchor attributes such as href to the underlying button", async () => {
+    const Host = defineComponent({
+      components: { ETab, ETabGroup },
+      setup() {
+        const model = ref("home");
+        return { model };
+      },
+      template: `
+        <ETabGroup v-model="model">
+          <ETab value="home" href="#home" :to="'#home'">Home</ETab>
+        </ETabGroup>
+      `,
+    });
+
+    const wrapper = mount(Host, { attachTo: document.body });
+    await nextTick();
+
+    const tab = wrapper.get('[role="tab"]');
+    expect(tab.attributes('href')).toBe('#home');
+  });
+
   it("keeps ripple enabled for tabs by default", async () => {
     const wrapper = mountTabHost();
     await nextTick();

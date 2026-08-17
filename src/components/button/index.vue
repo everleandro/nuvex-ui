@@ -41,9 +41,22 @@ const vRipple = { ...ripple };
 
 type ButtonElevation = ElevationLevel | "none";
 
+export type NavigationTarget =
+  | string
+  | {
+      path?: string;
+      name?: string;
+      params?: Record<string, unknown>;
+      query?: Record<string, unknown>;
+      hash?: string;
+      [key: string]: unknown;
+    };
+
 export interface ButtonProps extends SizeProps {
   disabled?: boolean;
   link?: boolean;
+  href?: string;
+  to?: NavigationTarget;
   ripple?: boolean;
   appendIcon?: Array<IconPath> | IconPath | string;
   prependIcon?: Array<IconPath> | IconPath | string;
@@ -92,9 +105,9 @@ const slots = useSlots();
 
 const tag = computed(() => {
   if (props.link) return "a";
-  const { to } = attrs;
-  if (typeof to === "string" && to.startsWith("http")) return "a";
-  if (to) return "router-link";
+  const target = props.to ?? attrs.to;
+  if (typeof target === "string" && target.startsWith("http")) return "a";
+  if (target) return "router-link";
   return "button";
 });
 
@@ -104,7 +117,7 @@ const isIconOnly = computed(
   () => !hasDefaultSlot.value && (!!props.icon || props.fab)
 );
 const hasNavigationTarget = computed(
-  () => typeof attrs.href === "string" || attrs.to !== undefined
+  () => typeof (props.href ?? attrs.href) === "string" || (props.to ?? attrs.to) !== undefined
 );
 const requiresButtonKeyboardSemantics = computed(
   () => tag.value === "a" && !hasNavigationTarget.value
@@ -115,7 +128,9 @@ const rippleBinding = computed(() => ({
 }));
 
 const rootAttributes = computed(() => {
-  const { to, href, ...restAttrs } = attrs;
+  const { to: attrTo, href: attrHref, ...restAttrs } = attrs;
+  const to = props.to ?? attrTo;
+  const href = props.href ?? attrHref;
 
   if (tag.value === "button") {
     return {

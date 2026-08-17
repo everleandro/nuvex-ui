@@ -120,7 +120,7 @@ $alignments: (
   items: (start: flex-start, center: center, end: flex-end, baseline: baseline, stretch: stretch)
 );
 
-$text-align: left, center, right;
+$text-align: left, center, right, justify, start, end, match-parent;
 $text-transforms: uppercase, lowercase, capitalize, none;
 $text-decorations: (
   underline: underline,

@@ -164,6 +164,6 @@ describe('ECard', () => {
     const style = wrapper.element.style;
 
     expect(style.getPropertyValue('--card-color')).toBe('var(--e-palette-blue-500)');
-    expect(style.getPropertyValue('--card-contrast-color')).toBe('var(--e-palette-blue-50, white)');
+    expect(style.getPropertyValue('--card-contrast-color')).toBe('var(--e-palette-contrast-blue-500, var(--e-palette-blue-50, white))');
   });
 });

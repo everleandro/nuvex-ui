@@ -109,6 +109,19 @@
 
       <p class="tab-demo__state">Vertical tab: {{ verticalTab }}</p>
     </article>
+
+    <article class="tab-demo">
+      <h3>Anchor links in tabs</h3>
+      <p class="tab-demo__caption">Reproducion del caso con href en `ETab` para verificar que los atributos HTML se reenvian correctamente.</p>
+
+      <ETabGroup v-model="anchorTab" color="primary" inactive-color="secondary" track>
+        <ETab value="home" :to="'#home'" href="#home">Home</ETab>
+        <ETab value="about" :to="'#about'" href="#about">About</ETab>
+        <ETab value="contact" :to="'#contact'" href="#contact">Contact</ETab>
+      </ETabGroup>
+
+      <p class="tab-demo__state">Anchor tab: {{ anchorTab }}</p>
+    </article>
   </section>
 </template>
 
@@ -119,6 +132,7 @@ import iconFactory from "./icons.ts";
 const primaryTab = ref("overview");
 const featureTab = ref("design");
 const verticalTab = ref("foundation");
+const anchorTab = ref("home");
 
 const featureItems = [
   {

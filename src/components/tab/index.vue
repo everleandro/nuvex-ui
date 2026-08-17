@@ -9,14 +9,14 @@
     </slot>
 </template>
 <script lang="ts" setup>
-import { computed, inject } from "vue";
+import { computed, inject, useAttrs } from "vue";
 import { TabGroup } from "./group.vue"
 import EButton from "@/components/button/index.vue";
 import { ButtonProps } from "@/components/button/index.vue";
 export interface Props extends ButtonProps {
     value: string | number
-    to?: any
 }
+const attrs = useAttrs();
 const props = withDefaults(defineProps<Props>(), {
     ripple: true,
     text: true,
@@ -89,6 +89,7 @@ const color = computed((): string | undefined => {
 const buttonProps = computed((): Partial<ButtonProps> => {
     const propsResult: ButtonProps = {
         ...props,
+        ...attrs,
         color: color.value,
         text: props.text,
         ripple: props.ripple,
