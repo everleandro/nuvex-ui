@@ -21,6 +21,10 @@
         align-items: var(--bar-content-alignment);
     }
 
+    &__field {
+        max-width: var(--e-field-max-width);
+    }
+
 
     &__controls {
         gap: var(--schedule-toolbar-local-gap);

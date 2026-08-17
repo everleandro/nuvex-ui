@@ -1,7 +1,8 @@
 {
   "name": "nuvex-ui",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.0.4",
+  "license": "MIT",
   "files": [
     "dist"
   ],
@@ -79,6 +80,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "release": "node ./scripts/release.mjs",
     "docs:dev": "vitepress dev docs --port 5176",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"

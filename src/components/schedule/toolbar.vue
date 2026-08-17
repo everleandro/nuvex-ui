@@ -1,11 +1,11 @@
 <template>
     <EBar class="e-schedule-toolbar" :color="color">
         <div class="e-schedule-toolbar__controls flex-grow-1 d-flex flex-wrap">
-            <ESelect :label="labels.view" :items="localizedViewOptions" dense class="e-schedule-toolbar__select-view"
+            <ESelect :label="labels.view" :items="localizedViewOptions" dense class="e-schedule-toolbar__select-view e-schedule-toolbar__field"
                 :model-value="activeViewOption" @update:model-value="handleViewChange" :menu-color="color" />
 
             <ESelect v-if="spaces.length && view !== ScheduleView.Resource" dense
-                class="e-schedule-toolbar__select-space" :label="labels.space" :items="spaceOptions"
+                class="e-schedule-toolbar__select-space e-schedule-toolbar__field" :label="labels.space" :items="spaceOptions"
                 :model-value="selectedSpaceId" @update:model-value="handleSpaceChange" :menu-color="color" />
 
             <div v-if="canPaginateResources" class="e-schedule-toolbar__pager">
