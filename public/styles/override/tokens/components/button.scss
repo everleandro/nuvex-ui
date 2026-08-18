@@ -56,22 +56,22 @@ $fab-font-sizes: map.merge(
 
 $fab-height: map.merge(
     (
-        x-small: 2em,
-        small: 2.5em,
-        default: 3.5em,
-        large: 4em,
-        x-large: 4.5em,
+        x-small: 2.5714rem,
+        small: 3.2143rem,
+        default: 4.5rem,
+        large: 5.1429rem,
+        x-large: 5.7857rem,
     ),
     ()
 ) !default;
 
 $stacked-height: map.merge(
     (
-        x-small: 2em,
-        small: 2.5em,
-        default: 4.5em,
-        large: 5.5em,
-        x-large: 8em,
+        x-small: 3.2805rem,
+        small: 3.75rem,
+        default: 4.5rem,
+        large: 4.6875rem,
+        x-large: 5.15625rem,
     ),
     ()
 ) !default;

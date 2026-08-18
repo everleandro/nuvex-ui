@@ -68,6 +68,27 @@
             </div>
         </article>
         <article class="button-demo">
+            <h3>Stacked</h3>
+            <p class="button-demo__caption">Icono y contenido acomodados en columna con la prop `stacked`.</p>
+
+            <div class="button-row">
+                <EButton stacked :prepend-icon="iconFactory.heart" color="primary">Favorito</EButton>
+                <EButton stacked :append-icon="iconFactory.arrowRight" color="secondary">Continuar</EButton>
+                <EButton stacked outlined :prepend-icon="iconFactory.menu" color="primary">Menu</EButton>
+                <EButton stacked tonal :prepend-icon="iconFactory.trash" color="error">Eliminar</EButton>
+                <EButton stacked text :prepend-icon="iconFactory.heart">Texto</EButton>
+            </div>
+
+            <div class="button-row button-row--align-end">
+                <EButton stacked size="x-small" :prepend-icon="iconFactory.heart" color="primary">x-small</EButton>
+                <EButton stacked size="small" :prepend-icon="iconFactory.heart" color="primary">small</EButton>
+                <EButton stacked size="default" :prepend-icon="iconFactory.heart" color="primary">default</EButton>
+                <EButton stacked size="large" :prepend-icon="iconFactory.heart" color="primary">large</EButton>
+                <EButton stacked size="x-large" :prepend-icon="iconFactory.heart" color="primary">x-large</EButton>
+            </div>
+        </article>
+
+        <article class="button-demo">
             <h3>Button text</h3>
             <p class="button-demo__caption">Variantes de botones tipo texto.</p>
 
