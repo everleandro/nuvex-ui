@@ -35,7 +35,7 @@ export interface ScheduleToolbarLabels {
 export interface ScheduleToolbarSlotProps {
   date: Date;
   locale: string;
-  color: string;
+  color?: string;
   view: ScheduleView;
   scale: CalendarScale;
   selectedSpace?: ScheduleSpace;

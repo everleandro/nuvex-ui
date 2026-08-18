@@ -37,7 +37,11 @@ describe("EButton", () => {
       },
     });
 
-    expect(wrapper.classes().some((className) => className.startsWith("e-elevation--"))).toBe(false);
+    expect(
+      wrapper
+        .classes()
+        .some((className) => className.startsWith("e-elevation--")),
+    ).toBe(false);
   });
 
   it("keeps text buttons flat even when elevation is provided", () => {
@@ -53,7 +57,11 @@ describe("EButton", () => {
     });
 
     expect(wrapper.classes()).toContain("e-btn--text");
-    expect(wrapper.classes().some((className) => className.startsWith("e-elevation--"))).toBe(false);
+    expect(
+      wrapper
+        .classes()
+        .some((className) => className.startsWith("e-elevation--")),
+    ).toBe(false);
   });
 
   it("adds tonal class when tonal mode is enabled", () => {
@@ -85,6 +93,10 @@ describe("EButton", () => {
     });
 
     expect(wrapper.classes()).toContain("e-btn--text");
-    expect(wrapper.classes().some((className) => className.startsWith("e-elevation--"))).toBe(false);
+    expect(
+      wrapper
+        .classes()
+        .some((className) => className.startsWith("e-elevation--")),
+    ).toBe(false);
   });
 });

@@ -37,7 +37,7 @@
           detail="Toggle to receive a copy of this request" />
 
         <div class="form-demo__actions">
-          <EButton type="submit" color="primary">Submit</EButton>
+          <EButton type="submit" :disabled="!formValid" color="primary">Submit</EButton>
           <EButton outlined type="button" @click="resetFields">Reset</EButton>
         </div>
       </EForm>
@@ -94,7 +94,7 @@ import { computed, ref } from "vue";
 import iconFactory from "./icons.ts";
 
 
-const formValid = ref(false);
+const formValid = ref(true);
 const fullName = ref("");
 const email = ref("");
 const priority = ref("Medium");

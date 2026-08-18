@@ -1,13 +1,15 @@
 @use "../foundation/globals" as globals;
 
 $e-schedule-border-width: globals.$border-width !default;
-$hour-column-width:  4.0625rem !default;
+$hour-column-width: 4.0625rem !default;
 $hour-column-width-xs: calc(var(--e-hour-column-width) - 1.1875rem) !default;
 $header-col-height: 4.0625rem !default;
 $schedule-bg: var(--e-color-surface-base, #ffffff) !default;
+$schedule-header-bg: var(--e-color-header-surface, #f8fafc) !default;
+$schedule-hour-bg: var(--e-color-header-surface, #f8fafc) !default;
 $schedule-color: var(--e-contrast-surface-base) !default;
 $schedule-border-color: var(--e-color-border, rgba(0, 0, 0, 0.12)) !default;
 $schedule-border-radius: var(--e-border-radius-root, #{globals.$border-radius-root}) !default;
-$schedule-header-frame-height: calc($header-col-height + 1.25rem) !default;
+$schedule-header-frame-height: calc($header-col-height - 1.25rem) !default;
 $schedule-toolbar-gap: globals.$space-base * 2 !default;
 $schedule-event-bg: var(--e-color-surface-raised, #ffffff) !default;

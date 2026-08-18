@@ -45,6 +45,7 @@ $button-sizes: x-small, small, default, large, x-large;
   color: var(--button-local-text);
   background-color: var(--button-local-solid-bg);
   border-color: var(--button-local-solid-bg);
+  overflow: hidden;
 
   @include button-reset();
   @include prefix(user-select, none);
@@ -124,6 +125,7 @@ $button-sizes: x-small, small, default, large, x-large;
 }
 
 @mixin button-variant-rules() {
+
   &--icon,
   &--fab {
     padding: 0;

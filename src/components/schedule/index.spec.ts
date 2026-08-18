@@ -176,7 +176,7 @@ describe("ESchedule", () => {
     const eventButton = wrapper.get("button.e-schedule__event-container");
     const wrapperStyle = eventWrapper.attributes("style");
 
-    expect(wrapperStyle).toContain("--schedule-local-event-bg: var(--e-color-primary);");
+    expect(wrapperStyle).toContain("--schedule-local-event-accent: var(--e-color-primary);");
     expect(wrapperStyle).toContain("--schedule-local-event-color: var(--e-contrast-primary, white);");
     expect(eventButton.classes()).toContain("e-schedule__event-container");
     expect(eventButton.classes()).not.toContain("primary");

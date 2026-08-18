@@ -45,13 +45,13 @@
                                             @click="handleHeaderLabelClick(data.date, data.entityId)">
                                             {{ data.label }}
                                         </EButton>
-                                        <span v-else>
-                                            <span data-day-of-week="true"> {{ data.dayOfWeek }}</span>
-                                            <EButton v-if="isWeekScale" class="e-schedule-btn--day" :color="color"
+                                        <span v-else class="d-flex justify-center items-baseline">
+                                            <EButton v-if="isWeekScale" class="e-schedule-btn--day" block :color="color"
                                                 :text="!data.today" :aria-current="data.today ? 'date' : undefined"
                                                 :aria-label="calendarHeaderAriaLabel(data)"
                                                 @click="handleHeaderLabelClick(data.date)">
-                                                {{ data.dayOfMonth }}
+                                                {{ data.dayOfMonth }}<span data-day-of-week="true"> {{ data.dayOfWeek
+                                                    }}</span>
                                             </EButton>
                                             <span v-else class="e-schedule__day-chip"
                                                 :aria-current="data.today ? 'date' : undefined">
@@ -156,7 +156,7 @@ export interface Props extends ElevationProps {
 }
 const props = withDefaults(defineProps<Props>(),
     {
-        lng: getDefaultLocaleCode(), color: 'primary', rowHeight: '97',
+        lng: getDefaultLocaleCode(), rowHeight: '97',
         eventElevation: 'md',
         step: 60 * 60, start: 0, events: () => [],
         end: 60 * 60 * 24, spaces: () => []
@@ -524,7 +524,7 @@ const eventStyle = (point: Point): Record<string, string> => {
         height: `${height}px`,
         top: `${top}px`,
         marginTop: '0',
-        ...(backgroundColor ? { '--schedule-local-event-bg': backgroundColor } : {}),
+        ...(backgroundColor ? { '--schedule-local-event-accent': backgroundColor } : {}),
         ...(contrastColor ? { '--schedule-local-event-color': contrastColor } : {}),
     };
 }
