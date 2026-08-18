@@ -186,12 +186,11 @@
     font-size: var(--e-typography-body-font-size-lg, 1rem);
     line-height: var(--e-typography-body-line-height-lg, 1.5rem);
     font-weight: var(--e-typography-title-font-weight-md, 500);
-    margin-top: 0.25rem;
-
-    &[aria-current="date"] {
-      background-color: var(--schedule-local-color);
-      color: var(--schedule-local-bg);
-    }
+    //use this line if you want to change the color of the day chip based on the current date
+    // &[aria-current="date"] {
+    //   background-color: var(--schedule-local-color);
+    //   color: var(--schedule-local-bg);
+    // }
   }
 
   &-btn--space {
@@ -357,9 +356,9 @@
         }
 
         &-name {
-          font-size: var(--e-typography-body-font-size-md, 14px);
-          font-weight: var(--e-typography-body-font-weight-md, 400);
-          line-height: var(--e-typography-body-line-height-md, 15px);
+          font-size: var(--e-typography-title-font-size-sm, 14px);
+          font-weight: var(--e-typography-title-font-weight-sm, 500);
+          line-height: var(--e-typography-title-line-height-sm, 1.25rem);
         }
 
         &-subtitle {
@@ -372,7 +371,7 @@
           color: currentColor;
           font-size: var(--e-typography-body-font-size-sm, 12px);
           font-weight: var(--e-typography-body-font-weight-sm, 400);
-          line-height: var(--e-typography-body-line-height-md, 15px);
+          line-height: var(--e-typography-body-line-height-sm, 14px);
           opacity: 0.72;
         }
       }
