@@ -33,6 +33,10 @@
       "import": "./dist/styles/_mixins.scss",
       "require": "./dist/styles/_mixins.scss"
     },
+    "./nuxt": {
+      "types": "./dist/types/nuxt/module.d.ts",
+      "import": "./dist/nuxt/module.mjs"
+    },
     "./package.json": {
       "import": "./package.json",
       "require": "./package.json"
@@ -69,7 +73,7 @@
     "playground:dev": "vite --config playground/vite.config.ts",
     "playground:build": "vite build --config playground/vite.config.ts",
     "playground:preview": "vite preview --config playground/vite.config.ts",
-    "build": "vite build && vue-tsc --emitDeclarationOnly && node ./scripts/prepare-dist.mjs",
+    "build": "vite build && vite build --config vite.nuxt-module.config.ts && vue-tsc --emitDeclarationOnly && node ./scripts/prepare-dist.mjs",
     "build:types": "vue-tsc --emitDeclarationOnly && node ./scripts/prepare-dist.mjs",
     "pack:local": "npm run build && npm pack",
     "prepublishOnly": "npm run test && npm run build",
@@ -86,13 +90,21 @@
     "docs:preview": "vitepress preview docs"
   },
   "peerDependencies": {
-    "vue": "^3.3.11"
+    "vue": "^3.3.11",
+    "@nuxt/kit": "^3.0.0 || ^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@nuxt/kit": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "@vue/test-utils": "^2.4.6",
     "@microsoft/api-extractor": "^7.57.7",
+    "@nuxt/kit": "^4.5.2",
+    "@nuxt/schema": "^4.5.2",
     "@types/node": "^20.19.37",
     "@vitejs/plugin-vue": "^6.0.5",
+    "@vue/test-utils": "^2.4.6",
     "concurrently": "^9.2.1",
     "jsdom": "^26.1.0",
     "sass": "^1.98.0",
@@ -100,8 +112,8 @@
     "vite": "^8.0.1",
     "vite-plugin-css-injected-by-js": "^3.3.1",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^3.2.4",
     "vitepress": "^2.0.0-alpha.17",
+    "vitest": "^3.2.4",
     "vue-router": "^4.2.5",
     "vue-tsc": "^3.2.6"
   }

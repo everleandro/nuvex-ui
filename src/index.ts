@@ -79,6 +79,7 @@ export {
 	setDefaultLocaleCode,
 } from "./locales";
 export type { Locale, LocaleCode } from "./locales";
+export type { NuvexUIInstallOptions } from "./install";
 export { version } from "../package.json";
 import "@/style/main.scss";
 

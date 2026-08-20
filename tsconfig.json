@@ -30,5 +30,8 @@
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue"
+  ],
+  "exclude": [
+    "src/nuxt/runtime/**"
   ]
 }

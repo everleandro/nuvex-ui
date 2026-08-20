@@ -33,26 +33,9 @@ const computedHeight = computed(() => {
     return normalizeCssSize(props.height) || (props.dense ? '48px' : '64px')
 })
 
-watch(() => [props.clipped, props.fixed, props.absolute, props.app, props.dense, computedHeight.value], () => {
-    nextTick(() => {
-        syncLayoutTracking()
-    })
-});
-
-onMounted(() => {
-    syncLayoutTracking()
-})
-
-onBeforeUnmount(() => {
-    stopResizeObserver()
-})
-
-onUnmounted(() => {
-    if (hasRegisteredAppBar) {
-        resetAppBarLayout()
-        hasRegisteredAppBar = false
-    }
-})
+// Parsed once as a pixel estimate: used before the bar exists in the DOM (SSR
+// and first client render) so EMain/EContainer don't start at 0 and jump.
+const estimatedHeight = computed(() => Number.parseFloat(computedHeight.value) || 0)
 
 const barClass: ComputedRef<Array<string>> = computed((): Array<string> => {
     const classes = ['e-bar']
@@ -130,9 +113,12 @@ const syncLayoutTracking = (): void => {
 }
 
 const refreshLayoutStyle = (): void => {
-    if (!props.app || !el.value) return
-    
-    const height = el.value.getBoundingClientRect().height
+    if (!props.app) return
+
+    // Real DOM measurement once mounted; falls back to the CSS estimate
+    // beforehand (SSR, or before this component has rendered its element).
+    const height = el.value ? el.value.getBoundingClientRect().height : estimatedHeight.value
+
     setAppBarLayout({
         enabled: !!props.app,
         app: !!props.app,
@@ -144,6 +130,31 @@ const refreshLayoutStyle = (): void => {
 
     hasRegisteredAppBar = true
 }
+
+// immediate: registers the estimated height during setup (SSR + pre-mount)
+// so layout padding is correct before the bar ever reaches the real DOM.
+watch(() => [props.clipped, props.fixed, props.absolute, props.app, props.dense, computedHeight.value], () => {
+    refreshLayoutStyle()
+
+    nextTick(() => {
+        syncLayoutTracking()
+    })
+}, { immediate: true });
+
+onMounted(() => {
+    syncLayoutTracking()
+})
+
+onBeforeUnmount(() => {
+    stopResizeObserver()
+})
+
+onUnmounted(() => {
+    if (hasRegisteredAppBar) {
+        resetAppBarLayout()
+        hasRegisteredAppBar = false
+    }
+})
 
 </script>
 <style lang="scss" src="./style.scss"></style>
