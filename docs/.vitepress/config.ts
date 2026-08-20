@@ -46,6 +46,7 @@ export default defineConfig({
           { text: 'Card', link: '/components/card' },
           { text: 'Checkbox', link: '/components/checkbox' },
           { text: 'Chip', link: '/components/chip' },
+          { text: 'Data List', link: '/components/data-list' },
           { text: 'Date Picker', link: '/components/date-picker' },
           { text: 'Dialog', link: '/components/dialog' },
           { text: 'Form', link: '/components/form' },

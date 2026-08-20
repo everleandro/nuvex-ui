@@ -30,6 +30,11 @@ export const navigationGroups = [
         to: "/components/button-group",
       },
       {
+        id: "components-data-list",
+        title: "Data List",
+        to: "/components/data-list",
+      },
+      {
         id: "components-textfield",
         title: "Text Field",
         to: "/components/text-field",

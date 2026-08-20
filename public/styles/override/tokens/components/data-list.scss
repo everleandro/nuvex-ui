@@ -1,0 +1,25 @@
+@use "../foundation/globals" as globals;
+
+$data-list-gap: calc(var(--e-space-base, #{globals.$space-base}) * 2) !default;
+$data-list-column-gap: calc(var(--e-space-base, #{globals.$space-base}) * 4) !default;
+$data-list-background: var(--e-color-surface-base) !default;
+$data-list-color: var(--e-contrast-surface-base) !default;
+$data-list-border-color: var(--e-color-border) !default;
+$data-list-border-radius: var(--e-border-radius-root, #{globals.$border-radius-root}) !default;
+
+$data-header-color: var(--e-text-muted) !default;
+$data-header-background: var(--e-color-surface-canvas) !default;
+$data-header-padding-block: calc(var(--e-space-base, #{globals.$space-base}) * 2) !default;
+$data-header-font-size: var(--e-typography-label-font-size-sm) !default;
+$data-header-font-weight: var(--e-typography-label-font-weight-md) !default;
+$data-header-letter-spacing: 0.04em !default;
+
+$data-row-background: var(--e-color-surface-base) !default;
+$data-row-color: var(--e-contrast-surface-base) !default;
+$data-row-border-color: var(--e-color-border) !default;
+$data-row-border-radius: var(--e-border-radius-root, #{globals.$border-radius-root}) !default;
+$data-row-padding-inline: calc(var(--e-space-base, #{globals.$space-base}) * 4) !default;
+$data-row-padding-block: calc(var(--e-space-base, #{globals.$space-base}) * 3) !default;
+$data-row-selected-color: var(--e-color-primary) !default;
+
+$data-cell-gap: calc(var(--e-space-base, #{globals.$space-base}) * 2) !default;

@@ -95,5 +95,14 @@ export type {
 export type { DialogInterface } from "./dialog";
 export type { Menu, ContainerMenuInterface, MenuTypeTarget } from "./menu";
 export type { ElevationLevel, ElevationProps } from "./elevation";
+export type {
+  DataCellAlign,
+  DataCellProps,
+  DataHeaderProps,
+  DataListColumns,
+  DataListProps,
+  DataRowElevation,
+  DataRowProps,
+} from "./data-list";
 export type { Size, SizeProps, SizeValue } from "./size";
 export type { DrawerClassKeys, DrawerProps } from "./drawer";

@@ -10,6 +10,7 @@ Esta seccion documenta cada componente publico exportado por Nuvex UI.
 - [Button (`EButton`)](./button.md)
 - [Card (`ECard`)](./card.md)
 - [Chip (`EChip`)](./chip.md)
+- [Data List (`EDataList`, `EDataHeader`, `EDataRow`, `EDataCell`)](./data-list.md)
 - [Date Picker (`EDatePicker`)](./date-picker.md)
 - [Dialog (`EDialog`)](./dialog.md)
 - [Icon (`EIcon`)](./icon.md)

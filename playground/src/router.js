@@ -4,6 +4,7 @@ import ExpansionPanelsView from "./ExpansionPanelsView.vue";
 import AvatarView from "./AvatarView.vue";
 import ButtonView from "./ButtonView.vue";
 import ButtonGroupView from "./ButtonGroupView.vue";
+import DataListView from "./DataListView.vue";
 import CardView from "./CardView.vue";
 import BarView from "./BarView.vue";
 import DrawerView from "./DrawerView.vue";
@@ -27,6 +28,7 @@ const routeComponentById = {
   "components-avatar": AvatarView,
   "components-button": ButtonView,
   "components-button-group": ButtonGroupView,
+  "components-data-list": DataListView,
   "components-card": CardView,
   "components-bar": BarView,
   "components-drawer": DrawerView,

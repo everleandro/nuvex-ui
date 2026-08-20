@@ -1,0 +1,155 @@
+.e-data-list {
+  --data-list-local-gap: var(--e-data-list-gap, calc(var(--e-space-base, 4px) * 2));
+  --data-list-local-radius: var(--e-data-list-border-radius, var(--e-border-radius-root, 4px));
+  --data-list-local-border-color: var(--e-data-list-border-color, var(--e-color-border));
+
+  display: grid;
+  gap: var(--data-list-local-gap);
+  min-width: 0;
+  border-radius: var(--data-list-local-radius);
+
+  &--outlined,
+  &[class*="e-elevation--"] {
+    // El header sticky se funde con la caja del contenedor.
+    --e-data-header-background: var(--e-data-list-background, var(--e-color-surface-base, #ffffff));
+
+    background-color: var(--e-data-list-background, var(--e-color-surface-base, #ffffff));
+    color: var(--e-data-list-color, var(--e-contrast-surface-base, #000000));
+  }
+
+  &--outlined {
+    border: var(--e-border-width, thin) solid var(--data-list-local-border-color);
+  }
+
+  &--divided {
+    --data-list-local-gap: 0;
+    --e-data-row-border-radius: 0;
+
+    // Las filas con borde propio (outlined/selected) ya se separan solas.
+    > * + *:not(.e-data-row--outlined):not(.e-data-row--selected) {
+      border-block-start-color: var(--e-data-row-border-color, var(--e-color-border));
+    }
+  }
+}
+
+.e-data-header,
+.e-data-row {
+  --data-grid-local-columns: var(--e-data-list-columns, repeat(auto-fit, minmax(0, 1fr)));
+  --data-grid-local-column-gap: var(--e-data-list-column-gap, calc(var(--e-space-base, 4px) * 4));
+  --data-grid-local-padding-inline: var(--e-data-row-padding-inline, calc(var(--e-space-base, 4px) * 4));
+
+  display: grid;
+  grid-template-columns: var(--data-grid-local-columns);
+  column-gap: var(--data-grid-local-column-gap);
+  align-items: center;
+  min-width: 0;
+  padding-inline: var(--data-grid-local-padding-inline);
+  // Caja identica en header y filas: las columnas quedan alineadas al pixel.
+  border: var(--e-border-width, thin) solid transparent;
+}
+
+.e-data-header {
+  --data-header-local-color: var(--e-data-header-color, var(--e-text-muted, currentColor));
+  --data-header-local-padding-block: var(--e-data-header-padding-block, calc(var(--e-space-base, 4px) * 2));
+  --data-header-local-font-size: var(--e-data-header-font-size, var(--e-typography-label-font-size-sm, 0.75rem));
+  --data-header-local-font-weight: var(--e-data-header-font-weight, var(--e-typography-label-font-weight-md, 600));
+  --data-header-local-letter-spacing: var(--e-data-header-letter-spacing, 0.04em);
+
+  color: var(--data-header-local-color);
+  font-size: var(--data-header-local-font-size);
+  font-weight: var(--data-header-local-font-weight);
+  letter-spacing: var(--data-header-local-letter-spacing);
+  text-transform: uppercase;
+  padding-block: var(--data-header-local-padding-block);
+  background-color: transparent;
+
+  &--sticky {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--e-data-header-background, var(--e-color-surface-canvas, transparent));
+  }
+}
+
+.e-data-row {
+  --data-row-local-bg: var(--e-data-row-background, var(--e-color-surface-base, #ffffff));
+  --data-row-local-color: var(--e-data-row-color, var(--e-contrast-surface-base, #000000));
+  --data-row-local-radius: var(--e-data-row-border-radius, var(--e-border-radius-root, 4px));
+  --data-row-local-padding-block: var(--e-data-row-padding-block, calc(var(--e-space-base, 4px) * 3));
+  --data-row-local-accent: var(--e-data-row-selected-color, var(--e-color-primary));
+  --data-row-local-state-hover: var(--e-interactive-state-hover, 0.08);
+  --data-row-local-tonal-opacity: var(--e-interactive-tonal-opacity, 0.08);
+  --data-row-local-border-color: transparent;
+  --data-row-local-overlay-color: currentColor;
+  --data-row-local-overlay-opacity: 0;
+
+  position: relative;
+  padding-block: var(--data-row-local-padding-block);
+  background-color: var(--data-row-local-bg);
+  color: var(--data-row-local-color);
+  border-color: var(--data-row-local-border-color);
+  border-radius: var(--data-row-local-radius);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--data-row-local-overlay-color);
+    opacity: var(--data-row-local-overlay-opacity);
+    pointer-events: none;
+  }
+
+  &--outlined {
+    --data-row-local-border-color: var(--e-data-row-border-color, var(--e-color-border));
+  }
+
+  &--clickable {
+    cursor: pointer;
+
+    &:hover {
+      --data-row-local-overlay-opacity: var(--data-row-local-state-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--data-row-local-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  &--selected {
+    --data-row-local-border-color: var(--data-row-local-accent);
+    --data-row-local-overlay-color: var(--data-row-local-accent);
+    --data-row-local-overlay-opacity: var(--data-row-local-tonal-opacity);
+  }
+
+  &--disabled {
+    --data-row-local-color: var(--e-color-disabled);
+
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.e-data-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--e-data-cell-gap, calc(var(--e-space-base, 4px) * 2));
+  // Evita que el contenido intrinseco desborde el track de la grilla.
+  min-width: 0;
+
+  &--align-start {
+    justify-content: flex-start;
+  }
+
+  &--align-center {
+    justify-content: center;
+    text-align: center;
+  }
+
+  &--align-end {
+    justify-content: flex-end;
+    text-align: end;
+  }
+}
