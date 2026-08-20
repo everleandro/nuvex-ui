@@ -1,4 +1,4 @@
-export type breakpointKey = "xs" | "sm" | "md" | "lg";
+export type breakpointKey = "xs" | "sm" | "md" | "lg" | "xl";
 import { ref, reactive, onMounted, onUnmounted } from "vue";
 export default function () {
   const viewport = reactive({
@@ -12,6 +12,7 @@ export default function () {
   const sm = ref(0);
   const md = ref(0);
   const lg = ref(0);
+  const xl = ref(0);
   let timer = 0;
 
   onMounted(() => {
@@ -19,6 +20,7 @@ export default function () {
     sm.value = integerFromKeys(["--e-grid-breakpoint-sm", "--sm"], 600);
     md.value = integerFromKeys(["--e-grid-breakpoint-md", "--md"], 960);
     lg.value = integerFromKeys(["--e-grid-breakpoint-lg", "--lg"], 1264);
+    xl.value = integerFromKeys(["--e-grid-breakpoint-xl", "--xl"], 1920);
     observeBreakpoint();
     if (typeof window === "undefined") return;
     window?.addEventListener("resize", observeBreakpoint);
@@ -45,10 +47,10 @@ export default function () {
     }
     timer = window?.setTimeout(() => {
       const windowWidth = window?.innerWidth || 0;
-      viewport.xs = windowWidth <= xs.value;
-      viewport.sm = windowWidth > xs.value && windowWidth <= sm.value;
-      viewport.md = windowWidth > sm.value && windowWidth <= md.value;
-      viewport.lg = windowWidth > md.value && windowWidth <= lg.value;
+      viewport.xs = windowWidth <= sm.value;
+      viewport.sm = windowWidth > sm.value && windowWidth <= md.value;
+      viewport.md = windowWidth > md.value && windowWidth <= lg.value;
+      viewport.lg = windowWidth > lg.value && windowWidth <= lg.value;
       viewport.xl = windowWidth > lg.value;
     }, 300);
   };
