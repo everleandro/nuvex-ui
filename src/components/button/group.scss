@@ -1,0 +1,58 @@
+.e-btn-group {
+    --btn-group-local-radius: var(--e-btn-group-border-radius, var(--e-border-radius-root, 4px));
+    --btn-group-local-rounded-radius: var(--e-btn-group-rounded-border-radius, var(--e-btn-rounded-border-radius, 28px));
+    --btn-group-local-gap: var(--e-btn-group-gap, 1px);
+
+    // Los hijos pierden su radio propio: el radio vive en el grupo.
+    --e-btn-border-radius: 0;
+
+    display: inline-flex;
+    flex-direction: row;
+    align-items: stretch;
+    max-width: 100%;
+    border-radius: var(--btn-group-local-radius);
+    overflow: hidden;
+    gap: var(--btn-group-local-gap);
+
+    >* {
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+
+    >*[class*="e-elevation"] {
+        box-shadow: none;
+    }
+
+    &--vertical {
+        flex-direction: column;
+    }
+
+    &--block {
+        display: flex;
+        width: 100%;
+
+        >* {
+            flex: 1 1 0;
+        }
+    }
+
+    &--rounded {
+        --btn-group-local-radius: var(--btn-group-local-rounded-radius);
+
+        >*[class*="e-btn"]:first-child {
+            border-top-left-radius: var(--btn-group-local-radius);
+            border-bottom-left-radius: var(--btn-group-local-radius);
+        }
+
+        >*[class*="e-btn"]:last-child {
+            border-top-right-radius: var(--btn-group-local-radius);
+            border-bottom-right-radius: var(--btn-group-local-radius);
+        }
+
+    }
+
+    &--outlined {
+        border: 1px solid currentColor;
+    }
+
+}

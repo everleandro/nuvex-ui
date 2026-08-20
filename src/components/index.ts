@@ -1,4 +1,5 @@
 export { default as EButton } from "./button/index.vue";
+export { default as EButtonGroup } from "./button/group.vue";
 export { default as EIcon } from "./icon/index.vue";
 export { default as ECard } from "./card/index.vue";
 export { default as EDatePicker } from "./date-picker/index.vue";
