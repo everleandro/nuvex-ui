@@ -2,32 +2,38 @@
     <div :class="cardClass" :style="cardStyle">
         <div :class="mainClass">
             <div v-if="hasMainPrepend" :class="mainPrependClass">
-                <EAvatar v-if="prependAvatar" v-bind="resolvedPrependAvatarProps" />
+                <slot name="prepend">
+                    <EAvatar v-if="prependAvatar" v-bind="resolvedPrependAvatarProps" />
 
-                <EIcon v-else-if="prependIcon" v-bind="resolvedPrependIconProps" />
+                    <EIcon v-else-if="prependIcon" v-bind="resolvedPrependIconProps" />
+                </slot>
             </div>
 
             <div v-if="hasHeader" class="e-card__header">
-                <span v-if="prependHeaderAvatar" class="e-card__prepend">
-                    <EAvatar v-bind="resolvedPrependHeaderAvatarProps" />
-                </span>
+                <slot name="prepend-header">
+                    <span v-if="prependHeaderAvatar" class="e-card__prepend">
+                        <EAvatar v-bind="resolvedPrependHeaderAvatarProps" />
+                    </span>
 
-                <span v-else-if="prependHeaderIcon" class="e-card__prepend">
-                    <EIcon v-bind="resolvedPrependHeaderIconProps" />
-                </span>
+                    <span v-else-if="prependHeaderIcon" class="e-card__prepend">
+                        <EIcon v-bind="resolvedPrependHeaderIconProps" />
+                    </span>
+                </slot>
 
                 <div class="e-card__headline">
                     <p v-if="title" class="title e-card__title">{{ title }}</p>
                     <p v-if="subtitle" class="subtitle e-card__subtitle">{{ subtitle }}</p>
                 </div>
 
-                <span v-if="appendHeaderAvatar" class="e-card__append">
-                    <EAvatar v-bind="resolvedAppendHeaderAvatarProps" />
-                </span>
+                <slot name="append-header">
+                    <span v-if="appendHeaderAvatar" class="e-card__append">
+                        <EAvatar v-bind="resolvedAppendHeaderAvatarProps" />
+                    </span>
 
-                <span v-else-if="appendHeaderIcon" class="e-card__append">
-                    <EIcon v-bind="resolvedAppendHeaderIconProps" />
-                </span>
+                    <span v-else-if="appendHeaderIcon" class="e-card__append">
+                        <EIcon v-bind="resolvedAppendHeaderIconProps" />
+                    </span>
+                </slot>
             </div>
 
             <p v-if="description" class="type-body e-card__description">{{ description }}</p>
@@ -37,9 +43,11 @@
             </div>
 
             <div v-if="hasMainAppend" :class="mainAppendClass">
-                <EAvatar v-if="appendAvatar" v-bind="resolvedAppendAvatarProps" />
+                <slot name="append">
+                    <EAvatar v-if="appendAvatar" v-bind="resolvedAppendAvatarProps" />
 
-                <EIcon v-else-if="appendIcon" v-bind="resolvedAppendIconProps" />
+                    <EIcon v-else-if="appendIcon" v-bind="resolvedAppendIconProps" />
+                </slot>
             </div>
         </div>
 
@@ -201,8 +209,8 @@ const resolvedAppendHeaderIconProps = computed(() => {
     }
 })
 
-const hasMainPrepend = computed(() => !!prependAvatar.value || !!prependIcon.value)
-const hasMainAppend = computed(() => !!appendAvatar.value || !!appendIcon.value)
+const hasMainPrepend = computed(() => !!prependAvatar.value || !!prependIcon.value || !!slots.prepend)
+const hasMainAppend = computed(() => !!appendAvatar.value || !!appendIcon.value || !!slots.appendHeader)
 const hasHeader = computed(() => {
     return !!title.value
         || !!subtitle.value

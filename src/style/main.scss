@@ -17,6 +17,10 @@
   }
 }
 
+.e-app {
+  min-height: 100dvh;
+}
+
 .interactive-element {
   --interactive-element-local-state-focus: var(--e-interactive-state-focus, 0.12);
   --interactive-element-local-state-hover: var(--e-interactive-state-hover, 0.08);
