@@ -7,6 +7,8 @@
                 Casos para validar imagenes, fallback iconografico, tamanos, color, elevacion y contenido personalizado.
             </p>
         </header>
+        <EAvatar name="ever santiesteban" :size="size"
+            :color="color" :elevation="elevation" />
 
         <article class="avatar-demo">
             <div>

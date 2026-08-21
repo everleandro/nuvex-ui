@@ -3,6 +3,7 @@
         <div :class="avatarClass">
             <slot>
                 <img v-if="hasImage" :src="src" alt="avatar" />
+                <span v-else-if="hasName" class="e-avatar__initials"> {{ initials }}</span>
                 <EIcon v-else :icon="resolvedIcon"></EIcon>
             </slot>
         </div>
@@ -17,7 +18,8 @@ import iconFactory from '@/utils/icons'
 export interface Props extends ElevationProps, SizeProps {
     color?: string
     icon?: string | IconPath | IconPath[]
-    src?: string
+    src?: string,
+    name?: string
 }
 
 const props = withDefaults(defineProps<Props>(), { size: 'default' })
@@ -28,6 +30,17 @@ const avatarClass = computed(() => {
     props.elevation && classes.push(`e-elevation--${props.elevation}`)
     classes.push(`e-avatar__container--size-${props.size}`)
     return classes
+})
+
+const hasName = computed(() => typeof props.name === 'string' && props.name.trim().length > 0)
+const initials = computed(() => {
+    if (!hasName.value) return ''
+    return props.name!
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part.charAt(0).toUpperCase())
+        .join('')
 })
 
 const hasImage = computed(() => typeof props.src === 'string' && props.src.trim().length > 0)
@@ -92,6 +105,13 @@ const resolvedIcon = computed(() => props.icon || iconFactory.person)
             height: 100%;
             object-fit: cover;
         }
+
+
+    }
+
+    &__initials {
+        font-size: calc(var(--avatar-size) * 0.4);
+        font-weight: 500;
     }
 }
 </style>
