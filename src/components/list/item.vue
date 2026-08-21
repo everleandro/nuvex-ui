@@ -1,11 +1,11 @@
 <template>
-    <component ref="node" v-ripple="rippleBinding" :is="tagResult" :active-class="activeClass"
-        v-bind="liBindingOptions" :class="listItemCLass" :style="mergedListItemStyle" @click="handleItemClick" @focus="handleItemFocus"
+    <component ref="node" v-ripple="rippleBinding" :is="tagResult" :active-class="activeClass" v-bind="liBindingOptions"
+        :class="listItemCLass" :style="mergedListItemStyle" @click="handleItemClick" @focus="handleItemFocus"
         @keydown="handleItemKeydown" @keyup="handleItemKeyup">
         <div v-if="hasPrepend" :class="prependClass">
             <slot name="prepend">
                 <EIcon v-if="prependIcon" :icon="prependIcon"></EIcon>
-                <EAvatar v-else-if="prependAvatar" :src="prependAvatar"></EAvatar>
+                <EAvatar v-else-if="hasPrependAvatar" v-bind="prependAvatarProps"></EAvatar>
             </slot>
         </div>
         <div class="e-list-item__content">
@@ -16,7 +16,7 @@
         <div v-if="hasAppend" :class="appendClass">
             <slot name="append">
                 <EIcon v-if="appendIcon" :icon="appendIcon"></EIcon>
-                <EAvatar v-else-if="appendAvatar" :src="appendAvatar"></EAvatar>
+                <EAvatar v-else-if="hasAppendAvatar" v-bind="appendAvatarProps"></EAvatar>
             </slot>
         </div>
     </component>
@@ -27,7 +27,7 @@ import { EListGroupInjection, IconPath, EListInjection, Size, SizeProps } from '
 import { useResolvedColor } from '@/composables/color'
 import EIcon from '@/components/icon/index.vue';
 import { ripple } from '@/directives'
-import EAvatar from '@/components/avatar.vue';
+import EAvatar, { Props as AvatarProps } from '@/components/avatar.vue';
 import { computed, useAttrs, useSlots, inject, ref, useId, onBeforeUnmount, onMounted } from 'vue';
 import { LIST_GROUP_KEY, LIST_KEY } from './constants';
 
@@ -40,7 +40,9 @@ export interface Props extends SizeProps {
     prependIcon?: string | IconPath | Array<IconPath>
     appendIcon?: string | IconPath | Array<IconPath>
     prependAvatar?: string
+    prependAvatarProps?: Partial<Omit<AvatarProps, 'src'>>
     appendAvatar?: string
+    appendAvatarProps?: Partial<Omit<AvatarProps, 'src'>>
     isActive?: boolean
     activeClass?: string
     title?: string
@@ -259,15 +261,29 @@ const sizeClasses: Record<Size, string> = {
 
 const hasPrependIcon = computed((): boolean => !!props.prependIcon)
 
-const hasPrependAvatar = computed((): boolean => !!props.prependAvatar)
+const hasPrependAvatar = computed((): boolean => {
+    return !!props.prependAvatar || !!props.prependAvatarProps
+})
 
 const hasPrependSlot = computed((): boolean => {
     return !!slots.prepend && !hasPrependIcon.value && !hasPrependAvatar.value
 })
 
+const prependAvatarProps = computed(() => ({
+    ...(props.prependAvatarProps || {}),
+    ...(props.prependAvatar ? { src: props.prependAvatar } : {}),
+}))
+
+const appendAvatarProps = computed(() => ({
+    ...(props.appendAvatarProps || {}),
+    ...(props.appendAvatar ? { src: props.appendAvatar } : {}),
+}))
+
 const hasAppendIcon = computed((): boolean => !!props.appendIcon)
 
-const hasAppendAvatar = computed((): boolean => !!props.appendAvatar)
+const hasAppendAvatar = computed((): boolean => {
+    return !!props.appendAvatar || !!props.appendAvatarProps
+})
 
 const hasAppendSlot = computed((): boolean => {
     return !!slots.append && !hasAppendIcon.value && !hasAppendAvatar.value
@@ -328,11 +344,11 @@ const listItemCLass = computed((): Array<unknown> => {
 })
 
 const hasPrepend = computed((): boolean => {
-    return !!slots.prepend || !!props.prependAvatar || !!props.prependIcon;
+    return !!slots.prepend || hasPrependAvatar.value || !!props.prependIcon;
 })
 
 const hasAppend = computed((): boolean => {
-    return !!slots.append || !!props.appendAvatar || !!props.appendIcon;
+    return !!slots.append || hasAppendAvatar.value || !!props.appendIcon;
 })
 
 const prependClass = computed((): Array<string> => {

@@ -41,7 +41,9 @@ import { EList, EListItem, EListGroup } from 'nuvex-ui'
 | `prependIcon` | `IconPath \| IconPath[] \| string` | `undefined` | Icono al inicio. |
 | `appendIcon` | `IconPath \| IconPath[] \| string` | `undefined` | Icono al final. |
 | `prependAvatar` | `string` | `undefined` | Avatar al inicio. |
+| `prependAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props adicionales de `EAvatar`; permite, por ejemplo, mostrar iniciales con `name` cuando no se pasa una imagen. |
 | `appendAvatar` | `string` | `undefined` | Avatar al final. |
+| `appendAvatarProps` | `Partial<Omit<AvatarProps, 'src'>>` | `undefined` | Props adicionales de `EAvatar`; permite, por ejemplo, mostrar iniciales con `name` cuando no se pasa una imagen. |
 | `isActive` | `boolean` | `undefined` | Fuerza estado activo manual, sin depender del modelo de la lista. |
 | `activeClass` | `string` | `'e-list-item--active'` | Clase agregada cuando el item esta activo. |
 | `title` | `string` | `undefined` | Titulo principal del item. |

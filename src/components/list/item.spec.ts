@@ -28,6 +28,27 @@ const mountList = (
 });
 
 describe("EListItem interaction", () => {
+  it("renders an avatar name through avatar props", () => {
+    const wrapper = mount(EListItem, {
+      props: {
+        prependAvatarProps: { name: "Ada Lovelace" },
+      },
+    });
+
+    expect(wrapper.get(".e-avatar__initials").text()).toContain("AL");
+  });
+
+  it("keeps prependAvatar as the avatar image source", () => {
+    const wrapper = mount(EListItem, {
+      props: {
+        prependAvatar: "/avatars/ada.png",
+        prependAvatarProps: { name: "Ada Lovelace" },
+      },
+    });
+
+    expect(wrapper.get(".e-avatar__container img").attributes("src")).toBe("/avatars/ada.png");
+  });
+
   it("is interactive by default inside a list", async () => {
     const wrapper = mountList(`
       <EList>
